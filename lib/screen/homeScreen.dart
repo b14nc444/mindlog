@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/component/appbar.dart';
+import 'package:mindlog_app/component/appointment_list.dart';
 import 'package:mindlog_app/component/calendar.dart';
+import 'package:mindlog_app/component/mindlog_list.dart';
 import 'package:mindlog_app/component/navigator.dart';
 import 'package:mindlog_app/const/visual.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -44,144 +46,73 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: renderAppBarHome(),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(14)
                       ),
-                      child: Calendar()
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Calendar(),
+                      )
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: SizedBox(
-                      height: 90,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 8,
-                            height: 90,
-                            decoration: const ShapeDecoration(
-                              color: secondaryColor3,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      const appointmentList(
+                          appointmentTime: '9:00 - 9:15',
+                          doctor: '김정심 원장님'
+                      ),
+                      // const appointmentList(
+                      //     appointmentTime: '9:00 - 9:15',
+                      //     doctor: '김정심11 원장님'
+                      // ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: const SizedBox(
+                          height: 55,
+                          child: Center(
+                            child: Text('진료 일정 만들기',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold
                               ),
                             ),
-                          ),
-                          const Padding( ///////진료 컴포넌트 따로 빼기
-                            padding: EdgeInsets.fromLTRB(14, 12, 0, 12),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('진료',
-                                  style: TextStyle(
-                                    color: basicBlack,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Text('9:00 - 9:15',
-                                  style: TextStyle(
-                                      color: basicBlack,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: -0.15
-                                  ),
-                                ),
-                                Text('김정심 원장님',
-                                  style: TextStyle(
-                                      color: typographyGray,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: -0.15
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: const SizedBox(
-                      height: 55,
-                      child: Center(
-                        child: Text('진료 일정 만들기',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: const SizedBox(
-                      height: 90,
-                      child: Padding( ////////////컴포넌트 따로 빼기
-                        padding: EdgeInsets.fromLTRB(14, 22, 0, 22),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('오늘 기분 최고!',
-                              style: TextStyle(
-                                  color: basicBlack,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -0.2
-                              ),
-                            ),
-                            Text('오늘 오전엔 기분이 안좋았는데...',
-                              style: TextStyle(
-                                  color: typographyGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500
-                              ),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
+                      const mindlogList(
+                          mindlogTitle: '오늘 기분 최고!',
+                          contents: '오늘 오전엔 기분이 안좋았는데...'
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
       bottomNavigationBar: renderBottomNavigationBar(
         currentIndex: _selectedIndex,
