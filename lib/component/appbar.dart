@@ -10,7 +10,7 @@ class renderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       color: Colors.transparent,
       //secondaryColor1,
-      padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -35,7 +35,7 @@ class renderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(500);
+  Size get preferredSize => const Size.fromHeight(400);
 }
 
 // PreferredSize renderAppBarHome() {

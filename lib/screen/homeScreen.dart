@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/component/appbar.dart';
+import 'package:mindlog_app/component/appointment_bottom_sheet.dart';
 import 'package:mindlog_app/component/appointment_list.dart';
 import 'package:mindlog_app/component/calendar.dart';
 import 'package:mindlog_app/component/mindlog_list.dart';
@@ -15,7 +16,7 @@ class homeScreen extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const Home(),
       theme: ThemeData(
-        scaffoldBackgroundColor: backgroundColor, // 전체 앱의 배경색 지정
+        scaffoldBackgroundColor: BACKGROUND_COLOR, // 전체 앱의 배경색 지정
         // 다른 테마 속성들
       ),
     );
@@ -80,19 +81,29 @@ class _HomeState extends State<Home> {
                       const SizedBox(
                         height: 4,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: const SizedBox(
-                          height: 50,
-                          child: Center(
-                            child: Text('진료 일정 만들기',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold
+                      InkWell(
+                        onTap: (){
+                          showModalBottomSheet(
+                            context: context,
+                            barrierColor: Colors.black.withAlpha(0),
+
+                            builder: (_) => AppointmentBottomSheet()
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR,
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          child: const SizedBox(
+                            height: 50,
+                            child: Center(
+                              child: Text('진료 일정 만들기',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold
+                                ),
                               ),
                             ),
                           ),

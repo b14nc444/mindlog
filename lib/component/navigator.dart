@@ -14,7 +14,7 @@ class renderBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: secondaryColor1,
-      selectedItemColor: primaryColor,
+      selectedItemColor: PRIMARY_COLOR,
       // unselectedIconTheme,
       selectedFontSize: 12.0,
       // this.unselectedFontSize = 12.0,

@@ -17,7 +17,7 @@ class _CalendarState extends State<Calendar> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
 
   TextStyle weekTextStyle = const TextStyle(
-      color: typographyGray2,
+      color: TYPOGRAPHY_GRAY_2,
       fontSize: 11
   );
 
@@ -75,7 +75,7 @@ class _CalendarState extends State<Calendar> {
         selectedDecoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: typographyGray2,
+            color: TYPOGRAPHY_GRAY_2,
             width: 1.5,
           )
         ),

@@ -29,7 +29,7 @@ class appointmentList extends StatelessWidget {
                   width: 8,
                   height: 90,
                   decoration: const ShapeDecoration(
-                    color: secondaryColor3,
+                    color: SECONDARY_COLOR_3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
