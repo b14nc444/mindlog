@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/component/appbar.dart';
 import 'package:mindlog_app/component/appointment_list.dart';
@@ -6,7 +5,6 @@ import 'package:mindlog_app/component/calendar.dart';
 import 'package:mindlog_app/component/mindlog_list.dart';
 import 'package:mindlog_app/component/navigator.dart';
 import 'package:mindlog_app/const/visual.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
@@ -45,7 +43,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: renderAppBarHome(),
+      appBar: const renderAppBarHome(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,8 +57,8 @@ class _HomeState extends State<Home> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(14)
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: const Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: Calendar(),
                       )
                   ),
@@ -72,6 +70,7 @@ class _HomeState extends State<Home> {
                       ),
                       const appointmentList(
                           appointmentTime: '9:00 - 9:15',
+                          hospital: '행복주는정신과의원',
                           doctor: '김정심 원장님'
                       ),
                       // const appointmentList(
@@ -87,7 +86,7 @@ class _HomeState extends State<Home> {
                             borderRadius: BorderRadius.circular(10)
                         ),
                         child: const SizedBox(
-                          height: 55,
+                          height: 50,
                           child: Center(
                             child: Text('진료 일정 만들기',
                               style: TextStyle(

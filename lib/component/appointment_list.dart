@@ -4,10 +4,11 @@ import '../const/visual.dart';
 
 class appointmentList extends StatelessWidget {
   final String appointmentTime;
+  final String hospital;
   final String doctor;
 
   const appointmentList({
-    super.key, required this.appointmentTime, required this.doctor
+    super.key, required this.appointmentTime, required this.hospital, required this.doctor
   });
 
 
@@ -38,29 +39,32 @@ class appointmentList extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(14, 12, 0, 12),
+                  padding: const EdgeInsets.fromLTRB(14, 12, 0, 12),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('진료',
+                      const Text('진료',
                         style: TextStyle(
-                          color: basicBlack,
+                          color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Text(appointmentTime,
-                        style: TextStyle(
-                            color: basicBlack,
-                            fontSize: 14,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
                             letterSpacing: -0.15
                         ),
                       ),
-                      Text(doctor,
-                        style: TextStyle(
-                            color: typographyGray,
+                      SizedBox(
+                        height: 1,
+                      ),
+                      Text(hospital + ' / ' + doctor,
+                        style: const TextStyle(
+                            color: basicGray,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             letterSpacing: -0.15
@@ -73,7 +77,7 @@ class appointmentList extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         )
       ],

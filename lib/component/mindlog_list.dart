@@ -23,13 +23,13 @@ class mindlogList extends StatelessWidget {
           child: SizedBox(
             height: 90,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 22, 0, 22),
+              padding: const EdgeInsets.fromLTRB(20, 22, 0, 22),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(mindlogTitle,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: basicBlack,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -37,7 +37,7 @@ class mindlogList extends StatelessWidget {
                     ),
                   ),
                   Text(contents,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: typographyGray,
                         fontSize: 12,
                         fontWeight: FontWeight.w500
@@ -48,7 +48,7 @@ class mindlogList extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         )
       ],

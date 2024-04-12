@@ -5,7 +5,7 @@ class renderBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  renderBottomNavigationBar({
+  const renderBottomNavigationBar({super.key, 
     required this.currentIndex,
     required this.onTap,
   });
