@@ -16,6 +16,8 @@ class AppointmentTextField extends StatefulWidget {
 class _AppointmentTextFieldState extends State<AppointmentTextField> {
   @override
   Widget build(BuildContext context) {
+    String _selectedTime;
+    String _inputText;
 
     InputDecoration inputDecoration = InputDecoration(
       filled: true,
