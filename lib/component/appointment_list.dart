@@ -64,7 +64,7 @@ class appointmentList extends StatelessWidget {
                       ),
                       Text(hospital + ' / ' + doctor,
                         style: const TextStyle(
-                            color: basicGray,
+                            color: BASIC_GRAY,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             letterSpacing: -0.15

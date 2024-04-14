@@ -1,9 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/appointment_textfield.dart';
 import 'package:mindlog_app/const/visual.dart';
 
 class AppointmentBottomSheet extends StatefulWidget {
-  const AppointmentBottomSheet({super.key});
+
+  final DateTime selectedDate;
+
+  const AppointmentBottomSheet({super.key, required this.selectedDate});
 
   @override
   State<AppointmentBottomSheet> createState() => _AppointmentBottomSheetState();
@@ -12,11 +18,17 @@ class AppointmentBottomSheet extends StatefulWidget {
 class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    DateTime selectedDate = widget.selectedDate;
+
+    initializeDateFormatting('ko_KR');
+    String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDate);
+
     return Container(
-      height: 470,
+      height: 480 + bottomInset,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
@@ -29,12 +41,12 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
           ),
         ],
       ),
-      child: const Padding(
-        padding: EdgeInsets.fromLTRB(20, 25, 20, 0),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(20, 25, 20, bottomInset),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('진료',
+            const Text('진료',
               style: TextStyle(
                 color: SECONDARY_COLOR_3,
                 fontSize: 28,
@@ -42,30 +54,41 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                 letterSpacing: -0.1
               ),
             ),
-            SizedBox(
-              height: 8,
+            const SizedBox(
+              height: 6,
             ),
-            Text('2024-04-15(토)',
+            Text('$formattedDate',
               style: TextStyle(
                 color: TYPOGRAPHY_GRAY_3,
                 fontSize: 14,
                 letterSpacing: -0.1
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
-            AppointmentTextField(),
+            const AppointmentTextField(),
+            const SizedBox(
+              height: 30,
+            ),
             SizedBox(
               height: 50,
-              child: Center(
-                child: Text('진료 일정 등록하기',
-                  style: TextStyle(
+              child: FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: FilledButton.styleFrom(
+                  backgroundColor: PRIMARY_COLOR,
+                  textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold
                   ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
+                child: Text('진료 일정 등록하기'),
               ),
             ),
           ],

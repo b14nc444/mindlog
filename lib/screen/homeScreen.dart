@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mindlog_app/component/appbar.dart';
 import 'package:mindlog_app/component/appointment_bottom_sheet.dart';
 import 'package:mindlog_app/component/appointment_list.dart';
@@ -16,7 +18,13 @@ class homeScreen extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const Home(),
       theme: ThemeData(
-        scaffoldBackgroundColor: BACKGROUND_COLOR, // 전체 앱의 배경색 지정
+        scaffoldBackgroundColor: BACKGROUND_COLOR,
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(
+            fontFamily: 'Pretendard'
+          )
+        )
+        // 전체 앱의 배경색 지정
         // 다른 테마 속성들
       ),
     );
@@ -45,84 +53,123 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const renderAppBarHome(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14)
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Calendar(),
-                      )
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(
-                        height: 14,
-                      ),
-                      const appointmentList(
-                          appointmentTime: '9:00 - 9:15',
-                          hospital: '행복주는정신과의원',
-                          doctor: '김정심 원장님'
-                      ),
-                      // const appointmentList(
-                      //     appointmentTime: '9:00 - 9:15',
-                      //     doctor: '김정심11 원장님'
-                      // ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      InkWell(
-                        onTap: (){
-                          showModalBottomSheet(
-                            context: context,
-                            barrierColor: Colors.black.withAlpha(0),
-
-                            builder: (_) => AppointmentBottomSheet()
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: PRIMARY_COLOR,
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: const SizedBox(
-                            height: 50,
-                            child: Center(
-                              child: Text('진료 일정 만들기',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                          ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14)
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Calendar(),
+                    )
+                ),
+                const SizedBox(
+                  height: 14,
+                ),
+                const appointmentList(
+                    appointmentTime: '9:00 - 9:15',
+                    hospital: '행복주는정신과의원',
+                    doctor: '김정심 원장님'
+                ),
+                // const appointmentList(
+                //     appointmentTime: '9:00 - 9:15',
+                //     hospital: 'aa',
+                //     doctor: '김정심11 원장님'
+                // ),
+                const SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: FilledButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        barrierColor: Colors.black.withAlpha(0),
+                        builder: (_) => AppointmentBottomSheet(
+                          selectedDate: DateTime.now(),
                         ),
+                        isScrollControlled: true
+                        );
+                      },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: PRIMARY_COLOR,
+                      textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
                       ),
-                      const SizedBox(
-                        height: 20,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      const mindlogList(
+                    ),
+                    child: const Text('진료 일정 만들기',
+                      style: TextStyle(
+                        fontFamily: 'pretendard',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.15
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      mindlogList(
                           mindlogTitle: '오늘 기분 최고!',
                           contents: '오늘 오전엔 기분이 안좋았는데...'
                       ),
+                      // mindlogList(
+                      //     mindlogTitle: '오늘 기분 최고!',
+                      //     contents: '오늘 오전엔 기분이 안좋았는데...'
+                      // ),
+                      // mindlogList(
+                      //     mindlogTitle: '오늘 기분 최고!',
+                      //     contents: '오늘 오전엔 기분이 안좋았는데...'
+                      // ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image(image: AssetImage('assets/icons/arrow_down.png')),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Text('스와이프하면 감정을 기록할 수 있어요',
+                                style: TextStyle(
+                                  color: BASIC_GRAY,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: -0.13,
+                                )
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
       bottomNavigationBar: renderBottomNavigationBar(
         currentIndex: _selectedIndex,

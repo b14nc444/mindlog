@@ -30,7 +30,7 @@ class mindlogList extends StatelessWidget {
                 children: [
                   Text(mindlogTitle,
                     style: const TextStyle(
-                        color: basicBlack,
+                        color: BASIC_BLACK,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.2
