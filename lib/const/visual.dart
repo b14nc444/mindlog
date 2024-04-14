@@ -6,7 +6,7 @@ const Color secondaryColor1 = Color(0xfffae5cb);
 const Color secondaryColor2 = Color(0xfffefaf5);
 const Color SECONDARY_COLOR_3 = Color(0xff584a43);
 const Color BASIC_BLACK = Color(0xff212529);
-const Color typographyGray = Color(0xffacacac);
+const Color TYPOGRAPHY_GRAY = Color(0xffacacac);
 const Color TYPOGRAPHY_GRAY_2 = Color(0xff6c7072);
 const Color typographyGray2_20 = Color(0x516c7072);
 const Color TYPOGRAPHY_GRAY_3 = Color(0xff545357);
@@ -27,3 +27,4 @@ const Image typoTransparentColor = Image(image: AssetImage('assets/logo/typo_tra
 
 //icon
 const Image dropdownIcon = Image(image: AssetImage('assets/icons/dropdown_button.png'));
+const Image arrowRightIcon = Image(image: AssetImage('assets/icons/arrow_right.png'));

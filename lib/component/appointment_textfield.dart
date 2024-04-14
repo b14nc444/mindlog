@@ -14,6 +14,8 @@ class AppointmentTextField extends StatefulWidget {
 }
 
 class _AppointmentTextFieldState extends State<AppointmentTextField> {
+  String startTime = '09:00';
+
   @override
   Widget build(BuildContext context) {
     String _selectedTime;
@@ -28,26 +30,35 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
       ),
     );
 
-    InputDecoration inputDecoration_time = InputDecoration(
+    InputDecoration inputdecorationTime = InputDecoration(
       filled: true,
       fillColor: BACKGROUND_COLOR,
       border: UnderlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: BorderSide.none, // 테두리 없음
       ),
-      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
     );
 
-    TextStyle textStyleLabel = TextStyle(
+    TextStyle textStyleLabel = const TextStyle(
         color: SECONDARY_COLOR_3,
         fontWeight: FontWeight.bold
     );
-    TextStyle textStyleContent = TextStyle(
+
+    TextStyle textStyleContent = const TextStyle(
         color: BASIC_BLACK,
         fontSize: 14,
         fontFamily: 'Pretendard Variable',
         fontWeight: FontWeight.w500,
         letterSpacing: -0.15,
+    );
+
+    TextStyle textStyleHint = const TextStyle(
+      color: TYPOGRAPHY_GRAY,
+      fontSize: 14,
+      fontFamily: 'Pretendard Variable',
+      fontWeight: FontWeight.w500,
+      letterSpacing: -0.15,
     );
 
     List<String> timeList = [];
@@ -63,7 +74,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('시간', style: textStyleLabel),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -75,8 +86,16 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   width: 95,
                   height: 40,
                   child: DropdownButtonFormField<String>(
-                    value: '09:00',
-                    decoration: inputDecoration_time,
+                    decoration: InputDecoration(
+                      hintText: '09:00',
+                      hintStyle: textStyleHint,
+                      filled: true,
+                      fillColor: BACKGROUND_COLOR,
+                      border: UnderlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide.none, // 테두리 없음
+                      ),
+                    ),
                     items: timeList.map((String time) {
                       return DropdownMenuItem<String>(
                         value: time,
@@ -95,16 +114,24 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 14),
                 child: Text('~'),
               ),
               SizedBox(
                 width: 95,
                 height: 40,
                 child: DropdownButtonFormField<String>(
-                  value: '09:30',
-                  decoration: inputDecoration_time,
+                  decoration: InputDecoration(
+                    hintText: '09:30',
+                    hintStyle: textStyleHint,
+                    filled: true,
+                    fillColor: BACKGROUND_COLOR,
+                    border: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none, // 테두리 없음
+                    ),
+                  ),
                   items: timeList.map((String time) {
                     return DropdownMenuItem<String>(
                       value: time,
@@ -123,37 +150,55 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 14,
           ),
           Text('병원', style: textStyleLabel),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          Container(
+          SizedBox(
             height: 45,
             child: TextFormField(
               cursorColor: TYPOGRAPHY_GRAY_3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,
-              decoration: inputDecoration,
+              decoration: InputDecoration(
+                hintText: '병원을 입력해주세요.',
+                hintStyle: textStyleHint,
+                filled: true,
+                fillColor: BACKGROUND_COLOR,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none, // 테두리 없음
+                ),
+              ),
               style: textStyleContent,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 14,
           ),
           Text('주치의', style: textStyleLabel),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          Container(
+          SizedBox(
             height: 45,
             child: TextFormField(
               cursorColor: TYPOGRAPHY_GRAY_3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,
-              decoration: inputDecoration,
+              decoration: InputDecoration(
+                hintText: '주치의를 입력해주세요.',
+                hintStyle: textStyleHint,
+                filled: true,
+                fillColor: BACKGROUND_COLOR,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none, // 테두리 없음
+                ),
+              ),
               style: textStyleContent,
             ),
           ),

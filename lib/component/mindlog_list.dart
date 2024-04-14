@@ -23,26 +23,32 @@ class mindlogList extends StatelessWidget {
           child: SizedBox(
             height: 90,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 22, 0, 22),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.fromLTRB(20, 22, 20, 22),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(mindlogTitle,
-                    style: const TextStyle(
-                        color: BASIC_BLACK,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.2
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(mindlogTitle,
+                        style: const TextStyle(
+                            color: BASIC_BLACK,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.2
+                        ),
+                      ),
+                      Text(contents,
+                        style: const TextStyle(
+                            color: TYPOGRAPHY_GRAY,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(contents,
-                    style: const TextStyle(
-                        color: typographyGray,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500
-                    ),
-                  ),
+                  arrowRightIcon
                 ],
               ),
             ),

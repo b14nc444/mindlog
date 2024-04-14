@@ -8,6 +8,8 @@ import 'package:mindlog_app/component/calendar.dart';
 import 'package:mindlog_app/component/mindlog_list.dart';
 import 'package:mindlog_app/component/navigator.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:mindlog_app/screen/appointment_screen.dart';
+import 'package:mindlog_app/screen/mindlog_screen.dart';
 
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
@@ -74,10 +76,18 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 14,
                 ),
-                const appointmentList(
-                    appointmentTime: '9:00 - 9:15',
-                    hospital: '행복주는정신과의원',
-                    doctor: '김정심 원장님'
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => appointmentScreen()),
+                    );
+                  },
+                  child: const appointmentList(
+                      appointmentTime: '9:00 - 9:15',
+                      hospital: '행복주는정신과의원',
+                      doctor: '김정심 원장님'
+                  ),
                 ),
                 // const appointmentList(
                 //     appointmentTime: '9:00 - 9:15',
@@ -125,13 +135,21 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 20,
                 ),
-                const SingleChildScrollView(
+                SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      mindlogList(
-                          mindlogTitle: '오늘 기분 최고!',
-                          contents: '오늘 오전엔 기분이 안좋았는데...'
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => mindlogScreen()),
+                          );
+                        },
+                        child: mindlogList(
+                            mindlogTitle: '오늘 기분 최고!',
+                            contents: '오늘 오전엔 기분이 안좋았는데...'
+                        ),
                       ),
                       // mindlogList(
                       //     mindlogTitle: '오늘 기분 최고!',
