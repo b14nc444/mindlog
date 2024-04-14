@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mindlog_app/component/appbar.dart';
@@ -49,7 +50,11 @@ class _HomeState extends State<Home> {
       _selectedIndex = index;
     });
   }
-  //
+
+  //swipe down
+  double _objectPositionY = 0;
+  double _startY = 0;
+  double _endY = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -159,26 +164,58 @@ class _HomeState extends State<Home> {
                       //     mindlogTitle: '오늘 기분 최고!',
                       //     contents: '오늘 오전엔 기분이 안좋았는데...'
                       // ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image(image: AssetImage('assets/icons/arrow_down.png')),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Text('스와이프하면 감정을 기록할 수 있어요',
-                                style: TextStyle(
-                                  color: BASIC_GRAY,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: -0.13,
+                      GestureDetector(
+                        // onTap: () {
+                        //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => mindlogScreen()));
+                        //   print('clicked');
+                        //   },
+                        onVerticalDragStart: (details) {
+                          _startY = details.localPosition.dy;
+                        },
+                        onVerticalDragUpdate: (details) {
+                          _endY = details.localPosition.dy;
+                          double distance = _endY - _startY;
+                          setState(() {
+                            _objectPositionY += distance;
+                          });
+                        },
+                        onVerticalDragEnd: (details) {
+                          if (details.primaryVelocity! > 0) {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => mindlogScreen()));
+                            print('swiped down');
+                            _objectPositionY = -1;
+                          }
+                        },
+                        child: Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent
+                          ),
+                          child: Padding(
+                            padding: _objectPositionY > 0
+                                ? EdgeInsets.only(top: _objectPositionY / 30)
+                                : const EdgeInsets.only(top: 0),
+                            child: const Column(
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                Image(image: AssetImage('assets/icons/arrow_down.png')),
+                                SizedBox(
+                                  height: 25,
+                                ),
+                                Text('스와이프하면 감정을 기록할 수 있어요',
+                                    style: TextStyle(
+                                      color: BASIC_GRAY,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: -0.13,
+                                    )
                                 )
-                            )
-                          ],
+                              ],
+                            ),
+                          ),
                         ),
                       )
                     ],

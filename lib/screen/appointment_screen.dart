@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mindlog_app/component/appbar.dart';
 
 class appointmentScreen extends StatefulWidget {
   const appointmentScreen({super.key});
