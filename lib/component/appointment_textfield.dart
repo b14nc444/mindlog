@@ -79,39 +79,35 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
           ),
           Row(
             children: [
-              InkWell(
-                onTap: (){
-                },
-                child: SizedBox(
-                  width: 95,
-                  height: 40,
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      hintText: '09:00',
-                      hintStyle: textStyleHint,
-                      filled: true,
-                      fillColor: BACKGROUND_COLOR,
-                      border: UnderlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none, // 테두리 없음
-                      ),
+              SizedBox(
+                width: 95,
+                height: 40,
+                child: DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    hintText: '09:00',
+                    hintStyle: textStyleHint,
+                    filled: true,
+                    fillColor: BACKGROUND_COLOR,
+                    border: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none, // 테두리 없음
                     ),
-                    items: timeList.map((String time) {
-                      return DropdownMenuItem<String>(
-                        value: time,
-                        child: Text(time,),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedTime = newValue!;
-                      });
-                    },
-                    icon: dropdownIcon,
-                    style: textStyleContent,
-                    menuMaxHeight: 180,
-                    isExpanded: true,
                   ),
+                  items: timeList.map((String time) {
+                    return DropdownMenuItem<String>(
+                      value: time,
+                      child: Text(time,),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedTime = newValue!;
+                    });
+                  },
+                  icon: dropdownIcon,
+                  style: textStyleContent,
+                  menuMaxHeight: 180,
+                  isExpanded: true,
                 ),
               ),
               const Padding(
@@ -160,10 +156,12 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
           SizedBox(
             height: 45,
             child: TextFormField(
+              textAlignVertical: TextAlignVertical.center,
               cursorColor: TYPOGRAPHY_GRAY_3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(12.0),
                 hintText: '병원을 입력해주세요.',
                 hintStyle: textStyleHint,
                 filled: true,
@@ -190,6 +188,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
               maxLines: 1,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(12.0),
                 hintText: '주치의를 입력해주세요.',
                 hintStyle: textStyleHint,
                 filled: true,
