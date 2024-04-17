@@ -9,8 +9,10 @@ import 'package:mindlog_app/component/calendar.dart';
 import 'package:mindlog_app/component/mindlog_list.dart';
 import 'package:mindlog_app/component/navigator.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:mindlog_app/model/appoinment_model.dart';
 import 'package:mindlog_app/screen/appointment_screen.dart';
 import 'package:mindlog_app/screen/mindlog_screen.dart';
+import 'package:mindlog_app/service/db_server.dart';
 
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
@@ -115,6 +117,14 @@ class _HomeState extends State<Home> {
                         ),
                         isScrollControlled: true
                         );
+                      //TESTTESTTESTTESTTESTTESTTESTTESTTEST
+                      createAppointment(context, Appointment(
+                        date: '2022-04-20',
+                        startTime: '09:00',
+                        endTime: '11:00',
+                        doctor: 'Dr. Smith',
+                        hospital: 'City Hospital',
+                      ));
                       },
                     style: FilledButton.styleFrom(
                       backgroundColor: PRIMARY_COLOR,

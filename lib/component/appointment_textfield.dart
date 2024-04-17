@@ -6,14 +6,25 @@ import 'package:mindlog_app/const/visual.dart';
 class AppointmentTextField extends StatefulWidget {
   // final String label;
   // final bool isTime;
+  final FormFieldSetter<String> StartTimeSetter;
+  final FormFieldSetter<String> EndTimeSetter;
+  final FormFieldSetter<String> HospitalSetter;
+  final FormFieldSetter<String> DoctorSetter;
+  final FormFieldValidator<String> validator;
 
-  const AppointmentTextField({super.key});
+  const AppointmentTextField({super.key,
+    required this.StartTimeSetter,
+    required this.EndTimeSetter,
+    required this.HospitalSetter,
+    required this.DoctorSetter,
+    required this.validator, });
 
   @override
   State<AppointmentTextField> createState() => _AppointmentTextFieldState();
 }
 
 class _AppointmentTextFieldState extends State<AppointmentTextField> {
+
   String startTime = '09:00';
   final TextEditingController textControllerHospital = TextEditingController();
   final TextEditingController textControllerDoctor = TextEditingController();
@@ -105,13 +116,15 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedTimeStart = newValue!;
-                      print('start time : $_selectedTimeStart');
+                      print('start time selected : $_selectedTimeStart');
                     });
                   },
                   icon: dropdownIcon,
                   style: textStyleContent,
                   menuMaxHeight: 180,
                   isExpanded: true,
+                  onSaved: widget.StartTimeSetter,
+                  validator: widget.validator,
                 ),
               ),
               const Padding(
@@ -141,12 +154,15 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedTimeEnd = newValue!;
-                      print('end time : $_selectedTimeEnd');
+                      print('end time selected : $_selectedTimeEnd');
                     });
                   },
                   icon: dropdownIcon,
                   style: textStyleContent,
                   menuMaxHeight: 180,
+                  isExpanded: true,
+                  onSaved: widget.EndTimeSetter,
+                  validator: widget.validator,
                 ),
               ),
             ],
@@ -178,6 +194,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 ),
               ),
               style: textStyleContent,
+              onSaved: widget.HospitalSetter,
+              validator: widget.validator,
             ),
           ),
           const SizedBox(
@@ -206,6 +224,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 ),
               ),
               style: textStyleContent,
+              onSaved: widget.DoctorSetter,
+              validator: widget.validator,
             ),
           ),
         ],
