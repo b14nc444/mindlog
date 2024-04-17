@@ -83,23 +83,21 @@ class _mindlogScreenState extends State<mindlogScreen> {
                 const SizedBox(
                   height: 24,
                 ),
-                const SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      mindlogQuestion(question: '1. 감정을 기록합니다.'),
-                      mindlogTextField(hintText: '감정을 기록해주세요',),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      mindlogQuestion(question: '2. 이벤트를 기록합니다.'),
-                      mindlogTextField(hintText: '이벤트를 기록해주세요',),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      mindlogQuestion(question: '3. 질문을 기록합니다.'),
-                      mindlogTextField(hintText: '질문을 기록해주세요',),
-                    ],
-                  ),
+                const Column(
+                  children: [
+                    mindlogQuestion(question: '1. 감정을 기록합니다.'),
+                    mindlogTextField(hintText: '감정을 기록해주세요',),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    mindlogQuestion(question: '2. 이벤트를 기록합니다.'),
+                    mindlogTextField(hintText: '이벤트를 기록해주세요',),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    mindlogQuestion(question: '3. 질문을 기록합니다.'),
+                    mindlogTextField(hintText: '질문을 기록해주세요',),
+                  ],
                 ),
 
               ],

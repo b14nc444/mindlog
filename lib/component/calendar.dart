@@ -42,13 +42,13 @@ class _CalendarState extends State<Calendar> {
         CalendarFormat.month: '주',
         CalendarFormat.week: '월',
       },
-      onFormatChanged: (format) {
-        setState(() {
-          _calendarFormat = format;
-        });
-      },
-      rowHeight: 60, // 요일쪽
-      daysOfWeekHeight: 16, // 날짜쪽
+      // onFormatChanged: (format) {
+      //   setState(() {
+      //     _calendarFormat = format;
+      //   });
+      // },
+      rowHeight: 60, // 요일쪽 높이
+      daysOfWeekHeight: 16, // 날짜쪽 높이
       headerStyle: const HeaderStyle(
         formatButtonVisible: false,
         leftChevronVisible: false, // 왼쪽 화살표 숨기기

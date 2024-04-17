@@ -15,10 +15,13 @@ class AppointmentTextField extends StatefulWidget {
 
 class _AppointmentTextFieldState extends State<AppointmentTextField> {
   String startTime = '09:00';
+  final TextEditingController textControllerHospital = TextEditingController();
+  final TextEditingController textControllerDoctor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    String _selectedTime;
+    String _selectedTimeStart;
+    String _selectedTimeEnd;
     String _inputText;
 
     InputDecoration inputDecoration = InputDecoration(
@@ -37,7 +40,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
         borderRadius: BorderRadius.circular(8.0),
         borderSide: BorderSide.none, // 테두리 없음
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+      contentPadding: const EdgeInsets.symmetric(horizontal:10, vertical: 0),
     );
 
     TextStyle textStyleLabel = const TextStyle(
@@ -101,7 +104,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedTime = newValue!;
+                      _selectedTimeStart = newValue!;
+                      print('start time : $_selectedTimeStart');
                     });
                   },
                   icon: dropdownIcon,
@@ -136,7 +140,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedTime = newValue!;
+                      _selectedTimeEnd = newValue!;
+                      print('end time : $_selectedTimeEnd');
                     });
                   },
                   icon: dropdownIcon,
@@ -156,6 +161,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
           SizedBox(
             height: 45,
             child: TextFormField(
+              controller: textControllerHospital,
               textAlignVertical: TextAlignVertical.center,
               cursorColor: TYPOGRAPHY_GRAY_3,
               maxLines: 1,
@@ -184,6 +190,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
           SizedBox(
             height: 45,
             child: TextFormField(
+              controller: textControllerDoctor,
               cursorColor: TYPOGRAPHY_GRAY_3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,
@@ -201,7 +208,6 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
               style: textStyleContent,
             ),
           ),
-
         ],
     );
   }

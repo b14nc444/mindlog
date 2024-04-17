@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -28,8 +27,6 @@ class homeScreen extends StatelessWidget {
             fontFamily: 'Pretendard'
           )
         )
-        // 전체 앱의 배경색 지정
-        // 다른 테마 속성들
       ),
     );
   }
