@@ -15,10 +15,10 @@ public class Appointment {
     private Long id;
 
     // 진료 일정
-    private Date date;
+    private String date;
 
     // 주치의
-    private String patientName;
+    private String doctorName;
 
     // 병원
     private String hospital;
@@ -28,16 +28,14 @@ public class Appointment {
     }
 
     // 생성자 함수
-    public Appointment (Long id, Date date, String patientName, String hospital) {
+    public Appointment(Long id, String date, String doctorName, String hospital) {
         this.id = id;
         this.date = date;
-        this.patientName = patientName;
+        this.doctorName = doctorName;
         this.hospital = hospital;
     }
 
     // getter setter
-
-
     public Long getId() {
         return id;
     }
@@ -46,20 +44,20 @@ public class Appointment {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public String getDoctorName() {
+        return doctorName;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setDoctorName(String patientName) {
+        this.doctorName = doctorName;
     }
 
     public String getHospital() {

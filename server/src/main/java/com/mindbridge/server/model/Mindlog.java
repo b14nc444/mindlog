@@ -20,6 +20,9 @@ public class Mindlog {
     // 기분 색깔 -> 인공지능 내용이라.. 상의하기!
     private String moodColor;
 
+    // 제목
+    private String title;
+
     // 감정 기록 내용
     private String emotionRecord;
 
@@ -33,9 +36,10 @@ public class Mindlog {
     public Mindlog() {
     }
 
-    public Mindlog(Date date, String moodColor, String emotionRecord, String eventRecord, String questionRecord) {
+    public Mindlog(Date date, String moodColor, String title, String emotionRecord, String eventRecord, String questionRecord) {
         this.date = date;
         this.moodColor = moodColor;
+        this.title = title;
         this.emotionRecord = emotionRecord;
         this.eventRecord = eventRecord;
         this.questionRecord = questionRecord;
@@ -65,6 +69,10 @@ public class Mindlog {
     public void setMoodColor(String moodColor) {
         this.moodColor = moodColor;
     }
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
 
     public String getEmotionRecord() {
         return emotionRecord;

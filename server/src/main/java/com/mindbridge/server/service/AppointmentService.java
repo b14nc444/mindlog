@@ -1,39 +1,59 @@
 package com.mindbridge.server.service;
 
+import com.mindbridge.server.dto.AppointmentDTO;
 import com.mindbridge.server.model.Appointment;
 import com.mindbridge.server.repository.AppointmentRepository;
+import com.mindbridge.server.util.AppointmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
-// 기능 나타내는 클래스
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AppointmentService {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+    @Autowired
+    private AppointmentMapper appointmentMapper;
+
+    public List<AppointmentDTO> getAllAppointments() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointments.stream()
+                .map(appointmentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Appointment getAppointmentById(Long id) {
-        return appointmentRepository.findById(id).orElse(null);
+    // 진료 일정 조회
+    public AppointmentDTO getAppointmentById(Long id) {
+        Appointment appointment = appointmentRepository.findById(id).orElse(null);
+        return appointment != null ? appointmentMapper.toDTO(appointment) : null;
     }
 
-    public Appointment addAppointment(Appointment appointment) {
-        // 여기서 데이터 유효성 검사 등을 수행할 수 있습니다.
-        return appointmentRepository.save(appointment);
+    // 진료 일정 추가
+    public AppointmentDTO addAppointment(AppointmentDTO appointmentDTO) {
+        Appointment appointment = appointmentMapper.toEntity(appointmentDTO);
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+        return appointmentMapper.toDTO(savedAppointment);
+
     }
 
-    public Appointment updateAppointment(Long id, Appointment appointment) {
-        // id에 해당하는 진료 일정이 존재하는지 먼저 확인하는 등의 로직을 추가할 수 있습니다.
-        appointment.setId(id);
-        return appointmentRepository.save(appointment);
+    // 진료 일정 수정
+    public AppointmentDTO updateAppointment(Long id, AppointmentDTO appointmentDTO) {
+        if (appointmentRepository.existsById(id)) {
+            Appointment appointment = appointmentMapper.toEntity(appointmentDTO);
+            appointment.setId(id);
+            Appointment updatedAppointment = appointmentRepository.save(appointment);
+            return appointmentMapper.toDTO(updatedAppointment);
+        } else {
+            return null;
+        }
     }
 
+    // 진료 일정 삭제
     public void deleteAppointment(Long id) {
-        // id에 해당하는 진료 일정이 존재하는지 먼저 확인하는 등의 로직을 추가할 수 있습니다.
         appointmentRepository.deleteById(id);
     }
 }
