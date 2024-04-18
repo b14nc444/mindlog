@@ -126,7 +126,7 @@ class _mindlogScreenState extends State<mindlogScreen> {
                         height: 10,
                       ),
                       const mindlogQuestion(question: '3. 질문을 기록합니다.'),
-                      mindlogTextField(hintText: '질문을 기록해주세요',
+                      mindlogTextField(hintText: '질문을 기록해주세요(선택)',
                         onSavedContent: (String? val) {question = val;},
                         contentValidator: contentValidator,),
                     ],

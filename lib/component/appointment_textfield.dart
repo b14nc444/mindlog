@@ -190,7 +190,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(12.0),
-                hintText: '병원을 입력해주세요.',
+                hintText: '병원을 입력해주세요',
                 hintStyle: textStyleHint,
                 filled: true,
                 fillColor: BACKGROUND_COLOR,
@@ -220,7 +220,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(12.0),
-                hintText: '주치의를 입력해주세요.',
+                hintText: '주치의를 입력해주세요(선택)',
                 hintStyle: textStyleHint,
                 filled: true,
                 fillColor: BACKGROUND_COLOR,
