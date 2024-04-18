@@ -4,20 +4,26 @@ import 'package:flutter/widgets.dart';
 import 'package:mindlog_app/const/visual.dart';
 
 class AppointmentTextField extends StatefulWidget {
-  // final String label;
-  // final bool isTime;
-  final FormFieldSetter<String> StartTimeSetter;
-  final FormFieldSetter<String> EndTimeSetter;
-  final FormFieldSetter<String> HospitalSetter;
-  final FormFieldSetter<String> DoctorSetter;
-  final FormFieldValidator<String> validator;
+  final FormFieldSetter<String> onSavedStartTime;
+  final FormFieldSetter<String> onSavedEndTime;
+  final FormFieldSetter<String> onSavedHospital;
+  final FormFieldSetter<String> onSavedDoctor;
+
+  final FormFieldValidator<String> startTimeValidator;
+  final FormFieldValidator<String> endTimeValidator;
+  final FormFieldValidator<String> hospitalValidator;
+  final FormFieldValidator<String> doctorValidator;
 
   const AppointmentTextField({super.key,
-    required this.StartTimeSetter,
-    required this.EndTimeSetter,
-    required this.HospitalSetter,
-    required this.DoctorSetter,
-    required this.validator, });
+    required this.onSavedStartTime,
+    required this.onSavedEndTime,
+    required this.onSavedHospital,
+    required this.onSavedDoctor,
+    required this.startTimeValidator,
+    required this.endTimeValidator,
+    required this.hospitalValidator,
+    required this.doctorValidator,
+  });
 
   @override
   State<AppointmentTextField> createState() => _AppointmentTextFieldState();
@@ -26,8 +32,8 @@ class AppointmentTextField extends StatefulWidget {
 class _AppointmentTextFieldState extends State<AppointmentTextField> {
 
   String startTime = '09:00';
-  final TextEditingController textControllerHospital = TextEditingController();
-  final TextEditingController textControllerDoctor = TextEditingController();
+  // final TextEditingController textControllerHospital = TextEditingController();
+  // final TextEditingController textControllerDoctor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +129,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   style: textStyleContent,
                   menuMaxHeight: 180,
                   isExpanded: true,
-                  onSaved: widget.StartTimeSetter,
-                  validator: widget.validator,
+                  onSaved: widget.onSavedStartTime,
+                  validator: widget.startTimeValidator,
                 ),
               ),
               const Padding(
@@ -161,8 +167,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   style: textStyleContent,
                   menuMaxHeight: 180,
                   isExpanded: true,
-                  onSaved: widget.EndTimeSetter,
-                  validator: widget.validator,
+                  onSaved: widget.onSavedEndTime,
+                  validator: widget.endTimeValidator,
                 ),
               ),
             ],
@@ -177,7 +183,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
           SizedBox(
             height: 45,
             child: TextFormField(
-              controller: textControllerHospital,
+              //controller: textControllerHospital,
               textAlignVertical: TextAlignVertical.center,
               cursorColor: TYPOGRAPHY_GRAY_3,
               maxLines: 1,
@@ -194,8 +200,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 ),
               ),
               style: textStyleContent,
-              onSaved: widget.HospitalSetter,
-              validator: widget.validator,
+              onSaved: widget.onSavedHospital,
+              validator: widget.hospitalValidator,
             ),
           ),
           const SizedBox(
@@ -208,7 +214,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
           SizedBox(
             height: 45,
             child: TextFormField(
-              controller: textControllerDoctor,
+              //controller: textControllerDoctor,
               cursorColor: TYPOGRAPHY_GRAY_3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,
@@ -224,8 +230,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 ),
               ),
               style: textStyleContent,
-              onSaved: widget.DoctorSetter,
-              validator: widget.validator,
+              onSaved: widget.onSavedDoctor,
+              validator: widget.doctorValidator,
             ),
           ),
         ],

@@ -5,7 +5,13 @@ import '../const/visual.dart';
 class mindlogTextField extends StatefulWidget {
   final String hintText;
 
-  const mindlogTextField({super.key, required this.hintText});
+  final FormFieldSetter<String> onSavedContent;
+  final FormFieldValidator<String> contentValidator;
+
+  const mindlogTextField({super.key,
+    required this.hintText,
+    required this.onSavedContent,
+    required this.contentValidator});
 
   @override
   State<mindlogTextField> createState() => _mindlogTextFieldState();
@@ -14,7 +20,7 @@ class mindlogTextField extends StatefulWidget {
 class _mindlogTextFieldState extends State<mindlogTextField> {
 
   @override
-  Widget build(BuildContext context) {;
+  Widget build(BuildContext context) {
 
     TextStyle textStyleContent = const TextStyle(
       color: BASIC_BLACK,
@@ -53,6 +59,8 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
             keyboardType: TextInputType.multiline,
             decoration: inputDecoration,
             style: textStyleContent,
+            onSaved: widget.onSavedContent,
+            validator: widget.contentValidator,
           ),
         ),
       ),

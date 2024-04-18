@@ -158,8 +158,9 @@ class _HomeState extends State<Home> {
                       InkWell(
                         onTap: (){
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => mindlogScreen()),
+                            context,MaterialPageRoute(builder: (context) => mindlogScreen(
+                            selectedDate: DateTime.now(),
+                          ))
                           );
                         },
                         child: mindlogList(
@@ -192,7 +193,11 @@ class _HomeState extends State<Home> {
                         },
                         onVerticalDragEnd: (details) {
                           if (details.primaryVelocity! > 0) {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => mindlogScreen()));
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => mindlogScreen(
+                                  selectedDate: DateTime.now(),
+                                ))
+                            );
                             print('swiped down');
                             _objectPositionY = -1;
                           }

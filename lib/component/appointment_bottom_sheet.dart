@@ -85,11 +85,14 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                   height: 24,
                 ),
                 AppointmentTextField(
-                  StartTimeSetter: (String? val) {startTime = val;},
-                  EndTimeSetter: (String? val) {endTime = val;},
-                  HospitalSetter: (String? val) {hospital = val;},
-                  DoctorSetter: (String? val) {doctor = val;},
-                  validator: contentValidator,
+                  onSavedStartTime: (String? val) {startTime = val;},
+                  onSavedEndTime: (String? val) {endTime = val;},
+                  onSavedHospital: (String? val) {hospital = val;},
+                  onSavedDoctor: (String? val) {doctor = val;},
+                  startTimeValidator: timeValidator,
+                  endTimeValidator: timeValidator,
+                  hospitalValidator: hospitalValidator,
+                  doctorValidator: doctorValidator,
                 ),
                 const SizedBox(
                   height: 30,
@@ -146,9 +149,24 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
   }
 }
 
-String? contentValidator(String? val) {
+String? timeValidator(String? val) {
   if(val == null || val.length == 0) {
-    return 'insert the content';
+    print('insert the time');
+    return 'insert the time';
+  }
+  return null;
+}
+String? hospitalValidator(String? val) {
+  if(val == null || val.length == 0) {
+    print('insert the hospital name');
+    return 'insert the hospital name';
+  }
+  return null;
+}
+String? doctorValidator(String? val) {
+  if(val == null || val.length == 0) {
+    print('insert the doctor name');
+    return 'insert the doctor name';
   }
   return null;
 }

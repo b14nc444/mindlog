@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Appointment {
   //final Long? id;
   final String? date;  // 이거 date로 바꿔야됨
