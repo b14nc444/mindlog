@@ -127,17 +127,16 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
   }
 
   void onCreateButtonPressed() {
-
-    createAppointment(context, Appointment(
-      date: date,
-      startTime: startTime,
-      endTime: endTime,
-      doctor: doctor,
-      hospital: hospital,
-    ));
-
     if(formKey.currentState!.validate()) {  // 폼 검증
-    formKey.currentState!.save();  // 폼 저장
+      formKey.currentState!.save();  // 폼 저장
+      createAppointment(context, Appointment(
+        date: date,
+        startTime: startTime,
+        endTime: endTime,
+        doctor: doctor,
+        hospital: hospital,
+      ));
+
       print('date : $date');
       print('start time : $startTime');
       print('end time : $endTime');

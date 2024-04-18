@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/mindlog_question.dart';
 import 'package:mindlog_app/component/mindlog_textfield.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:mindlog_app/model/mindlog_model.dart';
+import 'package:mindlog_app/service/db_server.dart';
 
 import '../component/hide_keyboard_on_tap.dart';
 
@@ -148,6 +150,15 @@ class _mindlogScreenState extends State<mindlogScreen> {
   void onCreateButtonPressed() {
     if(formKey.currentState!.validate()) {  // 폼 검증
       formKey.currentState!.save();  // 폼 저장
+      createMindlog(context, Mindlog(
+        date: date,
+        moodColor: moodColor,
+        title: title,
+        emotionRecord: emotion,
+        eventRecord: event,
+        questionRecord: question,
+      ));
+
       print('date : $date');
       print('mood color : $moodColor');
       print('title : $title');
