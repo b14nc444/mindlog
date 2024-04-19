@@ -6,9 +6,10 @@ import 'package:mindlog_app/component/mindlog_question.dart';
 import 'package:mindlog_app/component/mindlog_textfield.dart';
 import 'package:mindlog_app/const/visual.dart';
 import 'package:mindlog_app/model/mindlog_model.dart';
-import 'package:mindlog_app/service/db_server.dart';
+import 'package:mindlog_app/service/db_server_appointment.dart';
 
 import '../component/hide_keyboard_on_tap.dart';
+import '../service/db_server_mindlog.dart';
 
 class mindlogScreen extends StatefulWidget {
 
@@ -81,7 +82,6 @@ class _mindlogScreenState extends State<mindlogScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.pop(context);
                 onCreateButtonPressed();
               },
             ),
@@ -150,6 +150,7 @@ class _mindlogScreenState extends State<mindlogScreen> {
   void onCreateButtonPressed() {
     if(formKey.currentState!.validate()) {  // 폼 검증
       formKey.currentState!.save();  // 폼 저장
+
       createMindlog(context, Mindlog(
         date: date,
         moodColor: moodColor,
@@ -159,12 +160,15 @@ class _mindlogScreenState extends State<mindlogScreen> {
         questionRecord: question,
       ));
 
+      print('-----input-----');
       print('date : $date');
       print('mood color : $moodColor');
       print('title : $title');
       print('emotion record : $emotion');
       print('event record : $event');
       print('question record: $question');
+
+      Navigator.pop(context);
     } else {
       print("null can't exist");
     }

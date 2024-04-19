@@ -7,7 +7,7 @@ import 'package:mindlog_app/component/hide_keyboard_on_tap.dart';
 import 'package:mindlog_app/const/visual.dart';
 
 import '../model/appoinment_model.dart';
-import '../service/db_server.dart';
+import '../service/db_server_appointment.dart';
 
 class AppointmentBottomSheet extends StatefulWidget {
 
@@ -27,7 +27,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
   String? startTime;
   String? endTime;
   String? hospital;
-  String? doctor;
+  String? doctorName;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                   onSavedStartTime: (String? val) {startTime = val;},
                   onSavedEndTime: (String? val) {endTime = val;},
                   onSavedHospital: (String? val) {hospital = val;},
-                  onSavedDoctor: (String? val) {doctor = val;},
+                  onSavedDoctor: (String? val) {doctorName = val;},
                   startTimeValidator: timeValidator,
                   endTimeValidator: timeValidator,
                   hospitalValidator: hospitalValidator,
@@ -101,7 +101,6 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                   height: 50,
                   child: FilledButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
                       onCreateButtonPressed();
                     },
                     style: FilledButton.styleFrom(
@@ -129,43 +128,43 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
   void onCreateButtonPressed() {
     if(formKey.currentState!.validate()) {  // 폼 검증
       formKey.currentState!.save();  // 폼 저장
+
       createAppointment(context, Appointment(
         date: date,
         startTime: startTime,
         endTime: endTime,
-        doctor: doctor,
         hospital: hospital,
+        doctorName: doctorName,
       ));
 
+      print('-----input-----');
       print('date : $date');
-      print('start time : $startTime');
-      print('end time : $endTime');
+      print('startTime : $startTime');
+      print('endTime : $endTime');
       print('hospital : $hospital');
-      print('doctor: $doctor');
+      print('doctorName : $doctorName');
+
+      Navigator.pop(context);
     } else {
-      print("null can't exist");
     }
   }
 }
 
 String? timeValidator(String? val) {
   if(val == null || val.length == 0) {
-    print('insert the time');
-    return 'insert the time';
+    return 'enter the time';
   }
   return null;
 }
 String? hospitalValidator(String? val) {
   if(val == null || val.length == 0) {
-    print('insert the hospital name');
-    return 'insert the hospital name';
+    return 'enter the hospital name';
   }
   return null;
 }
 String? doctorValidator(String? val) {
-  if(val == null || val.length == 0) {
-    print('insert the doctor name');
-    return 'insert the doctor name';
+  if(val!.length > 10) {
+    return 'enter under 10 characters';
   }
   return null;
 }

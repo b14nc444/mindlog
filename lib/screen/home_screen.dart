@@ -12,13 +12,14 @@ import 'package:mindlog_app/const/visual.dart';
 import 'package:mindlog_app/model/appoinment_model.dart';
 import 'package:mindlog_app/screen/appointment_screen.dart';
 import 'package:mindlog_app/screen/mindlog_screen.dart';
-import 'package:mindlog_app/service/db_server.dart';
+import 'package:mindlog_app/service/db_server_appointment.dart';
 
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const Home(),
@@ -55,6 +56,10 @@ class _HomeState extends State<Home> {
   double _objectPositionY = 0;
   double _startY = 0;
   double _endY = 0;
+
+  //get date
+  // Calendar calendarWidget = Calendar();
+  // DateTime? selectedDay = calendarWidget.selectedDay;
 
   @override
   Widget build(BuildContext context) {
@@ -114,17 +119,18 @@ class _HomeState extends State<Home> {
                         barrierColor: Colors.black.withAlpha(0),
                         builder: (_) => AppointmentBottomSheet(
                           selectedDate: DateTime.now(),
+                          //calendarWidget.selectedDay; // _selectedDay 변수에 접근
                         ),
                         isScrollControlled: true
                         );
                       //TESTTESTTESTTESTTESTTESTTESTTESTTEST
-                      createAppointment(context, Appointment(
-                        date: '2022-04-20',
-                        startTime: '09:00',
-                        endTime: '11:00',
-                        doctor: 'Dr. Smith',
-                        hospital: 'City Hospital',
-                      ));
+                      // createAppointment(context, Appointment(
+                      //   date: 'aaaa', ///////////
+                      //   startTime: '09:00',
+                      //   endTime: '11:00',
+                      //   doctor: 'Dr. Smith',
+                      //   hospital: 'City Hospital',
+                      // ));
                       },
                     style: FilledButton.styleFrom(
                       backgroundColor: PRIMARY_COLOR,
@@ -158,9 +164,9 @@ class _HomeState extends State<Home> {
                       InkWell(
                         onTap: (){
                           Navigator.push(
-                            context,MaterialPageRoute(builder: (context) => mindlogScreen(
-                            selectedDate: DateTime.now(),
-                          ))
+                            context, MaterialPageRoute(builder: (context) => mindlogScreen(
+                              selectedDate: DateTime.now(),
+                            ))
                           );
                         },
                         child: mindlogList(
