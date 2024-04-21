@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/const/visual.dart';
 
-class renderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
-  const renderAppBarHome({super.key});
+class RenderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
+  const RenderAppBarHome({super.key});
 
 
   @override

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../const/visual.dart';
 
-class appointmentList extends StatelessWidget {
+class AppointmentList extends StatelessWidget {
   final String appointmentTime;
   final String hospital;
   final String doctor;
 
-  const appointmentList({
+  const AppointmentList({
     super.key, required this.appointmentTime, required this.hospital, required this.doctor
   });
 
@@ -59,7 +59,7 @@ class appointmentList extends StatelessWidget {
                             letterSpacing: -0.15
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 1,
                       ),
                       Text(hospital + ' / ' + doctor,

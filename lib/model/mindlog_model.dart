@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
-
 class Mindlog {
   //final Long? id;
   final String? date;  // 이거 date로 바꿔야됨
+  final String? mood;
   final String? moodColor;
   final String? title;
   final String? emotionRecord;
@@ -12,6 +9,7 @@ class Mindlog {
   final String? questionRecord;
 
   Mindlog({required this.date,
+    required this.mood,
     required this.moodColor,
     required this.title,
     required this.emotionRecord,
@@ -22,6 +20,7 @@ class Mindlog {
     return Mindlog(
       //id: json['id'],
         date: json['date'],
+        mood: json['mood'],
         moodColor: json['moodColor'],
         title: json['title'],
         emotionRecord: json['emotionRecord'],
@@ -31,6 +30,7 @@ class Mindlog {
   Map<String, dynamic> toJson() => {
     //'id': id,
     'date': date,
+    'mood': mood,
     'moodColor': moodColor,
     'title': title,
     'emotionRecord': emotionRecord,

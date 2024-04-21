@@ -47,7 +47,7 @@ Future<int> createMindlog(BuildContext context, Mindlog mindlog) async {
 
 //삭제
 Future<void> deleteMindlog(BuildContext context, int mindlogId) async {
-  var serverUrl = Uri.parse('${serverIP_mindlog}/${mindlogId}');
+  var serverUrl = Uri.parse('$serverIP_mindlog/$mindlogId');
 
   try {
     final response = await http.delete(serverUrl);
@@ -64,7 +64,7 @@ Future<void> deleteMindlog(BuildContext context, int mindlogId) async {
 
 //수정
 Future<void> updateMindlog(BuildContext context, int mindlogId, Mindlog mindlog) async {
-  var serverUrl = Uri.parse('${serverIP_mindlog}/${mindlogId}');
+  var serverUrl = Uri.parse('$serverIP_mindlog/$mindlogId');
 
   try {
     final response = await http.put(serverUrl,
@@ -80,14 +80,14 @@ Future<void> updateMindlog(BuildContext context, int mindlogId, Mindlog mindlog)
       throw Exception("Failed to send data2: ${response.statusCode}");
     }
   } catch (e) {
-    print("Failed to send data1: ${e}");
+    print("Failed to send data1: $e");
 
   }
 }
 
 //날짜별조회
 Future<void> getMindlogByDate(BuildContext context, String mindlogDate) async {
-  var serverUrl = Uri.parse('${serverIP_mindlog}/by-date/${mindlogDate}');
+  var serverUrl = Uri.parse('$serverIP_mindlog/by-date/$mindlogDate');
 
   try {
     final response = await http.get(serverUrl);
@@ -115,7 +115,7 @@ Future<void> getMindlogByDate(BuildContext context, String mindlogDate) async {
 
 //id별조회
 Future<Mindlog> getMindlogById(BuildContext context, int mindlogId) async {
-  var serverUrl = Uri.parse('${serverIP_mindlog}/${mindlogId}');
+  var serverUrl = Uri.parse('$serverIP_mindlog/$mindlogId');
 
   final response = await http.get(serverUrl);
 
@@ -124,7 +124,6 @@ Future<Mindlog> getMindlogById(BuildContext context, int mindlogId) async {
 
     dynamic responseData = json.decode(response.body);  // 응답 데이터를 JSON으로 디코딩
     return Mindlog.fromJson(responseData); // Appointment 모델로 변환하여 반환
-
   } else {
     throw Exception("Failed to load data: ${response.statusCode}");
   }

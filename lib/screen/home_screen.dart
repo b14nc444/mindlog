@@ -7,12 +7,11 @@ import 'package:mindlog_app/component/appointment_bottom_sheet.dart';
 import 'package:mindlog_app/component/appointment_list.dart';
 import 'package:mindlog_app/component/calendar.dart';
 import 'package:mindlog_app/component/mindlog_list.dart';
-import 'package:mindlog_app/component/navigator.dart';
+import 'package:mindlog_app/component/navigation.dart';
 import 'package:mindlog_app/const/visual.dart';
-import 'package:mindlog_app/model/appoinment_model.dart';
 import 'package:mindlog_app/screen/appointment_screen.dart';
-import 'package:mindlog_app/screen/mindlog_screen.dart';
-import 'package:mindlog_app/service/db_server_appointment.dart';
+import 'package:mindlog_app/screen/mindlog_viewer_screen.dart';
+import 'package:mindlog_app/screen/mindlog_writer_screen.dart';
 
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
@@ -25,11 +24,7 @@ class homeScreen extends StatelessWidget {
       home: const Home(),
       theme: ThemeData(
         scaffoldBackgroundColor: BACKGROUND_COLOR,
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            fontFamily: 'Pretendard'
-          )
-        )
+        fontFamily: 'pretendard',
       ),
     );
   }
@@ -67,7 +62,7 @@ class _HomeState extends State<Home> {
     initializeDateFormatting('ko_KR');
 
     return Scaffold(
-      appBar: const renderAppBarHome(),
+      appBar: const RenderAppBarHome(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -96,7 +91,7 @@ class _HomeState extends State<Home> {
                       MaterialPageRoute(builder: (context) => appointmentScreen()),
                     );
                   },
-                  child: const appointmentList(
+                  child: const AppointmentList(
                       appointmentTime: '9:00 - 9:15',
                       hospital: '행복주는정신과의원',
                       doctor: '김정심 원장님'
@@ -114,6 +109,8 @@ class _HomeState extends State<Home> {
                   height: 50,
                   child: FilledButton(
                     onPressed: () {
+                      // getAppointmentById(context, 1);
+                      // deleteAppointment(context, 1);
                       showModalBottomSheet(
                         context: context,
                         barrierColor: Colors.black.withAlpha(0),
@@ -123,14 +120,6 @@ class _HomeState extends State<Home> {
                         ),
                         isScrollControlled: true
                         );
-                      //TESTTESTTESTTESTTESTTESTTESTTESTTEST
-                      // createAppointment(context, Appointment(
-                      //   date: 'aaaa', ///////////
-                      //   startTime: '09:00',
-                      //   endTime: '11:00',
-                      //   doctor: 'Dr. Smith',
-                      //   hospital: 'City Hospital',
-                      // ));
                       },
                     style: FilledButton.styleFrom(
                       backgroundColor: PRIMARY_COLOR,
@@ -163,8 +152,9 @@ class _HomeState extends State<Home> {
                     children: [
                       InkWell(
                         onTap: (){
+                          // deleteMindlog(context, 1);
                           Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => mindlogScreen(
+                            context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
                               selectedDate: DateTime.now(),
                             ))
                           );
@@ -200,7 +190,7 @@ class _HomeState extends State<Home> {
                         onVerticalDragEnd: (details) {
                           if (details.primaryVelocity! > 0) {
                             Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => mindlogScreen(
+                                MaterialPageRoute(builder: (context) => mindlogWriterScreen(
                                   selectedDate: DateTime.now(),
                                 ))
                             );

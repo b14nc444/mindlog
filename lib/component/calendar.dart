@@ -16,7 +16,7 @@ class _CalendarState extends State<Calendar> {
   DateTime _focusedDay = DateTime.now();
   //DateTime? get selectedDay => _selectedDay;
 
-  CalendarFormat _calendarFormat = CalendarFormat.week;
+  final CalendarFormat _calendarFormat = CalendarFormat.week;
 
   TextStyle weekTextStyle = const TextStyle(
       color: TYPOGRAPHY_GRAY_2,

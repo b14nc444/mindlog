@@ -54,7 +54,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                 color: Colors.grey.withOpacity(0.5), // Shadow color
                 spreadRadius: 3, // Spread radius
                 blurRadius: 33, // Blur radius
-                offset: Offset(0, 1), // Offset
+                offset: const Offset(0, 1), // Offset
               ),
             ],
           ),
@@ -74,8 +74,8 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                 const SizedBox(
                   height: 6,
                 ),
-                Text('$formattedDate',
-                  style: TextStyle(
+                Text(formattedDate,
+                  style: const TextStyle(
                     color: TYPOGRAPHY_GRAY_3,
                     fontSize: 14,
                     letterSpacing: -0.1
@@ -105,7 +105,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                     },
                     style: FilledButton.styleFrom(
                       backgroundColor: PRIMARY_COLOR,
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold
@@ -114,7 +114,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    child: Text('진료 일정 등록하기'),
+                    child: const Text('진료 일정 등록하기'),
                   ),
                 ),
               ],
@@ -137,7 +137,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
         doctorName: doctorName,
       ));
 
-      print('-----input-----');
+      print('-----data input-----');
       print('date : $date');
       print('startTime : $startTime');
       print('endTime : $endTime');
@@ -151,13 +151,13 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
 }
 
 String? timeValidator(String? val) {
-  if(val == null || val.length == 0) {
+  if(val == null || val.isEmpty) {
     return 'enter the time';
   }
   return null;
 }
 String? hospitalValidator(String? val) {
-  if(val == null || val.length == 0) {
+  if(val == null || val.isEmpty) {
     return 'enter the hospital name';
   }
   return null;

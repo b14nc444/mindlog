@@ -21,9 +21,9 @@ class mindlogList extends StatelessWidget {
               borderRadius: BorderRadius.circular(10)
           ),
           child: SizedBox(
-            height: 90,
+            height: 80,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 22, 20, 22),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

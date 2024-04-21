@@ -42,17 +42,17 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
     InputDecoration inputDecoration = InputDecoration(
       hintText: widget.hintText,
       hintStyle: textStyleHint,
-      border: OutlineInputBorder(
+      border: const OutlineInputBorder(
         borderSide: BorderSide.none, // 테두리 없음
       ),
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
     );
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+      padding: const EdgeInsets.fromLTRB(10, 6, 0, 0),
       child: Expanded(
         child: Container(
-          constraints: BoxConstraints(minHeight: 140.0),
+          constraints: const BoxConstraints(minHeight: 140.0),
           child: TextFormField(
             maxLines: null,
             cursorColor: TYPOGRAPHY_GRAY_3,
