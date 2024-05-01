@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../const/visual.dart';
 
-class mindlogList extends StatelessWidget {
+class mindlogCard extends StatelessWidget {
   final String mindlogTitle;
   final String contents;
 
-  const mindlogList({
+  const mindlogCard({
     super.key, required this.mindlogTitle, required this.contents
   });
 
@@ -33,7 +33,7 @@ class mindlogList extends StatelessWidget {
                     children: [
                       Text(mindlogTitle,
                         style: const TextStyle(
-                            color: BASIC_BLACK,
+                            color: basicBlack,
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -0.2
@@ -41,7 +41,7 @@ class mindlogList extends StatelessWidget {
                       ),
                       Text(contents,
                         style: const TextStyle(
-                            color: TYPOGRAPHY_GRAY,
+                            color: typographyGray1,
                             fontSize: 12,
                             fontWeight: FontWeight.w500
                         ),

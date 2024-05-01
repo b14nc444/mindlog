@@ -8,6 +8,7 @@ import 'package:mindlog_app/const/visual.dart';
 import 'package:mindlog_app/model/mindlog_model.dart';
 
 import '../component/hide_keyboard_on_tap.dart';
+import '../component/mindlog_mood_picker.dart';
 import '../service/db_server_mindlog.dart';
 
 class mindlogWriterScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
   String? question;
 
   TextStyle textStyleHintTitle = const TextStyle(
-    color: TYPOGRAPHY_GRAY,
+    color: typographyGray1,
     fontSize: 23,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
@@ -41,7 +42,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
   );
 
   TextStyle textStyleContent = const TextStyle(
-    color: BASIC_BLACK,
+    color: basicBlack,
     fontSize: 22,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.normal,
@@ -52,7 +53,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
   Widget build(BuildContext context) {
 
     initializeDateFormatting('ko_KR');
-    String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(widget.selectedDate);
+    String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(widget.selectedDate);
     date = formattedDate;
 
     return Form(
@@ -65,7 +66,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
           leading: TextButton(
             child: const Text('취소',
               style: TextStyle(
-                color: TYPOGRAPHY_GRAY,
+                color: typographyGray1,
                 fontSize: 16
               ),
             ),
@@ -77,7 +78,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
             TextButton(
               child: const Text('완료',
                 style: TextStyle(
-                    color: PRIMARY_COLOR,
+                    color: primaryColor,
                     fontSize: 16
                 ),
               ),
@@ -94,7 +95,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                    cursorColor: TYPOGRAPHY_GRAY_3,
+                    cursorColor: typographyGray3,
                     maxLines: 1,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
@@ -110,6 +111,10 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                   ),
                   Column(
                     children: [
+                      mindlogMoodPicker(),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       const mindlogQuestion(
                         question: '1. 감정을 기록합니다.',
                         direction: '오늘의 감정은 어떠했나요?\n우울함, 불안함 등의 감정이 들었다면 몇점으로 평가할 수 있을까요?(10점 만점)'
@@ -154,7 +159,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
 
   String? contentValidator(String? val) {
     if(val == null || val.length == 0) {
-      return 'cant be null';
+      return '내용을 입력하세요';
     }
     return null;
   }

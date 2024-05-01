@@ -43,7 +43,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
 
     InputDecoration inputDecoration = InputDecoration(
       filled: true,
-      fillColor: BACKGROUND_COLOR,
+      fillColor: backgroundColor,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: BorderSide.none, // 테두리 없음
@@ -52,7 +52,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
 
     InputDecoration inputdecorationTime = InputDecoration(
       filled: true,
-      fillColor: BACKGROUND_COLOR,
+      fillColor: backgroundColor,
       border: UnderlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
         borderSide: BorderSide.none, // 테두리 없음
@@ -61,12 +61,12 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
     );
 
     TextStyle textStyleLabel = const TextStyle(
-        color: SECONDARY_COLOR_3,
+        color: secondaryColor3,
         fontWeight: FontWeight.bold
     );
 
     TextStyle textStyleContent = const TextStyle(
-        color: BASIC_BLACK,
+        color: basicBlack,
         fontSize: 14,
         fontFamily: 'Pretendard Variable',
         fontWeight: FontWeight.w500,
@@ -74,7 +74,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
     );
 
     TextStyle textStyleHint = const TextStyle(
-      color: TYPOGRAPHY_GRAY,
+      color: typographyGray1,
       fontSize: 14,
       fontFamily: 'Pretendard Variable',
       fontWeight: FontWeight.w500,
@@ -107,7 +107,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                     hintText: '09:00',
                     hintStyle: textStyleHint,
                     filled: true,
-                    fillColor: BACKGROUND_COLOR,
+                    fillColor: backgroundColor,
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide.none, // 테두리 없음
@@ -145,7 +145,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                     hintText: '09:30',
                     hintStyle: textStyleHint,
                     filled: true,
-                    fillColor: BACKGROUND_COLOR,
+                    fillColor: backgroundColor,
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide.none, // 테두리 없음
@@ -185,7 +185,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
             child: TextFormField(
               //controller: textControllerHospital,
               textAlignVertical: TextAlignVertical.center,
-              cursorColor: TYPOGRAPHY_GRAY_3,
+              cursorColor: typographyGray3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
@@ -193,7 +193,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 hintText: '병원을 입력해주세요',
                 hintStyle: textStyleHint,
                 filled: true,
-                fillColor: BACKGROUND_COLOR,
+                fillColor: backgroundColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide.none, // 테두리 없음
@@ -215,7 +215,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
             height: 45,
             child: TextFormField(
               //controller: textControllerDoctor,
-              cursorColor: TYPOGRAPHY_GRAY_3,
+              cursorColor: typographyGray3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
@@ -223,7 +223,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 hintText: '주치의를 입력해주세요(선택)',
                 hintStyle: textStyleHint,
                 filled: true,
-                fillColor: BACKGROUND_COLOR,
+                fillColor: backgroundColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide.none, // 테두리 없음

@@ -62,7 +62,7 @@ class _mindlogQuestionState extends State<mindlogQuestion> {
                 child: Text(
                   widget.direction,
                   style: TextStyle(
-                    color: TYPOGRAPHY_GRAY_2,
+                    color: typographyGray2,
                     fontSize: 13,
                   ),
                 ),

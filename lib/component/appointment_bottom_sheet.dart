@@ -65,7 +65,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
               children: [
                 const Text('진료',
                   style: TextStyle(
-                    color: SECONDARY_COLOR_3,
+                    color: secondaryColor3,
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.1
@@ -76,7 +76,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                 ),
                 Text(formattedDate,
                   style: const TextStyle(
-                    color: TYPOGRAPHY_GRAY_3,
+                    color: typographyGray3,
                     fontSize: 14,
                     letterSpacing: -0.1
                   ),
@@ -104,7 +104,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                       onCreateButtonPressed();
                     },
                     style: FilledButton.styleFrom(
-                      backgroundColor: PRIMARY_COLOR,
+                      backgroundColor: primaryColor,
                       textStyle: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -152,19 +152,19 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
 
 String? timeValidator(String? val) {
   if(val == null || val.isEmpty) {
-    return 'enter the time';
+    return '시간을 입력하세요';
   }
   return null;
 }
 String? hospitalValidator(String? val) {
   if(val == null || val.isEmpty) {
-    return 'enter the hospital name';
+    return '병원 이름을 입력하세요';
   }
   return null;
 }
 String? doctorValidator(String? val) {
   if(val!.length > 10) {
-    return 'enter under 10 characters';
+    return '10글자 이내로 입력하세요';
   }
   return null;
 }

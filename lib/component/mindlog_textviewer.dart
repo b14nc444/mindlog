@@ -11,8 +11,8 @@ class mindlogTextViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle textStyleContent = const TextStyle(
-      color: BASIC_BLACK,
-      fontSize: 18,
+      color: basicBlack,
+      fontSize: 16,
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w500,
       letterSpacing: -0.15,

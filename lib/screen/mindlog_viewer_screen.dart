@@ -30,7 +30,7 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
   String? question;
 
   TextStyle textStyleTitle = const TextStyle(
-    color: BASIC_BLACK,
+    color: basicBlack,
     fontSize: 22,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.bold,
@@ -53,10 +53,10 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
     date = formattedDateTime;
 
     //for test
-    String testTitle = '오늘 기분 최고!';
-    String testContent1 = '오늘 오전엔 기분이 안좋았는데, 오후에는 기분이 좀 좋아졌다.\n그리고 별거 아니었는데 기분 안 좋았던 이유를 생각해보면 그냥 아침에 늦게 일어나서 다 망한 것 같아서 그랬나보다';
-    String testContent2 = '할머니가 요양원에 들어가셨다.\n가기 전까지는 딱히 아무 생각 없었는데,\n엄마가 마지막으로 할머니랑 안아주라고 하는데 할머니가 엄마랑 싸우지 말고 잘 지내라고 했다. 그리고 고생했다고 말해줬다.\n확실히 가족들에 관련한 일은 마음을 쉽게흔드는 것 같다.';
-    String testContent3 = '요즘 자꾸 자면서 깬다.\n그래서 아침에 늦게 일어난 것 같다.\n그리고 요즘 생각하기에 인내심은 길어진 것 같은데, 약간 상황판단력이 좀 떨어진 느낌도 든다.';
+    String testTitle = '저희 진짜 열심히 했어요';
+    String testContent1 = '피곤하다… 시험 하나만 봐서 별로 안 바쁠 줄 알았는데 생각보다 할 게 많음';
+    String testContent2 = '친구들 만나러 다녀옴 근데 바빠서 생각보다 오래 못 놀고 들어와서 아쉬웠다';
+    String testContent3 = '피곤하고 무기력할 때는 어떻게 해야 하지 힘이 안 난다';
 
     return Scaffold(
         appBar: AppBar(
@@ -91,9 +91,9 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
                     ),
                     SizedBox(
                         width: double.infinity,
-                        child: Text(formattedDateTime,
+                        child: Text('2024년 4월 20일 22:04',
                             style: const TextStyle(
-                                color: TYPOGRAPHY_GRAY,
+                                color: typographyGray1,
                                 fontWeight: FontWeight.w300,
                                 fontSize: 13,
                                 fontFamily: 'pretendard'

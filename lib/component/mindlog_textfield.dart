@@ -23,7 +23,7 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
   Widget build(BuildContext context) {
 
     TextStyle textStyleContent = const TextStyle(
-      color: BASIC_BLACK,
+      color: basicBlack,
       fontSize: 18,
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w500,
@@ -31,7 +31,7 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
     );
 
     TextStyle textStyleHint = const TextStyle(
-      color: TYPOGRAPHY_GRAY,
+      color: typographyGray1,
       fontSize: 18,
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w500,
@@ -55,7 +55,7 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
           constraints: const BoxConstraints(minHeight: 140.0),
           child: TextFormField(
             maxLines: null,
-            cursorColor: TYPOGRAPHY_GRAY_3,
+            cursorColor: typographyGray3,
             keyboardType: TextInputType.multiline,
             decoration: inputDecoration,
             style: textStyleContent,

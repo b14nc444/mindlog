@@ -3,9 +3,11 @@ import 'package:mindlog_app/const/visual.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatefulWidget {
-  const Calendar({super.key});
+  final ValueChanged<DateTime?>? onDaySelected;
 
-  DateTime? get selectedDay => null;
+  const Calendar({super.key, this.onDaySelected});
+
+  //DateTime? get selectedDay => null;
 
   @override
   State<Calendar> createState() => _CalendarState();
@@ -19,7 +21,7 @@ class _CalendarState extends State<Calendar> {
   final CalendarFormat _calendarFormat = CalendarFormat.week;
 
   TextStyle weekTextStyle = const TextStyle(
-      color: TYPOGRAPHY_GRAY_2,
+      color: typographyGray2,
       fontSize: 11
   );
 
@@ -40,10 +42,10 @@ class _CalendarState extends State<Calendar> {
       lastDay: DateTime.utc(2050, 12, 31),
       focusedDay: _focusedDay,
       calendarFormat: _calendarFormat,
-      availableCalendarFormats: const {
-        CalendarFormat.month: '주',
-        CalendarFormat.week: '월',
-      },
+      // availableCalendarFormats: const {
+      //   CalendarFormat.month: '주',
+      //   CalendarFormat.week: '월',
+      // },
       // onFormatChanged: (format) {
       //   setState(() {
       //     _calendarFormat = format;
@@ -77,7 +79,7 @@ class _CalendarState extends State<Calendar> {
         selectedDecoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: TYPOGRAPHY_GRAY_2,
+            color: typographyGray2,
             width: 1.5,
           )
         ),
@@ -89,10 +91,11 @@ class _CalendarState extends State<Calendar> {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
             });
+          // Notify the parent widget about the selected day
+          widget.onDaySelected?.call(selectedDay);
           }
         },  // select the day tapped
         onPageChanged: (focusedDay) {
-        // No need to call `setState()` here
         _focusedDay = focusedDay;
       },
     // eventLoader: (day) {

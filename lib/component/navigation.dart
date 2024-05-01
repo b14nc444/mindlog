@@ -13,8 +13,8 @@ class renderBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: SECONDARY_COLOR_1,
-      selectedItemColor: PRIMARY_COLOR,
+      backgroundColor: secondaryColor1,
+      selectedItemColor: primaryColor,
       // unselectedIconTheme,
       selectedFontSize: 12.0,
       // this.unselectedFontSize = 12.0,
