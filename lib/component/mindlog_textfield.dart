@@ -50,19 +50,23 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 6, 0, 0),
-      child: Expanded(
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 140.0),
-          child: TextFormField(
-            maxLines: null,
-            cursorColor: typographyGray3,
-            keyboardType: TextInputType.multiline,
-            decoration: inputDecoration,
-            style: textStyleContent,
-            onSaved: widget.onSavedContent,
-            validator: widget.contentValidator,
+      child: Flex(
+        direction: Axis.horizontal,
+        children: [Expanded(
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 140.0),
+            child: TextFormField(
+              maxLines: null,
+              cursorColor: typographyGray3,
+              keyboardType: TextInputType.multiline,
+              decoration: inputDecoration,
+              style: textStyleContent,
+              onSaved: widget.onSavedContent,
+              validator: widget.contentValidator,
+            ),
           ),
         ),
+        ]
       ),
     );
   }

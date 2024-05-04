@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import '../model/mindlog_model.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class MindlogRepository {
@@ -12,6 +10,7 @@ class MindlogRepository {
   Future<int> createMindlog(Mindlog mindlog) async {
     var serverUrl = serverIP_mindlog;
 
+    final json = mindlog.toJson();
     final response = await dio.post(serverUrl, data: json);
 
     if (response.statusCode == 200) {
@@ -47,11 +46,12 @@ class MindlogRepository {
   Future<void> updateMindlog(int mindlogId, Mindlog mindlog) async {
     var serverUrl = '$serverIP_mindlog/$mindlogId';
 
+    final json = mindlog.toJson();
     try {
       final response = await dio.put(serverUrl, data: json);
 
       if (response.statusCode == 200) {
-        int appointmentId = response.data?['id'];
+        int mindlogId = response.data?['id'];
         print("Mindlog Data with ID [$mindlogId] updated successfully");
       } else {
         throw Exception("Failed to send data2: ${response.statusCode}");

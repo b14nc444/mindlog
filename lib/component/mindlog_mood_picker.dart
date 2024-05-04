@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mindlog_app/const/visual.dart';
@@ -8,17 +5,25 @@ import 'package:provider/provider.dart';
 
 import '../provider/mindlog_provider.dart';
 
-class mindlogMoodPicker extends StatelessWidget {
+class mindlogMoodPicker extends StatefulWidget {
   const mindlogMoodPicker({super.key});
 
   @override
+  State<mindlogMoodPicker> createState() => _mindlogMoodPickerState();
+}
+
+class _mindlogMoodPickerState extends State<mindlogMoodPicker> {
+
+  Image heartImage = heartEmpty;
+
+  @override
   Widget build(BuildContext context) {
+
     final provider = Provider.of<MindlogProvider>(context);
 
-    List<String> selectedMoods = provider.selectedMoods;
     List<MoodItem> moodItems = provider.moodItems;
+    List<String> selectedMoods = provider.selectedMoods;
     int moodColor = provider.moodColor;
-    Image heartImage = provider.heartImage;
 
     double calculateAverageMoodValue() {
       if (selectedMoods.isEmpty) {
@@ -79,25 +84,25 @@ class mindlogMoodPicker extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
-                              provider.selectMood(moodItems[index].name);
-                              print('Item ${moodItems[index].name} tapped');
-                              print('Item list : $selectedMoods');
+                                provider.selectMood(moodItems[index].name);
+                                print('Item ${moodItems[index].name} tapped');
+                                print('Item list : $selectedMoods');
 
-                              double averageMood = calculateAverageMoodValue();
-                              print('Average Mood Value: $averageMood');
-                              if (averageMood == 0) {
-                                heartImage = heartEmpty;
-                                moodColor = 0;
-                              } else if (averageMood < 2) {
-                                heartImage = heartRed;
-                                moodColor = 1;
-                              } else if (averageMood < 3.5) {
-                                heartImage = heartYellow;
-                                moodColor = 3;
-                              } else if (averageMood <= 5) {
-                                heartImage = heartGreen;
-                                moodColor = 5;
-                              }
+                                double averageMood = calculateAverageMoodValue();
+                                print('Average Mood Value: $averageMood');
+                                if (averageMood == 0) {
+                                  heartImage = heartEmpty;
+                                  provider.moodColor = 0;
+                                } else if (averageMood < 2) {
+                                  heartImage = heartRed;
+                                  provider.moodColor = 1;
+                                } else if (averageMood < 3.5) {
+                                  heartImage = heartYellow;
+                                  provider.moodColor = 3;
+                                } else {  // =if (averageMood <= 5)
+                                  heartImage = heartGreen;
+                                  provider.moodColor = 5;
+                                }
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -106,8 +111,7 @@ class mindlogMoodPicker extends StatelessWidget {
                                   selectedMoods.contains(moodItems[index].name) ? 0.4 : 1.0,
                                 ),
                                 border: Border.all(
-                                    color: selectedMoods.contains(moodItems[index].name) ? getColorByMoodValue(moodItems[index].moodValue) : Colors.white,
-                                    width: selectedMoods.contains(moodItems[index].name) ? 1 : 0
+                                    color: getColorByMoodValue(moodItems[index].moodValue),
                                 )
                               ),
                               child: Padding(

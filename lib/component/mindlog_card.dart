@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../const/visual.dart';
 import '../model/mindlog_model.dart';
-import '../provider/mindlog_provider.dart';
-import '../provider/schedule_provider.dart';
 import '../screen/mindlog_viewer_screen.dart';
 
 class mindlogCard extends StatelessWidget {
@@ -15,10 +12,6 @@ class mindlogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final scheduleProvider = context.watch<ScheduleProvider>();
-    final selectedDay = scheduleProvider.selectedDate;
-
-    int id = mindlog.id;
     String title = mindlog.title;
     String contents = '${mindlog.emotionRecord.substring(0, 20)}...';
 

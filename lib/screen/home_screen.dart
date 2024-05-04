@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/appbar.dart';
 import 'package:mindlog_app/component/appointment_bottom_sheet.dart';
 import 'package:mindlog_app/component/appointment_card.dart';
@@ -10,16 +9,10 @@ import 'package:mindlog_app/component/calendar.dart';
 import 'package:mindlog_app/component/mindlog_card.dart';
 import 'package:mindlog_app/component/navigation.dart';
 import 'package:mindlog_app/const/visual.dart';
-import 'package:mindlog_app/model/mindlog_model.dart';
 import 'package:mindlog_app/provider/mindlog_provider.dart';
 import 'package:mindlog_app/provider/schedule_provider.dart';
-import 'package:mindlog_app/screen/appointment_screen.dart';
-import 'package:mindlog_app/screen/mindlog_viewer_screen.dart';
 import 'package:mindlog_app/screen/mindlog_writer_screen.dart';
-import 'package:mindlog_app/service/db_server_appointment.dart';
 import 'package:provider/provider.dart';
-
-import '../model/appoinment_model.dart';
 
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
@@ -95,22 +88,21 @@ class _HomeState extends State<Home> {
                   const SizedBox(
                     height: 14,
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: appointments.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final appointment = appointments[index];
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: appointments.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final appointment = appointments[index];
 
-                        return Dismissible(
-                          key: ObjectKey(appointment.id),
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (DismissDirection direction) {
-                            scheduleProvider.deleteAppointment(id: appointment.id, date: appointment.date);
-                          },
-                          child: AppointmentCard(appointment: appointment,),
-                        );
-                      },
-                    ),
+                      return Dismissible(
+                        key: ObjectKey(appointment.id),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (DismissDirection direction) {
+                          scheduleProvider.deleteAppointment(id: appointment.id, date: appointment.date);
+                        },
+                        child: AppointmentCard(appointment: appointment,),
+                      );
+                    },
                   ),
                   // InkWell(
                   //   onTap: (){
@@ -166,15 +158,14 @@ class _HomeState extends State<Home> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: mindlogs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final mindlog = mindlogs[index];
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: mindlogs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final mindlog = mindlogs[index];
 
-                        return mindlogCard(mindlog: mindlog,);
-                      },
-                    ),
+                      return mindlogCard(mindlog: mindlog,);
+                    },
                   ),
                   // InkWell(
                   //   onTap: (){

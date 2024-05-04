@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/model/mindlog_model.dart';
-import 'package:mindlog_app/service/db_server_mindlog.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/mindlog_provider.dart';

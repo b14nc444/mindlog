@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -9,12 +8,16 @@ import 'package:mindlog_app/provider/schedule_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../model/appoinment_model.dart';
-import '../service/db_server_appointment.dart';
 
-class AppointmentBottomSheet extends StatelessWidget {
+class AppointmentBottomSheet extends StatefulWidget {
 
-  AppointmentBottomSheet({super.key});
+  const AppointmentBottomSheet({super.key});
 
+  @override
+  State<AppointmentBottomSheet> createState() => _AppointmentBottomSheetState();
+}
+
+class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
   final GlobalKey<FormState> formKey = GlobalKey();
 
   String? date;

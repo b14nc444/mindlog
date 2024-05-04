@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_http_request.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:mindlog_app/provider/mindlog_provider.dart';
 import 'package:mindlog_app/screen/home_screen.dart';
 import 'package:mindlog_app/service/db_server_appointment.dart';
@@ -9,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'provider/schedule_provider.dart';
 
 void main() {
+  initializeDateFormatting('ko_KR');
+
   final appointmentRepository = AppointmentRepository();
   final mindlogRepository = MindlogRepository();
   final scheduleProvider = ScheduleProvider(repository: appointmentRepository);

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import '../component/hide_keyboard_on_tap.dart';
 import '../component/mindlog_mood_picker.dart';
-import '../service/db_server_mindlog.dart';
 
 class mindlogWriterScreen extends StatefulWidget {
 
@@ -29,8 +27,8 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
-  String? date;
-  MoodItem? mood;
+  String? date = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
+  List<String>? mood;
   int? moodColor;
   String? title;
   String? emotion;
@@ -55,10 +53,15 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     initializeDateFormatting('ko_KR');
-    String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(widget.selectedDate);
-    date = formattedDate;
+    final provider = context.watch<MindlogProvider>();
+
+    String? date = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
+    mood = provider.selectedMoods;
+    moodColor = provider.moodColor;
+
+    // String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(widget.selectedDate);
+    // date = formattedDate;
 
     return Form(
       key: formKey,
@@ -162,7 +165,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
   }
 
   String? contentValidator(String? val) {
-    if(val == null || val.length == 0) {
+    if(val == null || val.isEmpty) {
       return '내용을 입력하세요';
     }
     return null;

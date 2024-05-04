@@ -40,6 +40,8 @@ class ScheduleProvider extends ChangeNotifier {
     final targetDate = appointment.date;
     final savedAppointment = await repository.createAppointment(appointment);
 
+    print('requested');
+
     cache.update(targetDate, (value) => [
       ...value,
       appointment.copyWith(id: savedAppointment)

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:mindlog_app/model/appoinment_model.dart';
 import 'dart:convert';
 
@@ -11,7 +10,9 @@ class AppointmentRepository {
   Future<int> createAppointment(Appointment appointment) async {
     var serverUrl = serverIP_appointment;
 
+    final json = appointment.toJson();
     final response = await dio.post(serverUrl, data: json);
+    print('waiting...');
 
     if (response.statusCode == 200) {
       int appointmentId = response.data?['id'];
@@ -46,6 +47,7 @@ class AppointmentRepository {
   Future<void> updateAppointment(int appointmentId, Appointment appointment) async {
     var serverUrl = '$serverIP_appointment/$appointmentId';
 
+    final json = appointment.toJson();
     try {
       final response = await dio.put(serverUrl, data: json);
 

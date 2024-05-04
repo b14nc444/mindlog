@@ -41,6 +41,8 @@ class MindlogProvider with ChangeNotifier {
     final targetDate = mindlog.date;
     final savedMindlog = await repository.createMindlog(mindlog);
 
+    print('requested');
+
     cache.update(targetDate, (value) =>
     [
       ...value,
@@ -138,7 +140,6 @@ class MindlogProvider with ChangeNotifier {
   List<String> get selectedMoods => _selectedMoods;
 
   int moodColor = 0;
-  Image heartImage = heartEmpty;
 
   void selectMood(String mood) {
     if (selectedMoods.contains(mood)) {

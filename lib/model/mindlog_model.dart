@@ -3,7 +3,7 @@ import 'package:mindlog_app/provider/mindlog_provider.dart';
 class Mindlog {
   final int id;
   final String date;  // 이거 date로 바꿔야됨
-  final MoodItem mood;
+  final List<String> mood;
   final int moodColor;
   final String title;
   final String emotionRecord;
@@ -44,7 +44,7 @@ class Mindlog {
   Mindlog copyWith({
     int? id,
     String? date,
-    MoodItem? mood,
+    List<String>? mood,
     int? moodColor,
     String? title,
     String? emotionRecord,

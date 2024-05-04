@@ -7,10 +7,15 @@ import 'package:table_calendar/table_calendar.dart';
 import '../provider/mindlog_provider.dart';
 import '../provider/schedule_provider.dart';
 
-class Calendar extends StatelessWidget {
+class Calendar extends StatefulWidget {
 
-  Calendar({super.key});
+  const Calendar({super.key});
 
+  @override
+  State<Calendar> createState() => _CalendarState();
+}
+
+class _CalendarState extends State<Calendar> {
   final CalendarFormat _calendarFormat = CalendarFormat.week;
 
   TextStyle weekTextStyle = const TextStyle(
@@ -88,7 +93,7 @@ class Calendar extends StatelessWidget {
       },
     );
   }
-  
+
   void onDaySelected(
       DateTime selectedDate,
       DateTime focusedDate,
