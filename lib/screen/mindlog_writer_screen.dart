@@ -6,6 +6,8 @@ import 'package:mindlog_app/component/mindlog_question.dart';
 import 'package:mindlog_app/component/mindlog_textfield.dart';
 import 'package:mindlog_app/const/visual.dart';
 import 'package:mindlog_app/model/mindlog_model.dart';
+import 'package:mindlog_app/provider/mindlog_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../component/hide_keyboard_on_tap.dart';
 import '../component/mindlog_mood_picker.dart';
@@ -14,8 +16,10 @@ import '../service/db_server_mindlog.dart';
 class mindlogWriterScreen extends StatefulWidget {
 
   final DateTime selectedDate;
+  final bool isUpdate;
+  final Mindlog? modifyingMindlog;
 
-  const mindlogWriterScreen({super.key, required this.selectedDate});
+  const mindlogWriterScreen({super.key, required this.selectedDate, required this.isUpdate, this.modifyingMindlog});
 
   @override
   State<mindlogWriterScreen> createState() => _mindlogWriterScreenState();
@@ -26,8 +30,8 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
   final GlobalKey<FormState> formKey = GlobalKey();
 
   String? date;
-  String? mood;
-  String? moodColor;
+  MoodItem? mood;
+  int? moodColor;
   String? title;
   String? emotion;
   String? event;
@@ -175,17 +179,35 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
       // getMindlogByDate(context, '2024-04-20(토)');
       // getMindlogById(context, 3);
       // deleteMindlog(context, 1);
-      createMindlog(context, Mindlog(
-        date: date,
-        mood: 'positive',
-        moodColor: '???',
-        title: title,
-        emotionRecord: emotion,
-        eventRecord: event,
-        questionRecord: question,
-      ));
+      if(widget.isUpdate == false) {  // 새로운 기록
+        context.read<MindlogProvider>().createMindlog(
+            mindlog: Mindlog(
+                id: 0,
+                date: date!,
+                mood: mood!,
+                moodColor: moodColor!,
+                title: title!,
+                emotionRecord: emotion!,
+                eventRecord: event!,
+                questionRecord: question)
+        );
+      } else {  // 기존 기록 수정
+        context.read<MindlogProvider>().updateMindlog(
+            id: widget.modifyingMindlog!.id,
+            mindlog: Mindlog(  // 수정 시 id와 date는 기존 값 유지
+                id: widget.modifyingMindlog!.id,
+                date: widget.modifyingMindlog!.date,
+                mood: mood!,
+                moodColor: moodColor!,
+                title: title!,
+                emotionRecord: emotion!,
+                eventRecord: event!,
+                questionRecord: question)
+        );
+      }
 
       print('-----input data-----');
+      widget.isUpdate ? print('updated') : print('created');
       print('date : $date');
       print('mood : $mood');
       print('mood color : $moodColor');

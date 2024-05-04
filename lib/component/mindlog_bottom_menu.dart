@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/model/mindlog_model.dart';
 import 'package:mindlog_app/service/db_server_mindlog.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/mindlog_provider.dart';
+import '../screen/mindlog_writer_screen.dart';
 
 enum MindlogShareItem { exportToText, exportToFile }
 enum MindlogMenuItem { updateItem, deleteItem, }
 
 class mindlogBottomMenu extends StatefulWidget {
-  const mindlogBottomMenu({super.key});
+  final Mindlog mindlog;
+
+  const mindlogBottomMenu({super.key, required this.mindlog});
 
   @override
   State<mindlogBottomMenu> createState() => _mindlogBottomMenuState();
@@ -18,6 +24,9 @@ class _mindlogBottomMenuState extends State<mindlogBottomMenu> {
 
   @override
   Widget build(BuildContext context) {
+
+    Mindlog mindlog = widget.mindlog;
+
     return Container(
       color: Colors.white,
       height: 70,
@@ -36,8 +45,10 @@ class _mindlogBottomMenuState extends State<mindlogBottomMenu> {
                   switch (selectedShareItem) {
                     case MindlogShareItem.exportToText:
                       print('Exported to Text');
+                      //텍스트로 내보내기
                     case MindlogShareItem.exportToFile:
                       print('Exported to Txt File');
+                      //파일로 내보내기
                     case null: break;
                   }
                   // SnackBar 표시
@@ -64,21 +75,21 @@ class _mindlogBottomMenuState extends State<mindlogBottomMenu> {
                   // 선택된 MenuItem에 따라 다른 동작 수행
                   switch (selectedMenuItem) {
                     case MindlogMenuItem.updateItem:
-                    // 감정기록 수정 동작 수행
-                      updateMindlog(context, 1, Mindlog(
-                          date: '',
-                          mood: '',
-                          moodColor: '',
-                          title: '',
-                          emotionRecord: '',
-                          eventRecord: '',
-                          questionRecord: ''
-                      ));
+                      // 감정기록 수정 동작 수행
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => mindlogWriterScreen(
+                            selectedDate: DateTime.now(),
+                            isUpdate: true,
+                            modifyingMindlog: mindlog,
+                          ))
+                      );
                       print('Mindlog updated');
                       break;
                     case MindlogMenuItem.deleteItem:
                     // 감정기록 삭제 동작 수행
-                      deleteMindlog(context, 1,);
+                      context.read<MindlogProvider>().deleteMindlog(
+                        id: mindlog.id, date: mindlog.date,
+                      );
                       print('Mindlog deleted');
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("감정기록이 삭제되었습니다.")),

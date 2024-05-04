@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Calendar extends StatefulWidget {
-  final ValueChanged<DateTime?>? onDaySelected;
+import '../provider/mindlog_provider.dart';
+import '../provider/schedule_provider.dart';
 
-  const Calendar({super.key, this.onDaySelected});
+class Calendar extends StatelessWidget {
 
-  //DateTime? get selectedDay => null;
-
-  @override
-  State<Calendar> createState() => _CalendarState();
-}
-
-class _CalendarState extends State<Calendar> {
-  DateTime? _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-  //DateTime? get selectedDay => _selectedDay;
+  Calendar({super.key});
 
   final CalendarFormat _calendarFormat = CalendarFormat.week;
 
@@ -37,10 +30,15 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
+
+    final provider = context.watch<ScheduleProvider>();
+    final selectedDay = provider.selectedDate;
+    DateTime focusedDay = selectedDay;
+
     return TableCalendar(
       firstDay: DateTime.utc(2010, 1, 1),
       lastDay: DateTime.utc(2050, 12, 31),
-      focusedDay: _focusedDay,
+      focusedDay: focusedDay,
       calendarFormat: _calendarFormat,
       // availableCalendarFormats: const {
       //   CalendarFormat.month: '주',
@@ -84,23 +82,23 @@ class _CalendarState extends State<Calendar> {
           )
         ),
       ),
-      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      selectedDayPredicate: (date) => isSameDay(selectedDay, date),
       onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(_selectedDay, selectedDay)) {
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          // Notify the parent widget about the selected day
-          widget.onDaySelected?.call(selectedDay);
-          }
-        },  // select the day tapped
-        onPageChanged: (focusedDay) {
-        _focusedDay = focusedDay;
+        onDaySelected(selectedDay, focusedDay, context);
       },
-    // eventLoader: (day) {
-    //   return _getEventsForDay(day);
-    // },
     );
+  }
+  
+  void onDaySelected(
+      DateTime selectedDate,
+      DateTime focusedDate,
+      BuildContext context
+      ) {
+    final scheduleProvider = context.read<ScheduleProvider>();
+    final mindlogProvider = context.read<MindlogProvider>();
+
+    scheduleProvider.changeSelectedDate(date: selectedDate);
+    scheduleProvider.getAppointmentByDate(date: DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDate));
+    mindlogProvider.getMindlogByDate(date: DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(selectedDate));
   }
 }

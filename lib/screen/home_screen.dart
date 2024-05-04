@@ -11,10 +11,13 @@ import 'package:mindlog_app/component/mindlog_card.dart';
 import 'package:mindlog_app/component/navigation.dart';
 import 'package:mindlog_app/const/visual.dart';
 import 'package:mindlog_app/model/mindlog_model.dart';
+import 'package:mindlog_app/provider/mindlog_provider.dart';
+import 'package:mindlog_app/provider/schedule_provider.dart';
 import 'package:mindlog_app/screen/appointment_screen.dart';
 import 'package:mindlog_app/screen/mindlog_viewer_screen.dart';
 import 'package:mindlog_app/screen/mindlog_writer_screen.dart';
 import 'package:mindlog_app/service/db_server_appointment.dart';
+import 'package:provider/provider.dart';
 
 import '../model/appoinment_model.dart';
 
@@ -57,15 +60,14 @@ class _HomeState extends State<Home> {
   double _startY = 0;
   double _endY = 0;
 
-  //get date
-  DateTime? _selectedDate;
-
-
-  // Calendar calendarWidget = Calendar();
-  // DateTime? selectedDay = calendarWidget.selectedDay;
-
   @override
   Widget build(BuildContext context) {
+
+    final scheduleProvider = context.watch<ScheduleProvider>();
+    final mindlogProvider = context.watch<MindlogProvider>();
+    final selectedDay = scheduleProvider.selectedDate;
+    final appointments = scheduleProvider.cache[selectedDay] ?? [];
+    final mindlogs = mindlogProvider.cache[selectedDay] ?? [];
 
     initializeDateFormatting('ko_KR');
 
@@ -87,23 +89,28 @@ class _HomeState extends State<Home> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Calendar(
-                          onDaySelected: (selectedDay) {
-                            setState(() {
-                              _selectedDate = selectedDay;
-                            });
-                          },
-                        ),
+                        child: Calendar(),
                       )
                   ),
                   const SizedBox(
                     height: 14,
                   ),
-                  const AppointmentCard(
-                      startTime: '16:30',
-                      endTime: '17:00',
-                      hospital: '고려숲정신건강의학과의원',
-                      doctor: '형원석 원장님'
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: appointments.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final appointment = appointments[index];
+
+                        return Dismissible(
+                          key: ObjectKey(appointment.id),
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (DismissDirection direction) {
+                            scheduleProvider.deleteAppointment(id: appointment.id, date: appointment.date);
+                          },
+                          child: AppointmentCard(appointment: appointment,),
+                        );
+                      },
+                    ),
                   ),
                   // InkWell(
                   //   onTap: (){
@@ -130,10 +137,7 @@ class _HomeState extends State<Home> {
                         showModalBottomSheet(
                           context: context,
                           barrierColor: Colors.black.withAlpha(0),
-                          builder: (_) => AppointmentBottomSheet(
-                            selectedDate: _selectedDate ?? DateTime.now(),
-                            //calendarWidget.selectedDay; // _selectedDay 변수에 접근
-                          ),
+                          builder: (_) => AppointmentBottomSheet(),
                           isScrollControlled: true
                           );
                         },
@@ -162,132 +166,93 @@ class _HomeState extends State<Home> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: (){
-                            // deleteMindlog(context, 1);
-                            Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
-                                selectedDate: DateTime.now(),
-                              ))
-                            );
-                          },
-                          child: StreamBuilder<List<Mindlog>>(
-                            stream: null,
-                            //getAppointmentByDate(context, DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(_selectedDate ?? DateTime.now())),
-                            builder: (context, snapshot) {
-                              if(!snapshot.hasData) {
-                                return Container();
-                              }
-                              return ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final mindlog = snapshot.data![index];
-                                  return mindlogCard(
-                                      mindlogTitle: mindlog.title ?? 'title',
-                                      //'오늘 기분 최고!',
-                                      contents: '오늘 오전엔 기분이 안좋았는데...'
-                                  );
-                                },
-                              );
-                            }
-                          ),
-                        ),
-                        //testtesttesttesttesttesttest
-                        InkWell(
-                          onTap: (){
-                            // deleteMindlog(context, 1);
-                            Navigator.push(
-                                context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
-                              selectedDate: DateTime.now(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: mindlogs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final mindlog = mindlogs[index];
+
+                        return mindlogCard(mindlog: mindlog,);
+                      },
+                    ),
+                  ),
+                  // InkWell(
+                  //   onTap: (){
+                  //     // deleteMindlog(context, 1);
+                  //     Navigator.push(
+                  //       context, MaterialPageRoute(builder: (context) => mindlogWriterScreen(
+                  //         selectedDate: DateTime.now(), isUpdate: false,
+                  //       ))
+                  //     );
+                  //   },
+                  // ),
+                  //testtesttesttesttesttesttest
+                  // InkWell(
+                  //   onTap: (){
+                  //     // deleteMindlog(context, 1);
+                  //     Navigator.push(
+                  //         context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
+                  //       selectedDate: DateTime.now(),
+                  //     ))
+                  //     );
+                  //   },
+                  //   child: mindlogCard(
+                  //       mindlogTitle: '오늘 기분 최고!',
+                  //       contents: '오늘 오전엔 기분이 안좋았는데...'
+                  //   ),
+                  // ),
+                  GestureDetector(
+                    onVerticalDragStart: (details) {
+                      _startY = details.localPosition.dy;
+                    },
+                    onVerticalDragUpdate: (details) {
+                      _endY = details.localPosition.dy;
+                      double distance = _endY - _startY;
+                      setState(() {
+                        _objectPositionY += distance;
+                      });
+                    },
+                    onVerticalDragEnd: (details) {
+                      if (details.primaryVelocity! > 0) {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => mindlogWriterScreen(
+                              selectedDate: DateTime.now(), isUpdate: false,
                             ))
-                            );
-                          },
-                          child: mindlogCard(
-                              mindlogTitle: '오늘 기분 최고!',
-                              contents: '오늘 오전엔 기분이 안좋았는데...'
-                          ),
-                        ),
-                        InkWell(
-                          onTap: (){
-                            // deleteMindlog(context, 1);
-                            Navigator.push(
-                                context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
-                              selectedDate: DateTime.now(),
-                            ))
-                            );
-                          },
-                          child: mindlogCard(
-                              mindlogTitle: '저희 진짜 열심히 했어요',
-                              contents: '피곤하다… 시험 하나만 봐서 별로...'
-                          ),
-                        ),
-                        // mindlogCard(
-                        //     mindlogTitle: '드디어 서버 연동 했다!!!!',
-                        //     contents: '며칠동안 매달렸는데 겨우 성공해서...'
-                        // ),
-                        GestureDetector(
-                          // onTap: () {
-                          //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => mindlogScreen()));
-                          //   print('clicked');
-                          //   },
-                          onVerticalDragStart: (details) {
-                            _startY = details.localPosition.dy;
-                          },
-                          onVerticalDragUpdate: (details) {
-                            _endY = details.localPosition.dy;
-                            double distance = _endY - _startY;
-                            setState(() {
-                              _objectPositionY += distance;
-                            });
-                          },
-                          onVerticalDragEnd: (details) {
-                            if (details.primaryVelocity! > 0) {
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => mindlogWriterScreen(
-                                    selectedDate: DateTime.now(),
-                                  ))
-                              );
-                              print('swiped down');
-                              _objectPositionY = -1;
-                            }
-                          },
-                          child: Container(
-                            height: 200,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.transparent
+                        );
+                        print('swiped down');
+                        _objectPositionY = -1;
+                      }
+                    },
+                    child: Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent
+                      ),
+                      child: Padding(
+                        padding: _objectPositionY > 0
+                            ? EdgeInsets.only(top: _objectPositionY / 30)
+                            : const EdgeInsets.only(top: 0),
+                        child: const Column(
+                          children: [
+                            SizedBox(
+                              height: 50,
                             ),
-                            child: Padding(
-                              padding: _objectPositionY > 0
-                                  ? EdgeInsets.only(top: _objectPositionY / 30)
-                                  : const EdgeInsets.only(top: 0),
-                              child: const Column(
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  Image(image: AssetImage('assets/icons/arrow_down.png')),
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-                                  Text('스와이프하면 감정을 기록할 수 있어요',
-                                      style: TextStyle(
-                                        color: basicGray,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500,
-                                        letterSpacing: -0.13,
-                                      )
-                                  )
-                                ],
-                              ),
+                            Image(image: AssetImage('assets/icons/arrow_down.png')),
+                            SizedBox(
+                              height: 25,
                             ),
-                          ),
-                        )
-                      ],
+                            Text('스와이프하면 감정을 기록할 수 있어요',
+                                style: TextStyle(
+                                  color: basicGray,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: -0.13,
+                                )
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],

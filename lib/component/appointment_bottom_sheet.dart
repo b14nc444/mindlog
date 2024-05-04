@@ -5,21 +5,15 @@ import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/appointment_textfield.dart';
 import 'package:mindlog_app/component/hide_keyboard_on_tap.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:mindlog_app/provider/schedule_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../model/appoinment_model.dart';
 import '../service/db_server_appointment.dart';
 
-class AppointmentBottomSheet extends StatefulWidget {
+class AppointmentBottomSheet extends StatelessWidget {
 
-  final DateTime selectedDate;
-
-  const AppointmentBottomSheet({super.key, required this.selectedDate});
-
-  @override
-  State<AppointmentBottomSheet> createState() => _AppointmentBottomSheetState();
-}
-
-class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
+  AppointmentBottomSheet({super.key});
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
@@ -31,11 +25,13 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final scheduleProvider = context.watch<ScheduleProvider>();
+    final selectedDay = scheduleProvider.selectedDate;
+
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    DateTime selectedDate = widget.selectedDate;
 
     initializeDateFormatting('ko_KR');
-    String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDate);
+    String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDay);
     date = formattedDate;
 
     return Form(
@@ -85,9 +81,9 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                   height: 24,
                 ),
                 AppointmentTextField(
-                  onSavedStartTime: (String? val) {startTime = val;},
-                  onSavedEndTime: (String? val) {endTime = val;},
-                  onSavedHospital: (String? val) {hospital = val;},
+                  onSavedStartTime: (String? val) {startTime = val!;},
+                  onSavedEndTime: (String? val) {endTime = val!;},
+                  onSavedHospital: (String? val) {hospital = val!;},
                   onSavedDoctor: (String? val) {doctorName = val;},
                   startTimeValidator: timeValidator,
                   endTimeValidator: timeValidator,
@@ -101,7 +97,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                   height: 50,
                   child: FilledButton(
                     onPressed: () {
-                      onCreateButtonPressed();
+                      onCreateButtonPressed(context);
                     },
                     style: FilledButton.styleFrom(
                       backgroundColor: primaryColor,
@@ -125,17 +121,19 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
     );
   }
 
-  void onCreateButtonPressed() {
+  void onCreateButtonPressed(BuildContext context) async {
     if(formKey.currentState!.validate()) {  // 폼 검증
       formKey.currentState!.save();  // 폼 저장
 
-      createAppointment(context, Appointment(
-        date: date,
-        startTime: startTime,
-        endTime: endTime,
-        hospital: hospital,
-        doctorName: doctorName,
-      ));
+      context.read<ScheduleProvider>().createAppointment(
+          appointment: Appointment(
+            id: 0,
+            date: date!,
+            startTime: startTime!,
+              endTime: endTime!,
+              hospital: hospital!,
+              doctorName: doctorName)
+      );
 
       print('-----data input-----');
       print('date : $date');

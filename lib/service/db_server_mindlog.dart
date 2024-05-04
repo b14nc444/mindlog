@@ -1,130 +1,109 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../model/mindlog_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-String serverIP_mindlog = 'http://112.168.203.141:3333/api/v1/mindlog';
+class MindlogRepository {
+  final dio = Dio();
+  final String serverIP_mindlog = 'http://112.168.203.141:3333/api/v1/mindlog';
 
-//감정기록 추가
-Future<int> createMindlog(BuildContext context, Mindlog mindlog) async {
-  var serverUrl = Uri.parse(serverIP_mindlog);
+  //감정기록 추가
+  Future<int> createMindlog(Mindlog mindlog) async {
+    var serverUrl = serverIP_mindlog;
 
-  final response = await http.post(serverUrl,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(mindlog.toJson()),
-  );
-
-  if (response.statusCode == 200) {
-    Map<String, dynamic> responseData = json.decode(response.body);
-    int mindlogId = responseData['id']; // 서버로부터 받은 진료 일정의 ID
-
-    print('New mindlog added with ID: $mindlogId');
-    return mindlogId;
-
-  } else {
-    throw Exception("Failed to send data2: ${response.statusCode}");
-  }
-}
-  // try {
-  //   final response = await http.post(serverUrl,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(mindlog.toJson()),
-  //   );
-  //
-  //   if (response.statusCode != 200) {
-  //     throw Exception("Failed to send data2: ${response.statusCode}");
-  //   } else {
-  //     //성공 시 콘솔 출력
-  //     print("Mindlog Data sent successfully");
-  //   }
-  // } catch (e) {
-  //   print("Failed to send data1: ${e}");
-  // }
-
-//삭제
-Future<void> deleteMindlog(BuildContext context, int mindlogId) async {
-  var serverUrl = Uri.parse('$serverIP_mindlog/$mindlogId');
-
-  try {
-    final response = await http.delete(serverUrl);
+    final response = await dio.post(serverUrl, data: json);
 
     if (response.statusCode == 200) {
-      print("Mindlog Data deleted successfully");
+      int mindlogId = response.data?['id']; // 서버로부터 받은 진료 일정의 ID
+      print('New mindlog added with ID: $mindlogId');
+      return mindlogId;
+
     } else {
-      throw Exception("Failed to delete data: ${response.statusCode}");
+      throw Exception("Failed to send data: ${response.statusCode}");
     }
-  } catch (e) {
-    print("Failed to delete data: $e");
   }
-}
 
-//수정
-Future<void> updateMindlog(BuildContext context, int mindlogId, Mindlog mindlog) async {
-  var serverUrl = Uri.parse('$serverIP_mindlog/$mindlogId');
+  //삭제
+  Future<int> deleteMindlog(int mindlogId) async {
+    var serverUrl = '$serverIP_mindlog/$mindlogId';
 
-  try {
-    final response = await http.put(serverUrl,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(mindlog.toJson()),
-    );
+    try {
+      final response = await dio.delete(serverUrl, data: {'id': mindlogId});
 
-    if (response.statusCode == 200) {
-      print("Mindlog Data updated successfully");
-    } else {
-      throw Exception("Failed to send data2: ${response.statusCode}");
-    }
-  } catch (e) {
-    print("Failed to send data1: $e");
-
-  }
-}
-
-//날짜별조회
-Future<void> getMindlogByDate(BuildContext context, String mindlogDate) async {
-  var serverUrl = Uri.parse('$serverIP_mindlog/by-date/$mindlogDate');
-
-  try {
-    final response = await http.get(serverUrl);
-
-    if (response.statusCode == 200) {
-      List<dynamic> responseData = json.decode(response.body);
-      List<Mindlog> mindlogs = responseData.map((data) => Mindlog.fromJson(data)).toList();
-      for (var mindlog in mindlogs) {
-        print('Date: ${mindlog.date}');
-        print('Mood Color: ${mindlog.moodColor}');
-        print('Title: ${mindlog.title}');
-        print('Emotion Record: ${mindlog.emotionRecord}');
-        print('Event Record: ${mindlog.eventRecord}');
-        print('Question Record: ${mindlog.questionRecord}');
-        print('------------------------');
+      if (response.statusCode == 200) {
+        int mindlogId = response.data?['id'];
+        print('Mindlog with this ID deleted: $mindlogId');
+        return mindlogId;
+      } else {
+        throw Exception("Failed to delete data: ${response.statusCode}");
       }
-      print("Mindlog Data received successfully");
-    } else {
-      throw Exception("Failed to loaded data: ${response.statusCode}");
+    } catch (e) {
+      throw Exception("Failed to delete data: $e");
     }
-  } catch (e) {
-    print("Failed to received data: $e");
   }
-}
 
-//id별조회
-Future<Mindlog> getMindlogById(BuildContext context, int mindlogId) async {
-  var serverUrl = Uri.parse('$serverIP_mindlog/$mindlogId');
+  //수정
+  Future<void> updateMindlog(int mindlogId, Mindlog mindlog) async {
+    var serverUrl = '$serverIP_mindlog/$mindlogId';
 
-  final response = await http.get(serverUrl);
+    try {
+      final response = await dio.put(serverUrl, data: json);
 
-  if (response.statusCode == 200) {
-    print("Mindlog Data loaded successfully");
+      if (response.statusCode == 200) {
+        int appointmentId = response.data?['id'];
+        print("Mindlog Data with ID [$mindlogId] updated successfully");
+      } else {
+        throw Exception("Failed to send data2: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Failed to send data1: $e");
 
-    dynamic responseData = json.decode(response.body);  // 응답 데이터를 JSON으로 디코딩
-    return Mindlog.fromJson(responseData); // Appointment 모델로 변환하여 반환
-  } else {
-    throw Exception("Failed to load data: ${response.statusCode}");
+    }
+  }
+
+  //날짜별조회
+  Future<List<Mindlog>> getMindlogByDate(String mindlogDate) async {
+    var serverUrl = '$serverIP_mindlog/by-date/$mindlogDate';
+
+    try {
+      final response = await dio.get(serverUrl, queryParameters: {});
+
+      if (response.statusCode == 200) {
+        List<Mindlog> mindlogs = response.data.map<Mindlog>(
+                (x) => Mindlog.fromJson(x)).toList();
+        for (var mindlog in mindlogs) {
+          print('Id: ${mindlog.id}');
+          print('Date: ${mindlog.date}');
+          print('Mood Color: ${mindlog.moodColor}');
+          print('Title: ${mindlog.title}');
+          print('Emotion Record: ${mindlog.emotionRecord}');
+          print('Event Record: ${mindlog.eventRecord}');
+          print('Question Record: ${mindlog.questionRecord}');
+          print('------------------------');
+        }
+        print("Mindlog Data received successfully");
+        return mindlogs;
+
+      } else {
+        throw Exception("Failed to loaded data: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Failed to received data: $e");
+    }
+  }
+
+  //id별조회
+  Future<Mindlog> getMindlogById(int mindlogId) async {
+    var serverUrl = '$serverIP_mindlog/$mindlogId';
+
+    final response = await dio.get(serverUrl);
+
+    if (response.statusCode == 200) {
+      print("Mindlog Data loaded successfully");
+      return Mindlog.fromJson(response.data);
+    } else {
+      throw Exception("Failed to load data: ${response.statusCode}");
+    }
   }
 }
