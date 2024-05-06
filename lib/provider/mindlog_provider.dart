@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../const/visual.dart';
 import '../model/mindlog_model.dart';
 import '../service/db_server_mindlog.dart';
 
@@ -8,8 +7,7 @@ class MindlogProvider with ChangeNotifier {
   final MindlogRepository repository;
 
   DateTime selectedDate = DateTime.now();
-  String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(
-      DateTime.now());
+  String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
   Map<String, List<Mindlog>> cache = {};
 
   MindlogProvider({required this.repository}) : super() {
@@ -22,17 +20,14 @@ class MindlogProvider with ChangeNotifier {
 
     cache.update(date, (value) => response, ifAbsent: () => response);
     notifyListeners();
+    print(cache);
   }
 
   void getMindlogById({required int id}) async {
     try {
       final response = await repository.getMindlogById(id);
-      if (response != null) {
-        notifyListeners();
-      } else {
-        throw Exception('failed to load mindlog: id error');
-      }
-    } catch (e) {
+      notifyListeners();
+        } catch (e) {
       throw Exception('failed to load mindlog');
     }
   }
@@ -58,14 +53,10 @@ class MindlogProvider with ChangeNotifier {
   void deleteMindlog({required int id, required String date}) async {
     try {
       final response = await repository.deleteMindlog(id);
-      if (response != null) {
-        cache.update(date, (value) => value.where((e) => e.id != id).toList(),
-            ifAbsent: () => []);
-        notifyListeners();
-      } else {
-        throw Exception("Failed to delete appointment. Response was null.");
-      }
-    } catch (e) {
+      cache.update(date, (value) => value.where((e) => e.id != id).toList(),
+          ifAbsent: () => []);
+      notifyListeners();
+        } catch (e) {
       print("Failed to delete appointment: $e");
     }
   }
@@ -136,7 +127,7 @@ class MindlogProvider with ChangeNotifier {
     //추가하는 기능 있어야 함
   ];
 
-  List<String> _selectedMoods = [];
+  final List<String> _selectedMoods = [];
   List<String> get selectedMoods => _selectedMoods;
 
   int moodColor = 0;

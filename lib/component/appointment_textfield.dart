@@ -35,9 +35,9 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
 
   @override
   Widget build(BuildContext context) {
-    String _selectedTimeStart;
-    String _selectedTimeEnd;
-    String _inputText;
+    String selectedTimeStart;
+    String selectedTimeEnd;
+    String inputText;
 
     InputDecoration inputDecoration = InputDecoration(
       filled: true,
@@ -119,8 +119,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedTimeStart = newValue!;
-                      print('start time selected : $_selectedTimeStart');
+                      selectedTimeStart = newValue!;
+                      print('start time selected : $selectedTimeStart');
                     });
                   },
                   icon: dropdownIcon,
@@ -157,8 +157,8 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                   }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedTimeEnd = newValue!;
-                      print('end time selected : $_selectedTimeEnd');
+                      selectedTimeEnd = newValue!;
+                      print('end time selected : $selectedTimeEnd');
                     });
                   },
                   icon: dropdownIcon,

@@ -20,17 +20,14 @@ class ScheduleProvider extends ChangeNotifier {
 
     cache.update(date, (value) => response, ifAbsent: () => response);
     notifyListeners();
+    print(cache);
   }
 
   void getAppointmentById({required int id}) async {
     try {
       final response = await repository.getAppointmentById(id);
-      if (response != null) {
-        notifyListeners();
-      } else {
-        throw Exception('failed to load appointment: id error');
-      }
-    } catch (e) {
+      notifyListeners();
+        } catch (e) {
       throw Exception('failed to load appointment');
     }
 
@@ -55,14 +52,10 @@ class ScheduleProvider extends ChangeNotifier {
   void deleteAppointment({required int id, required String date}) async {
     try {
       final response = await repository.deleteAppointment(id);
-      if (response != null) {
-        cache.update(date, (value) => value.where((e) => e.id != id).toList(),
-            ifAbsent: () => []);
-        notifyListeners();
-      } else {
-        throw Exception("Failed to delete appointment. Response was null.");
-      }
-    } catch (e) {
+      cache.update(date, (value) => value.where((e) => e.id != id).toList(),
+          ifAbsent: () => []);
+      notifyListeners();
+        } catch (e) {
       print("Failed to delete appointment: $e");
     }
   }

@@ -1,4 +1,3 @@
-import 'package:mindlog_app/provider/mindlog_provider.dart';
 
 class Mindlog {
   final int id;

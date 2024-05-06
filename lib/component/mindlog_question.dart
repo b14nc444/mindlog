@@ -21,7 +21,7 @@ class _mindlogQuestionState extends State<mindlogQuestion> {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Container(
-        constraints: BoxConstraints(minHeight: 50.0),
+        constraints: const BoxConstraints(minHeight: 50.0),
         width: double.infinity,
         //height: 50,
         decoration: BoxDecoration(
@@ -60,7 +60,7 @@ class _mindlogQuestionState extends State<mindlogQuestion> {
                 padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
                 child: Text(
                   widget.direction,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: typographyGray2,
                     fontSize: 13,
                   ),

@@ -19,13 +19,13 @@ class mindlogTextViewer extends StatelessWidget {
     );
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(4, 6, 4, 0),
+      padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
       child: Expanded(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Container(
             width: double.infinity,
-            constraints: BoxConstraints(minHeight: 140.0),
+            constraints: const BoxConstraints(minHeight: 140.0),
             child: Text(content,
               style: textStyleContent,)
           ),

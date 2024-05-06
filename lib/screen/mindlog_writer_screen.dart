@@ -118,7 +118,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                   ),
                   Column(
                     children: [
-                      mindlogMoodPicker(),
+                      const mindlogMoodPicker(),
                       const SizedBox(
                         height: 20,
                       ),

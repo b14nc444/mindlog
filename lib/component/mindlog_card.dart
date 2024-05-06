@@ -13,7 +13,7 @@ class mindlogCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     String title = mindlog.title;
-    String contents = '${mindlog.emotionRecord.substring(0, 20)}...';
+    String contents = (mindlog.emotionRecord.length > 20) ? '${mindlog.emotionRecord.substring(0, 20)}...' : mindlog.emotionRecord;
 
     return InkWell(
       onTap: (){

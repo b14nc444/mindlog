@@ -101,6 +101,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                   child: FilledButton(
                     onPressed: () {
                       onCreateButtonPressed(context);
+                      scheduleProvider.changeSelectedDate(date: selectedDay);
                     },
                     style: FilledButton.styleFrom(
                       backgroundColor: primaryColor,

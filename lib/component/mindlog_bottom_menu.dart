@@ -91,7 +91,7 @@ class _mindlogBottomMenuState extends State<mindlogBottomMenu> {
                       );
                       print('Mindlog deleted');
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("감정기록이 삭제되었습니다.")),
+                        const SnackBar(content: Text("감정기록이 삭제되었습니다.")),
                       );
                       Navigator.pop(context);
                       break;

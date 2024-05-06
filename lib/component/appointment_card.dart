@@ -26,7 +26,9 @@ class AppointmentCard extends StatelessWidget {
           onTap: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => appointmentScreen()),
+              MaterialPageRoute(builder: (context) => appointmentScreen(
+                appointment: appointment,)
+              ),
             );
           },
           // onLongPress: (){
@@ -68,7 +70,7 @@ class AppointmentCard extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        Text('$appointment.startTime - $appointment.endTime',
+                        Text('${appointment.startTime} - ${appointment.endTime}',
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -80,7 +82,7 @@ class AppointmentCard extends StatelessWidget {
                           height: 1,
                         ),
                         Text(
-                          (appointment.doctorName != null) ? '$appointment.hospital  /  $appointment.doctor' : '$appointment.hospital',
+                          (appointment.doctorName != null) ? '${appointment.hospital}  /  ${appointment.doctorName}' : '${appointment.hospital}',
                           style: const TextStyle(
                               color: basicGray,
                               fontSize: 12,

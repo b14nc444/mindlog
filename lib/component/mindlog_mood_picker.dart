@@ -144,17 +144,17 @@ class _mindlogMoodPickerState extends State<mindlogMoodPicker> {
   Color getColorByMoodValue(int moodValue) {
     switch (moodValue) {
       case 1:
-        return Color(0xffFF6362);
+        return const Color(0xffFF6362);
       case 2:
-        return Color(0xffFF9B62);
+        return const Color(0xffFF9B62);
       case 3:
-        return Color(0xffFFD362);
+        return const Color(0xffFFD362);
       case 4:
-        return Color(0xffBBD34F);
+        return const Color(0xffBBD34F);
       case 5:
-        return Color(0xff76D43C);
+        return const Color(0xff76D43C);
       default:
-        return Color(0xffFF6362);
+        return const Color(0xffFF6362);
     }
   }
 }

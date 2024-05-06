@@ -15,20 +15,21 @@ class renderBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
       backgroundColor: secondaryColor1,
       selectedItemColor: primaryColor,
+      unselectedItemColor: Colors.white,
       // unselectedIconTheme,
       selectedFontSize: 12.0,
       // this.unselectedFontSize = 12.0,
-      items: <BottomNavigationBarItem>[
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Image.asset('assets/icons/union.png'),
+          icon: Icon(Icons.home_rounded), //Image.asset('assets/icons/union.png'),
           label: '홈',
         ),
         BottomNavigationBarItem(
-          icon: Image.asset('assets/icons/document.png'),
+          icon: Icon(Icons.description_rounded), //Image.asset('assets/icons/document.png'),
           label: '모아보기',
         ),
         BottomNavigationBarItem(
-          icon: Image.asset('assets/icons/stats.png'),
+          icon: Icon(Icons.leaderboard_rounded), //Image.asset('assets/icons/stats.png'),
           label: '통계',
         ),
       ],

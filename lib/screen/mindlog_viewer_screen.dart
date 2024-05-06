@@ -54,7 +54,7 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.fromLTRB(20, 8, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
           child: SingleChildScrollView(
             child: Column(
               children: [
