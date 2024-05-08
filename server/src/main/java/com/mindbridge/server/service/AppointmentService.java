@@ -26,10 +26,18 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    // 진료 일정 조회
+    // 진료 일정 조회 (개별)
     public AppointmentDTO getAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElse(null);
         return appointment != null ? appointmentMapper.toDTO(appointment) : null;
+    }
+
+    // 진료 일정 조회 (날짜)
+    public List<AppointmentDTO> getAppointmentsByDate(String date) {
+        List<Appointment> appointments = appointmentRepository.findByDate(date);
+        return appointments.stream()
+                .map(appointmentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     // 진료 일정 추가

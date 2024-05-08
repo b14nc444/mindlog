@@ -8,7 +8,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 //lombok dependency추가
 @Getter
@@ -19,14 +22,14 @@ import java.util.Date;
 public class MindlogDTO {
 
     private Long id;
-    private Date date;
+    private String date;
+    private List<String> moods = new ArrayList<>(); // 감정을 List 형식으로 변경
+    // private String mood;
     private String moodColor;
     private String title;
     private String emotionRecord;
     private String eventRecord;
     private String questionRecord;
-
-    // 생성자, 게터, 세터 메서드는 생략
 
 
     public Long getId() {
@@ -37,12 +40,24 @@ public class MindlogDTO {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public List<String> getMoods() {
+        return moods;
+    }
+
+//    public void setMoods(String mood) {
+//        // 쉼표로 구분된 감정들을 리스트로 변환하여 저장
+//        this.moods = Arrays.asList(mood.split(", "));
+//    }
+    public void setMoods(List<String> moods) {
+        this.moods = moods;
     }
 
     public String getMoodColor() {
