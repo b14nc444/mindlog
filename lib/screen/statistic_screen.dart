@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../component/appbar.dart';
-import '../component/navigation.dart';
-
 class StatisticScreen extends StatefulWidget {
   const StatisticScreen({super.key});
 

@@ -93,12 +93,18 @@ class _mindlogMoodPickerState extends State<mindlogMoodPicker> {
                                 if (averageMood == 0) {
                                   heartImage = heartEmpty;
                                   provider.moodColor = 0;
-                                } else if (averageMood < 2) {
+                                } else if (averageMood <= 1) {
                                   heartImage = heartRed;
                                   provider.moodColor = 1;
-                                } else if (averageMood < 3.5) {
+                                } else if (averageMood <= 2) {
+                                  heartImage = heartOrange;
+                                  provider.moodColor = 2;
+                                } else if (averageMood <= 3) {
                                   heartImage = heartYellow;
                                   provider.moodColor = 3;
+                                } else if (averageMood <= 4) {
+                                  heartImage = heartYellowGreen;
+                                  provider.moodColor = 4;
                                 } else {  // =if (averageMood <= 5)
                                   heartImage = heartGreen;
                                   provider.moodColor = 5;

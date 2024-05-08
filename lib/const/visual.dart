@@ -36,5 +36,7 @@ const Image titleStroke = Image(image: AssetImage('assets/icons/title_stroke.png
 //heart
 const Image heartEmpty = Image(image: AssetImage('assets/hearts/heart_empty.png'));
 const Image heartRed = Image(image: AssetImage('assets/hearts/heart_red.png'));
+const Image heartOrange = Image(image: AssetImage('assets/hearts/heart_orange.png'));
 const Image heartYellow = Image(image: AssetImage('assets/hearts/heart_yellow.png'));
+const Image heartYellowGreen = Image(image: AssetImage('assets/hearts/heart_yellowgreen.png'));
 const Image heartGreen = Image(image: AssetImage('assets/hearts/heart_green.png'));
