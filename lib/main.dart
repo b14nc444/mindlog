@@ -7,6 +7,7 @@ import 'package:mindlog_app/service/db_server_appointment.dart';
 import 'package:mindlog_app/service/db_server_mindlog.dart';
 import 'package:provider/provider.dart';
 
+import 'const/visual.dart';
 import 'provider/schedule_provider.dart';
 
 void main() {
@@ -23,8 +24,13 @@ void main() {
         ChangeNotifierProvider(create: (_) => scheduleProvider),
         ChangeNotifierProvider(create: (_) => mindlogProvider),
       ],
-      child: const MaterialApp(
-        home: homeScreen(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          scaffoldBackgroundColor: backgroundColor,
+          fontFamily: 'pretendard',
+        ),
+        home: Home(),
       ),
     ),
   );
