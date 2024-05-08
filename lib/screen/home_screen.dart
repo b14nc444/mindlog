@@ -1,38 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mindlog_app/component/appbar.dart';
 import 'package:mindlog_app/component/appointment_bottom_sheet.dart';
-import 'package:mindlog_app/component/appointment_list.dart';
+import 'package:mindlog_app/component/appointment_card.dart';
 import 'package:mindlog_app/component/calendar.dart';
-import 'package:mindlog_app/component/mindlog_list.dart';
-import 'package:mindlog_app/component/navigator.dart';
+import 'package:mindlog_app/component/mindlog_card.dart';
+import 'package:mindlog_app/component/navigation.dart';
 import 'package:mindlog_app/const/visual.dart';
 import 'package:mindlog_app/model/appoinment_model.dart';
-import 'package:mindlog_app/screen/appointment_screen.dart';
-import 'package:mindlog_app/screen/mindlog_screen.dart';
-import 'package:mindlog_app/service/db_server.dart';
+import 'package:mindlog_app/model/mindlog_model.dart';
+import 'package:mindlog_app/provider/mindlog_provider.dart';
+import 'package:mindlog_app/provider/schedule_provider.dart';
+import 'package:mindlog_app/screen/mindlog_writer_screen.dart';
+import 'package:mindlog_app/screen/statistic_screen.dart';
+import 'package:mindlog_app/screen/timeline_screen.dart';
+import 'package:provider/provider.dart';
 
-class homeScreen extends StatelessWidget {
-  const homeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const Home(),
-      theme: ThemeData(
-        scaffoldBackgroundColor: BACKGROUND_COLOR,
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            fontFamily: 'Pretendard'
-          )
-        )
-      ),
-    );
-  }
-}
+import 'appointment_screen.dart';
+import 'mindlog_viewer_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -51,6 +36,42 @@ class _HomeState extends State<Home> {
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: const RenderAppBarHome(),
+      body: _buildBody(_selectedIndex),
+      bottomNavigationBar: renderBottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildBody(int index) {
+    switch (index) {
+      case 0:
+        return const HomeScreen();
+      case 1:
+        return const TimelineScreen();
+      case 2:
+        return const StatisticScreen();
+      default:
+        return Container();
+    }
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
   //swipe down
   double _objectPositionY = 0;
   double _startY = 0;
@@ -59,11 +80,16 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
+    final scheduleProvider = context.watch<ScheduleProvider>();
+    final mindlogProvider = context.watch<MindlogProvider>();
+    final selectedDay = scheduleProvider.formattedDate;
+    final appointments = scheduleProvider.cache[selectedDay] ?? [];
+    final mindlogs = mindlogProvider.cache[selectedDay] ?? [];
+
     initializeDateFormatting('ko_KR');
 
-    return Scaffold(
-      appBar: const renderAppBarHome(),
-      body: Column(
+    return SingleChildScrollView(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
@@ -84,24 +110,49 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 14,
                 ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: appointments.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final appointment = appointments[index];
+
+                    return Dismissible(
+                      key: ObjectKey(appointment.id),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (DismissDirection direction) {
+                        scheduleProvider.deleteAppointment(
+                            id: appointment.id, date: appointment.date
+                        );
+                      },
+                      child: AppointmentCard(appointment: appointment,),
+                    );
+                  },
+                ),
                 InkWell(
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => appointmentScreen()),
+                      MaterialPageRoute(builder: (context) => appointmentScreen(
+                        appointment: Appointment(
+                          id: 0, date: '2024년 5월 7일',
+                          startTime: '17:00',
+                          endTime: '17:30',
+                          hospital: '고려숲정신건강의학과의원',
+                          doctorName: '형원석 원장님',
+                        ),
+                      )),
                     );
                   },
-                  child: const appointmentList(
-                      appointmentTime: '9:00 - 9:15',
-                      hospital: '행복주는정신과의원',
-                      doctor: '김정심 원장님'
+                  child: AppointmentCard(
+                    appointment: Appointment(
+                      id: 0, date: '2024년 5월 7일',
+                      startTime: '17:00',
+                      endTime: '17:30',
+                      hospital: '고려숲정신건강의학과의원',
+                      doctorName: '형원석 원장님',
+                    ),
                   ),
                 ),
-                // const appointmentList(
-                //     appointmentTime: '9:00 - 9:15',
-                //     hospital: 'aa',
-                //     doctor: '김정심11 원장님'
-                // ),
                 const SizedBox(
                   height: 4,
                 ),
@@ -109,25 +160,17 @@ class _HomeState extends State<Home> {
                   height: 50,
                   child: FilledButton(
                     onPressed: () {
+                      // getAppointmentById(context, 1);
+                      // deleteAppointment(context, 1);
                       showModalBottomSheet(
                         context: context,
                         barrierColor: Colors.black.withAlpha(0),
-                        builder: (_) => AppointmentBottomSheet(
-                          selectedDate: DateTime.now(),
-                        ),
+                        builder: (_) => const AppointmentBottomSheet(),
                         isScrollControlled: true
                         );
-                      //TESTTESTTESTTESTTESTTESTTESTTESTTEST
-                      createAppointment(context, Appointment(
-                        date: '2022-04-20',
-                        startTime: '09:00',
-                        endTime: '11:00',
-                        doctor: 'Dr. Smith',
-                        hospital: 'City Hospital',
-                      ));
                       },
                     style: FilledButton.styleFrom(
-                      backgroundColor: PRIMARY_COLOR,
+                      backgroundColor: primaryColor,
                       textStyle: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -151,100 +194,97 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 20,
                 ),
-                SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(
-                            context,MaterialPageRoute(builder: (context) => mindlogScreen(
-                            selectedDate: DateTime.now(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: mindlogs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final mindlog = mindlogs[index];
+
+                    return mindlogCard(mindlog: mindlog,);
+                  },
+                ),
+                // InkWell(
+                //   onTap: (){
+                //     // deleteMindlog(context, 1);
+                //     Navigator.push(
+                //       context, MaterialPageRoute(builder: (context) => mindlogWriterScreen(
+                //         selectedDate: DateTime.now(), isUpdate: false,
+                //       ))
+                //     );
+                //   },
+                // ),
+                //testtesttesttesttesttesttest
+                InkWell(
+                  onTap: (){
+                    // deleteMindlog(context, 1);
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
+                      mindlog: Mindlog(id: 0, date: '2024년 5월 7일 16:45', mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: '',)
+                    ))
+                    );
+                  },
+                  child: mindlogCard(
+                    mindlog: Mindlog(id: 0, date: '2024년 5월 7일 16:45', mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: ''),
+                  ),
+                ),
+                GestureDetector(
+                  onVerticalDragStart: (details) {
+                    _startY = details.localPosition.dy;
+                  },
+                  onVerticalDragUpdate: (details) {
+                    _endY = details.localPosition.dy;
+                    double distance = _endY - _startY;
+                    setState(() {
+                      _objectPositionY += distance;
+                    });
+                  },
+                  onVerticalDragEnd: (details) {
+                    if (details.primaryVelocity! > 0) {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => mindlogWriterScreen(
+                            selectedDate: DateTime.now(), isUpdate: false,
                           ))
-                          );
-                        },
-                        child: mindlogList(
-                            mindlogTitle: '오늘 기분 최고!',
-                            contents: '오늘 오전엔 기분이 안좋았는데...'
-                        ),
+                      );
+                      print('swiped down');
+                      _objectPositionY = -1;
+                    }
+                  },
+                  child: Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent
+                    ),
+                    child: Padding(
+                      padding: _objectPositionY > 0
+                          ? EdgeInsets.only(top: _objectPositionY / 30)
+                          : const EdgeInsets.only(top: 0),
+                      child: const Column(
+                        children: [
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Image(image: AssetImage('assets/icons/arrow_down.png')),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Text('스와이프하면 감정을 기록할 수 있어요',
+                              style: TextStyle(
+                                color: basicGray,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: -0.13,
+                              )
+                          )
+                        ],
                       ),
-                      // mindlogList(
-                      //     mindlogTitle: '오늘 기분 최고!',
-                      //     contents: '오늘 오전엔 기분이 안좋았는데...'
-                      // ),
-                      // mindlogList(
-                      //     mindlogTitle: '오늘 기분 최고!',
-                      //     contents: '오늘 오전엔 기분이 안좋았는데...'
-                      // ),
-                      GestureDetector(
-                        // onTap: () {
-                        //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => mindlogScreen()));
-                        //   print('clicked');
-                        //   },
-                        onVerticalDragStart: (details) {
-                          _startY = details.localPosition.dy;
-                        },
-                        onVerticalDragUpdate: (details) {
-                          _endY = details.localPosition.dy;
-                          double distance = _endY - _startY;
-                          setState(() {
-                            _objectPositionY += distance;
-                          });
-                        },
-                        onVerticalDragEnd: (details) {
-                          if (details.primaryVelocity! > 0) {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => mindlogScreen(
-                                  selectedDate: DateTime.now(),
-                                ))
-                            );
-                            print('swiped down');
-                            _objectPositionY = -1;
-                          }
-                        },
-                        child: Container(
-                          height: 200,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent
-                          ),
-                          child: Padding(
-                            padding: _objectPositionY > 0
-                                ? EdgeInsets.only(top: _objectPositionY / 30)
-                                : const EdgeInsets.only(top: 0),
-                            child: const Column(
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                ),
-                                Image(image: AssetImage('assets/icons/arrow_down.png')),
-                                SizedBox(
-                                  height: 25,
-                                ),
-                                Text('스와이프하면 감정을 기록할 수 있어요',
-                                    style: TextStyle(
-                                      color: BASIC_GRAY,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: -0.13,
-                                    )
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                 ),
               ],
             ),
           )
         ],
-      ),
-      bottomNavigationBar: renderBottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

@@ -23,7 +23,7 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
   Widget build(BuildContext context) {
 
     TextStyle textStyleContent = const TextStyle(
-      color: BASIC_BLACK,
+      color: basicBlack,
       fontSize: 18,
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w500,
@@ -31,7 +31,7 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
     );
 
     TextStyle textStyleHint = const TextStyle(
-      color: TYPOGRAPHY_GRAY,
+      color: typographyGray1,
       fontSize: 18,
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w500,
@@ -42,27 +42,32 @@ class _mindlogTextFieldState extends State<mindlogTextField> {
     InputDecoration inputDecoration = InputDecoration(
       hintText: widget.hintText,
       hintStyle: textStyleHint,
-      border: OutlineInputBorder(
+      border: const OutlineInputBorder(
         borderSide: BorderSide.none, // 테두리 없음
       ),
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
     );
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-      child: Expanded(
-        child: Container(
-          constraints: BoxConstraints(minHeight: 140.0),
-          child: TextFormField(
-            maxLines: null,
-            cursorColor: TYPOGRAPHY_GRAY_3,
-            keyboardType: TextInputType.multiline,
-            decoration: inputDecoration,
-            style: textStyleContent,
-            onSaved: widget.onSavedContent,
-            validator: widget.contentValidator,
+      padding: const EdgeInsets.fromLTRB(10, 6, 0, 0),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: [
+          Expanded(
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 140.0),
+              child: TextFormField(
+                maxLines: null,
+                cursorColor: typographyGray3,
+                keyboardType: TextInputType.multiline,
+                decoration: inputDecoration,
+                style: textStyleContent,
+                onSaved: widget.onSavedContent,
+                validator: widget.contentValidator,
+              ),
+            ),
           ),
-        ),
+        ]
       ),
     );
   }

@@ -1,28 +1,49 @@
 class Appointment {
-  //final Long? id;
-  final String? date;  // 이거 date로 바꿔야됨
-  final String? startTime;
-  final String? endTime;
-  final String? doctor;
-  final String? hospital;
+  final int id;
+  final String date;  // 이거 date로 바꿔야됨
+  final String startTime;
+  final String endTime;
+  final String hospital;
+  final String? doctorName;
 
-  Appointment({required this.date, required this.startTime, required this.endTime, required this.doctor, required this.hospital,});
+  Appointment({required this.id, required this.date, required this.startTime, required this.endTime, required this.hospital, required this.doctorName,});
 
-  factory Appointment.fromJson(Map<String, dynamic> json) {
-    return Appointment(
-        //id: json['id'],
-        date: json['date'],
-        startTime: json['startTime'],
-        endTime: json['endTime'],
-        doctor: json['doctorName'],
-        hospital: json['hospital']);
+  Appointment.fromJson(Map<String, dynamic> json) :
+      id = json['id'],
+      date = json['date'],
+      startTime = json['startTime'],
+      endTime = json['endTime'],
+      hospital = json['hospital'],
+      doctorName = json['doctorName'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'date': date,
+      'startTime': startTime,
+      'endTime': endTime,
+      'hospital' : hospital,
+      'doctorName': doctorName,
+    };
   }
-  Map<String, dynamic> toJson() => {
-    //'id': id,
-    'date': date,
-    'startTime': startTime,
-    'endTime': endTime,
-    'doctorName': doctor,
-    'hospital' : hospital
-  };
+
+  Appointment copyWith({
+    int? id,
+    String? date,
+    String? startTime,
+    String? endTime,
+    String? hospital,
+    String? doctorName,
+  }) {
+    return Appointment(
+        id: id ?? this.id,
+        date: date ?? this.date,
+        startTime: startTime ?? this.startTime,
+        endTime: endTime ?? this.endTime,
+        hospital: hospital ?? this.hospital,
+        doctorName: doctorName ?? this.doctorName
+    );
+
+  }
 }
+

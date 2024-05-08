@@ -34,7 +34,11 @@ dependencies:
   table_calendar: ^3.1.1
   intl: ^0.19.0
   http: ^0.13.3
-
+  async: ^2.11.0
+  convert: ^3.1.1
+  flutter_staggered_grid_view: ^0.7.0
+  provider: ^5.0.0
+  dio: ^5.4.3+1
 
 
   # The following adds the Cupertino Icons fonts to your application.
@@ -67,6 +71,8 @@ flutter:
   assets:
   - assets/logo/
   - assets/icons/
+  - assets/hearts/
+  - assets/fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -17,12 +17,6 @@ public class Appointment {
     // 진료 일정
     private String date;
 
-    // 시작 시간
-    private String startTime;
-
-    // 종료 시간
-    private String endTime;
-
     // 주치의
     private String doctorName;
 
@@ -34,13 +28,9 @@ public class Appointment {
     }
 
     // 생성자 함수
-
-
-    public Appointment(Long id, String date, String startTime, String endTime, String doctorName, String hospital) {
+    public Appointment(Long id, String date, String doctorName, String hospital) {
         this.id = id;
         this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
         this.doctorName = doctorName;
         this.hospital = hospital;
     }
@@ -62,27 +52,11 @@ public class Appointment {
         this.date = date;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
     public String getDoctorName() {
         return doctorName;
     }
 
-    public void setDoctorName(String doctorName) {
+    public void setDoctorName(String patientName) {
         this.doctorName = doctorName;
     }
 

@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Calendar extends StatefulWidget {
-  const Calendar({super.key});
+import '../provider/mindlog_provider.dart';
+import '../provider/schedule_provider.dart';
 
+class Calendar extends StatefulWidget {
+
+  const Calendar({super.key});
 
   @override
   State<Calendar> createState() => _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
-  DateTime? _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-
-  CalendarFormat _calendarFormat = CalendarFormat.week;
+  final CalendarFormat _calendarFormat = CalendarFormat.week;
 
   TextStyle weekTextStyle = const TextStyle(
-      color: TYPOGRAPHY_GRAY_2,
+      color: typographyGray2,
       fontSize: 11
   );
 
@@ -33,15 +35,20 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
+
+    final provider = context.watch<ScheduleProvider>();
+    final selectedDay = provider.selectedDate;
+    DateTime focusedDay = selectedDay;
+
     return TableCalendar(
       firstDay: DateTime.utc(2010, 1, 1),
       lastDay: DateTime.utc(2050, 12, 31),
-      focusedDay: _focusedDay,
+      focusedDay: focusedDay,
       calendarFormat: _calendarFormat,
-      availableCalendarFormats: const {
-        CalendarFormat.month: '주',
-        CalendarFormat.week: '월',
-      },
+      // availableCalendarFormats: const {
+      //   CalendarFormat.month: '주',
+      //   CalendarFormat.week: '월',
+      // },
       // onFormatChanged: (format) {
       //   setState(() {
       //     _calendarFormat = format;
@@ -75,27 +82,28 @@ class _CalendarState extends State<Calendar> {
         selectedDecoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: TYPOGRAPHY_GRAY_2,
+            color: typographyGray2,
             width: 1.5,
           )
         ),
       ),
-      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      selectedDayPredicate: (date) => isSameDay(selectedDay, date),
       onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(_selectedDay, selectedDay)) {
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          }
-        },  // select the day tapped
-        onPageChanged: (focusedDay) {
-        // No need to call `setState()` here
-        _focusedDay = focusedDay;
+        onDaySelected(selectedDay, focusedDay, context);
       },
-    // eventLoader: (day) {
-    //   return _getEventsForDay(day);
-    // },
     );
+  }
+
+  void onDaySelected(
+      DateTime selectedDate,
+      DateTime focusedDate,
+      BuildContext context
+      ) {
+    final scheduleProvider = context.read<ScheduleProvider>();
+    final mindlogProvider = context.read<MindlogProvider>();
+
+    scheduleProvider.changeSelectedDate(date: selectedDate);
+    scheduleProvider.getAppointmentByDate(date: DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDate));
+    mindlogProvider.getMindlogByDate(date: DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(selectedDate));
   }
 }
