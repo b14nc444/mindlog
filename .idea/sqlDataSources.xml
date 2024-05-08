@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="4d7cee3f-6cc6-4255-bb1b-2f0b9daa1e65" name="mindlog@localhost Mapping">
+      <data-sources db="418e9a53-7587-463d-8544-3bda9a8f8a99" ddl="586c2a07-1bc4-4ec2-be21-a167fd747205" />
+      <scope>
+        <node kind="database" negative="1" />
+      </scope>
+    </mapping>
+  </component>
+  <component name="SqlDataSourceStorage">
+    <option name="dataSources">
+      <list>
+        <State>
+          <option name="id" value="586c2a07-1bc4-4ec2-be21-a167fd747205" />
+          <option name="name" value="mindlog@localhost (DDL)" />
+          <option name="dbmsName" value="MYSQL" />
+          <option name="urls">
+            <array />
+          </option>
+          <option name="outLayout" value="File per object by schema.groovy" />
+        </State>
+      </list>
+    </option>
+  </component>
+</project>
