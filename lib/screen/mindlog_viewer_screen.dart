@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/mindlog_question.dart';
 import 'package:mindlog_app/component/mindlog_textviewer.dart';
 import 'package:mindlog_app/const/visual.dart';
@@ -40,6 +41,7 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
     // String testContent3 = '피곤하고 무기력할 때는 어떻게 해야 하지 힘이 안 난다';
 
     Mindlog mindlog = widget.mindlog;
+    String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(mindlog.date);
 
     return Scaffold(
         appBar: AppBar(
@@ -74,7 +76,7 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
                     ),
                     SizedBox(
                         width: double.infinity,
-                        child: Text(mindlog.date,
+                        child: Text(formattedDate,
                             style: const TextStyle(
                                 color: typographyGray1,
                                 fontWeight: FontWeight.w300,

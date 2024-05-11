@@ -103,7 +103,7 @@ class _CalendarState extends State<Calendar> {
     final mindlogProvider = context.read<MindlogProvider>();
 
     scheduleProvider.changeSelectedDate(date: selectedDate);
-    scheduleProvider.getAppointmentByDate(date: DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDate));
-    mindlogProvider.getMindlogByDate(date: DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(selectedDate));
+    scheduleProvider.getAppointmentByDate(date: selectedDate);
+    mindlogProvider.getMindlogByDate(date: selectedDate);
   }
 }

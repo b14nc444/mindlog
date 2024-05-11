@@ -7,18 +7,18 @@ class MindlogProvider with ChangeNotifier {
   final MindlogRepository repository;
 
   DateTime selectedDate = DateTime.now();
-  String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
+  String formattedDate = DateTime.now().toIso8601String();
   Map<String, List<Mindlog>> cache = {};
 
   MindlogProvider({required this.repository}) : super() {
-    getMindlogByDate(date: formattedDate);
+    getMindlogByDate(date: selectedDate);
   }
 
   //CRUD
-  void getMindlogByDate({required String date}) async {
-    final response = await repository.getMindlogByDate(formattedDate);
+  void getMindlogByDate({required DateTime date}) async {
+    final response = await repository.getMindlogByDate(date.toIso8601String());
 
-    cache.update(date, (value) => response, ifAbsent: () => response);
+    cache.update(date.toIso8601String(), (value) => response, ifAbsent: () => response);
     notifyListeners();
     print(cache);
   }
@@ -33,7 +33,7 @@ class MindlogProvider with ChangeNotifier {
   }
 
   void createMindlog({required Mindlog mindlog}) async {
-    final targetDate = mindlog.date;
+    final targetDate = mindlog.date.toIso8601String();
     final savedMindlog = await repository.createMindlog(mindlog);
 
     print('requested');
@@ -50,10 +50,10 @@ class MindlogProvider with ChangeNotifier {
     );
   }
 
-  void deleteMindlog({required int id, required String date}) async {
+  void deleteMindlog({required int id, required DateTime date}) async {
     try {
       final response = await repository.deleteMindlog(id);
-      cache.update(date, (value) => value.where((e) => e.id != id).toList(),
+      cache.update(date.toIso8601String(), (value) => value.where((e) => e.id != id).toList(),
           ifAbsent: () => []);
       notifyListeners();
         } catch (e) {
@@ -62,7 +62,7 @@ class MindlogProvider with ChangeNotifier {
   }
 
   void updateMindlog({required int id, required Mindlog mindlog}) async {
-    final targetDate = mindlog.date;
+    final targetDate = mindlog.date.toIso8601String();
     final response = await repository.updateMindlog(id, mindlog);
 
     cache.update(targetDate, (value) =>
@@ -127,8 +127,13 @@ class MindlogProvider with ChangeNotifier {
     //추가하는 기능 있어야 함
   ];
 
-  final List<String> _selectedMoods = [];
-  List<String> get selectedMoods => _selectedMoods;
+  List<String> _selectedMoods = [];
+
+  List<String> get selectedMoods => _selectedMoods;  // getter
+  set selectedMoods(List<String> value) {  // setter
+    _selectedMoods = value;
+    notifyListeners();
+  }
 
   int moodColor = 0;
 

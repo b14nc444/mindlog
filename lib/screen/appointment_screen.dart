@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/mindlog_card.dart';
 import 'package:mindlog_app/const/visual.dart';
 
@@ -15,9 +16,11 @@ class appointmentScreen extends StatefulWidget {
 }
 
 class _appointmentScreenState extends State<appointmentScreen> {
+
   @override
   Widget build(BuildContext context) {
     Appointment appointment = widget.appointment;
+    String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(appointment.date);
 
     TextStyle textStyleTitle = const TextStyle(
       fontSize: 16,
@@ -46,7 +49,7 @@ class _appointmentScreenState extends State<appointmentScreen> {
                   children: [
                     const Icon(Icons.today),
                     const SizedBox(width: 4,),
-                    Text(appointment.date,
+                    Text(formattedDate,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

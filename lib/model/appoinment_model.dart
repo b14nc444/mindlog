@@ -1,6 +1,6 @@
 class Appointment {
   final int id;
-  final String date;  // 이거 date로 바꿔야됨
+  final DateTime date;  // 이거 date로 바꿔야됨
   final String startTime;
   final String endTime;
   final String hospital;
@@ -19,7 +19,7 @@ class Appointment {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'date': date,
+      'date': date.toIso8601String(),
       'startTime': startTime,
       'endTime': endTime,
       'hospital' : hospital,
@@ -29,7 +29,7 @@ class Appointment {
 
   Appointment copyWith({
     int? id,
-    String? date,
+    DateTime? date,
     String? startTime,
     String? endTime,
     String? hospital,

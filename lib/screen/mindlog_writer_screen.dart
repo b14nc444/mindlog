@@ -27,7 +27,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
-  String? date = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
+  DateTime? date = DateTime.now();
   List<String>? mood;
   int? moodColor;
   String? title;
@@ -50,6 +50,30 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
     fontWeight: FontWeight.normal,
     letterSpacing: -0.15,
   );
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (widget.isUpdate && widget.modifyingMindlog != null) {
+  //     // 수정 모드일 때 modifyingMindlog의 데이터로 각 필드를 초기화합니다.
+  //     date = widget.modifyingMindlog!.date;
+  //     mood = widget.modifyingMindlog!.mood;
+  //     moodColor = widget.modifyingMindlog!.moodColor;
+  //     title = widget.modifyingMindlog!.title;
+  //     emotion = widget.modifyingMindlog!.emotionRecord;
+  //     event = widget.modifyingMindlog!.eventRecord;
+  //     question = widget.modifyingMindlog!.questionRecord;
+  //   } else {
+  //     // 수정 모드가 아니면 각 필드를 빈 값으로 초기화합니다.
+  //     date = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
+  //     mood = context.watch<MindlogProvider>().selectedMoods;
+  //     moodColor = context.watch<MindlogProvider>().moodColor;
+  //     title = '';
+  //     emotion = '';
+  //     event = '';
+  //     question = '';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +103,9 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
             ),
             onPressed: () {
               Navigator.pop(context);
+              // 취소하면 선택했던 감정들 초기화
+              context.read<MindlogProvider>().selectedMoods = [];
+              context.read<MindlogProvider>().moodColor = 0;
             },
           ),
           actions: [
@@ -205,8 +232,12 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                 title: title!,
                 emotionRecord: emotion!,
                 eventRecord: event!,
-                questionRecord: question)
+                questionRecord: question,
+            )
         );
+
+        context.read<MindlogProvider>().selectedMoods = [];
+        context.read<MindlogProvider>().moodColor = 0;
       }
 
       print('-----input data-----');

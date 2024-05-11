@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final scheduleProvider = context.watch<ScheduleProvider>();
     final mindlogProvider = context.watch<MindlogProvider>();
-    final selectedDay = scheduleProvider.formattedDate;
+    final selectedDay = scheduleProvider.selectedDate;
     final appointments = scheduleProvider.cache[selectedDay] ?? [];
     final mindlogs = mindlogProvider.cache[selectedDay] ?? [];
 
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(builder: (context) => appointmentScreen(
                         appointment: Appointment(
-                          id: 0, date: '2024년 5월 7일',
+                          id: 0, date: selectedDay,
                           startTime: '17:00',
                           endTime: '17:30',
                           hospital: '고려숲정신건강의학과의원',
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: AppointmentCard(
                     appointment: Appointment(
-                      id: 0, date: '2024년 5월 7일',
+                      id: 0, date: selectedDay,
                       startTime: '17:00',
                       endTime: '17:30',
                       hospital: '고려숲정신건강의학과의원',
@@ -219,12 +219,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     // deleteMindlog(context, 1);
                     Navigator.push(
                         context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
-                      mindlog: Mindlog(id: 0, date: '2024년 5월 7일 16:45', mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: '',)
+                      mindlog: Mindlog(id: 0, date: selectedDay, mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: '',)
                     ))
                     );
                   },
                   child: mindlogCard(
-                    mindlog: Mindlog(id: 0, date: '2024년 5월 7일 16:45', mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: ''),
+                    mindlog: Mindlog(id: 0, date: selectedDay, mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: ''),
                   ),
                 ),
                 GestureDetector(

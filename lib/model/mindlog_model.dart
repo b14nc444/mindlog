@@ -1,7 +1,7 @@
 
 class Mindlog {
   final int id;
-  final String date;  // 이거 date로 바꿔야됨
+  final DateTime date;  // 이거 date로 바꿔야됨
   final List<String> mood;
   final int moodColor;
   final String title;
@@ -31,7 +31,7 @@ class Mindlog {
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'date': date,
+    'date': date.toIso8601String(),
     'mood': mood,
     'moodColor': moodColor,
     'title': title,
@@ -42,7 +42,7 @@ class Mindlog {
 
   Mindlog copyWith({
     int? id,
-    String? date,
+    DateTime? date,
     List<String>? mood,
     int? moodColor,
     String? title,

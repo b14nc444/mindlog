@@ -3,7 +3,7 @@ import 'package:mindlog_app/model/appoinment_model.dart';
 
 class AppointmentRepository {
   final dio = Dio();
-  final String serverIP_appointment = 'http://122.46.239.34:3333/api/v1/appointment';
+  final String serverIP_appointment = 'http://112.168.203.141:3333/api/v1/appointment';
 
   //진료 추가
   Future<int> createAppointment(Appointment appointment) async {
@@ -63,8 +63,8 @@ class AppointmentRepository {
   }
 
   //날짜별조회
-  Future<List<Appointment>> getAppointmentByDate(String appointmentDate) async {
-    var serverUrl = '$serverIP_appointment/by-date/$appointmentDate';
+  Future<List<Appointment>> getAppointmentByDate(DateTime appointmentDate) async {
+    var serverUrl = '$serverIP_appointment/by-date/${appointmentDate.toIso8601String()}';
 
     try {
       final response = await dio.get(serverUrl, queryParameters: {});

@@ -20,7 +20,7 @@ class AppointmentBottomSheet extends StatefulWidget {
 class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
   final GlobalKey<FormState> formKey = GlobalKey();
 
-  String? date;
+  DateTime? date;
   String? startTime;
   String? endTime;
   String? hospital;
@@ -35,7 +35,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
 
     initializeDateFormatting('ko_KR');
     String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDay);
-    date = formattedDate;
+    date = selectedDay;
 
     return Form(
       key: formKey,
