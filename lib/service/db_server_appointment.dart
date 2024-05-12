@@ -4,7 +4,7 @@ import 'package:mindlog_app/model/appoinment_model.dart';
 
 class AppointmentRepository {
   final dio = Dio();
-  final String serverIP_appointment = 'http://$URL_AWS:3333/api/v1/appointment';
+  final String serverIP_appointment = 'http://$URL_NOW:3333/api/v1/appointment';
 
   //진료 추가
   Future<int> createAppointment(Appointment appointment) async {

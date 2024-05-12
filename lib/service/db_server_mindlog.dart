@@ -4,7 +4,7 @@ import '../model/mindlog_model.dart';
 
 class MindlogRepository {
   final dio = Dio();
-  final String serverIP_mindlog = 'http://$URL_AWS:3333/api/v1/mindlog';
+  final String serverIP_mindlog = 'http://$URL_NOW:3333/api/v1/mindlog';
 
   //감정기록 추가
   Future<int> createMindlog(Mindlog mindlog) async {

@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mindlog_app/model/record_model.dart';
+import 'package:mindlog_app/provider/record_provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:record/record.dart';
 import 'package:flutter/material.dart';
 
@@ -24,10 +27,12 @@ class appointmentRecord extends StatefulWidget {
 class _appointmentRecordState extends State<appointmentRecord> {
   late AudioRecorder audioRecorder = AudioRecorder();
   late AudioPlayer audioPlayer = AudioPlayer();
+  late StreamSubscription<PlayerState> playerStateSubscription;
 
-  bool isRecording = false;
   bool isRecorded = false;
+  bool isRecording = false;
   bool isPlaying = false;
+  bool isPaused = false;
   String audioPath = '';
 
   late Timer _timer;
@@ -39,11 +44,18 @@ class _appointmentRecordState extends State<appointmentRecord> {
 
   @override
   void initState() {
-    // audioRecord = Record();
-    // audioPlayer = AudioPlayer();
-    // isRecorded = false;
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 1), updateTimer);
+
+    playerStateSubscription = audioPlayer.onPlayerStateChanged.listen((state) {
+      if (state == PlayerState.completed) {
+        // 재생이 완료되었을 때
+        setState(() {
+          isPlaying = false;
+        });
+        print('Playback completed');
+      }
+    });
   }
 
   @override
@@ -55,12 +67,13 @@ class _appointmentRecordState extends State<appointmentRecord> {
   }
 
   Future<void> startRecording() async {
-    audioPath = await getFilePath();
+    audioPath = await getFilePath(widget.appointment);
 
     try {
-      if(await audioRecorder.hasPermission()) {
+      if (await audioRecorder.hasPermission()) {
         await audioRecorder.start(config, path: audioPath);
         setState(() {
+          isRecorded = false;
           isRecording = true;
         });
         print('Recording started');
@@ -81,17 +94,19 @@ class _appointmentRecordState extends State<appointmentRecord> {
       });
       print('Recording stopped');
       print('path : $audioPath');
+
+      context.read<RecordProvider>().createRecord(
+          record: Record(appointmentId: widget.appointment.id, filePath: audioPath)
+      );
     }
     catch (e) {
       print('recording failed : $e');
     }
   }
 
-  Future<void> playRecording() async {
+  Future<void> startPlaying() async {
     try {
-      String audioUri = Platform.isAndroid ? 'file://$audioPath' : audioPath;
-      Source audioSource = DeviceFileSource(audioUri);
-      // Source audioSource = DeviceFileSource(audioPath);
+      Source audioSource = DeviceFileSource(audioPath);
       await audioPlayer.play(audioSource);
       // String? path = await audioRecorder.stop();
       setState(() {
@@ -106,6 +121,27 @@ class _appointmentRecordState extends State<appointmentRecord> {
     }
   }
 
+  Future<void> pausePlaying() async {
+    await audioPlayer.pause();
+    setState(() {
+      isPaused = true;
+    });
+  }
+
+  Future<void> resumePlaying() async {
+    await audioPlayer.resume();
+    setState(() {
+      isPaused = false;
+    });
+  }
+
+  Future<void> stopPlaying() async {
+    await audioPlayer.stop();
+    setState(() {
+      isPlaying = false;
+    });
+  }
+
   void updateTimer(Timer timer) {
     if (isRecording) {
       setState(() {
@@ -116,6 +152,10 @@ class _appointmentRecordState extends State<appointmentRecord> {
 
   @override
   Widget build(BuildContext context) {
+    final recordProvider = context.watch<RecordProvider>();
+    recordProvider.getRecordById(id: widget.appointment.id);
+    Record? record = recordProvider.record;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -127,26 +167,34 @@ class _appointmentRecordState extends State<appointmentRecord> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            isRecording ? Text('녹음을 하고 있어요', style : TextStyle(color: Colors.red)) :  // 녹음중
-            isRecorded ? Text('AI 요약') :  // 녹음 완료
-            Text('아직 녹음을 하지 않았어요'),  // 녹음 전
+            isRecorded
+                ? Text('AI 요약')  // 녹음 완료
+                : isRecording ? Text('녹음을 하고 있어요', style : TextStyle(color: Colors.red)) :  // 녹음 중
+                  Text('아직 녹음을 하지 않았어요'),  // 녹음 전
             Row(
               children: [
                 Text(
-                  isRecording ? _formatTime(_seconds) :  // 녹음중
-                  isPlaying ? '재생중' :  // 재생중
-                  isRecorded ? _formatTime(_seconds) :  // 녹음 완료
-                  ''  // 녹음 전
+                  isRecorded
+                      ? isPlaying ? '재생중' :  // 재생중
+                        _formatTime(_seconds)  // 녹음 완료
+                      : isRecording ? _formatTime(_seconds) :  // 녹음 중
+                        ''  // 녹음 전
                 ),
                 IconButton(
-                    onPressed: isRecording ? stopRecording :  // 녹음중 : 정지
-                      isPlaying ? startRecording :  // 재생중 : 정지(test 녹음)
-                      isRecorded ? playRecording :  // 녹음 완료 : 재생
-                      startRecording,  // 녹음 전 : 녹음
-                    icon: isRecording ? Image.asset('assets/icons/stop_button.png') :  // 녹음중 : 정지
-                      isPlaying ? Icon(Icons.stop_circle) :  // 재생중 : 정지
-                      isRecorded ? Icon(Icons.play_circle_outline) :  // 녹음 완료 : 재생
-                      Image.asset('assets/icons/record_button.png')  // 녹음 전 : 녹음
+                    onPressed:
+                      isRecorded
+                        ? isPlaying ?
+                          isPaused ? resumePlaying : pausePlaying :  // 일시정지/재생중
+                          startPlaying  // 녹음 완료: 재생
+                        : isRecording ? stopRecording :  // 녹음 중 : 정지
+                          startRecording,  // 녹음 전 : 녹음
+                    icon:
+                      isRecorded
+                        ? isPlaying ?
+                          isPaused ? Icon(Icons.play_circle_outline) : Image.asset('assets/icons/pause_button.png') :  // 일시정지/재생중
+                          Icon(Icons.play_circle_outline)  // 녹음 완료: 재생
+                        : isRecording ? Image.asset('assets/icons/stop_button.png') :  // 녹음중 : 정지
+                          Image.asset('assets/icons/record_button.png')  // 녹음 전 : 녹음
                 ),
               ],
             ),
@@ -165,17 +213,12 @@ class _appointmentRecordState extends State<appointmentRecord> {
   }
 }
 
-Future<String> getFilePath() async {
+Future<String> getFilePath(Appointment appointment) async {
   Directory directory = await getApplicationDocumentsDirectory();
   return p.join(
     directory.path,
-    'audio_${DateTime.now().millisecondsSinceEpoch}.m4a',
+    'audio_${appointment.date}_${appointment.id}.m4a',
   );
-
-  // String appDocPath = appDocDir.path;
-  // File file = new File('$appDocPath/test.wav');
-  // String filePath = file.path; // 파일 이름 및 확장자 설정
-  // return filePath;
 }
 //
 //   ContextWrapper contextWrapper= new ContextWrapper(getApplicationContext());

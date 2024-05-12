@@ -3,7 +3,7 @@
 <plist version="1.0">
 	<dict>
         <key>NSMicrophoneUsageDescription</key>
-        <string>Some message to describe why you need this permission</string>
+        <string>This app requires microphone access to record audio.</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
