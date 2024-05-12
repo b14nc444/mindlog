@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:mindlog_app/const/server.dart';
 import 'package:mindlog_app/model/appoinment_model.dart';
 
 class AppointmentRepository {
   final dio = Dio();
-  final String serverIP_appointment = 'http://112.168.203.141:3333/api/v1/appointment';
+  final String serverIP_appointment = 'http://$URL_AWS:3333/api/v1/appointment';
 
   //진료 추가
   Future<int> createAppointment(Appointment appointment) async {
@@ -95,6 +96,20 @@ class AppointmentRepository {
   //id별조회
   Future<Appointment> getAppointmentById(int appointmentId) async {
     var serverUrl = '$serverIP_appointment/$appointmentId';
+
+    final response = await dio.get(serverUrl);
+
+    if (response.statusCode == 200) {
+      print("Appointment Data loaded successfully");
+      return Appointment.fromJson(response.data);
+    } else {
+      throw Exception("Failed to load data: ${response.statusCode}");
+    }
+  }
+
+  //전체조회
+  Future<Appointment> getAppointmentAll() async {
+    var serverUrl = '$serverIP_appointment';
 
     final response = await dio.get(serverUrl);
 

@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import '../const/server.dart';
 import '../model/mindlog_model.dart';
 
 class MindlogRepository {
   final dio = Dio();
-  final String serverIP_mindlog = 'http://112.168.203.141:3333/api/v1/mindlog';
+  final String serverIP_mindlog = 'http://$URL_AWS:3333/api/v1/mindlog';
 
   //감정기록 추가
   Future<int> createMindlog(Mindlog mindlog) async {
@@ -95,6 +96,20 @@ class MindlogRepository {
   //id별조회
   Future<Mindlog> getMindlogById(int mindlogId) async {
     var serverUrl = '$serverIP_mindlog/$mindlogId';
+
+    final response = await dio.get(serverUrl);
+
+    if (response.statusCode == 200) {
+      print("Mindlog Data loaded successfully");
+      return Mindlog.fromJson(response.data);
+    } else {
+      throw Exception("Failed to load data: ${response.statusCode}");
+    }
+  }
+
+  //전체조회
+  Future<Mindlog> getMindlogAll() async {
+    var serverUrl = '$serverIP_mindlog';
 
     final response = await dio.get(serverUrl);
 
