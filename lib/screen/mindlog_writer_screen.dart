@@ -12,12 +12,10 @@ import '../component/hide_keyboard_on_tap.dart';
 import '../component/mindlog_mood_picker.dart';
 
 class mindlogWriterScreen extends StatefulWidget {
-
-  final DateTime selectedDate;
   final bool isUpdate;
   final Mindlog? modifyingMindlog;
 
-  const mindlogWriterScreen({super.key, required this.selectedDate, required this.isUpdate, this.modifyingMindlog});
+  const mindlogWriterScreen({super.key, required this.isUpdate, this.modifyingMindlog});
 
   @override
   State<mindlogWriterScreen> createState() => _mindlogWriterScreenState();
@@ -27,7 +25,8 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
-  DateTime? date = DateTime.now();
+  DateTime? date = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  String? time = DateFormat('hh:mm').format(DateTime.now());
   List<String>? mood;
   int? moodColor;
   String? title;
@@ -51,41 +50,24 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
     letterSpacing: -0.15,
   );
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (widget.isUpdate && widget.modifyingMindlog != null) {
-  //     // 수정 모드일 때 modifyingMindlog의 데이터로 각 필드를 초기화합니다.
-  //     date = widget.modifyingMindlog!.date;
-  //     mood = widget.modifyingMindlog!.mood;
-  //     moodColor = widget.modifyingMindlog!.moodColor;
-  //     title = widget.modifyingMindlog!.title;
-  //     emotion = widget.modifyingMindlog!.emotionRecord;
-  //     event = widget.modifyingMindlog!.eventRecord;
-  //     question = widget.modifyingMindlog!.questionRecord;
-  //   } else {
-  //     // 수정 모드가 아니면 각 필드를 빈 값으로 초기화합니다.
-  //     date = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
-  //     mood = context.watch<MindlogProvider>().selectedMoods;
-  //     moodColor = context.watch<MindlogProvider>().moodColor;
-  //     title = '';
-  //     emotion = '';
-  //     event = '';
-  //     question = '';
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('ko_KR');
-    final provider = context.watch<MindlogProvider>();
+    // final provider = context.watch<MindlogProvider>();
 
-    String? date = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(DateTime.now());
-    mood = provider.selectedMoods;
-    moodColor = provider.moodColor;
+    mood = context.watch<MindlogProvider>().selectedMoods;
+    moodColor = context.watch<MindlogProvider>().moodColor;
 
-    // String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(widget.selectedDate);
-    // date = formattedDate;
+    if (widget.isUpdate && widget.modifyingMindlog != null) {
+      date = widget.modifyingMindlog!.date;
+      time = widget.modifyingMindlog!.time;
+      mood = widget.modifyingMindlog!.mood;
+      moodColor = widget.modifyingMindlog!.moodColor;
+      title = widget.modifyingMindlog!.title;
+      emotion = widget.modifyingMindlog!.emotionRecord;
+      event = widget.modifyingMindlog!.eventRecord;
+      question = widget.modifyingMindlog!.questionRecord;
+    }
 
     return Form(
       key: formKey,
@@ -128,6 +110,8 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  // /////////test/////////
+                  // Text(date.toString()), Text(time.toString()),
                   TextFormField(
                     cursorColor: typographyGray3,
                     maxLines: 1,
@@ -135,8 +119,12 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                     decoration: InputDecoration(
                       hintText: '오늘을 요약하는 제목을 적어주세요',
                       hintStyle: textStyleHintTitle,
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor), // 포커스 상태에서의 밑줄 색상
+                      ),
                     ),
                     style: textStyleContent,
+                    initialValue: title,
                     onSaved: (String? val) {title = val;},
                     validator: contentValidator,
                   ),
@@ -145,7 +133,10 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                   ),
                   Column(
                     children: [
-                      const mindlogMoodPicker(),
+                      mindlogMoodPicker(
+                        mood: mood,
+                        moodColor: moodColor,
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -154,7 +145,9 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                         direction: '오늘의 감정은 어떠했나요?\n우울함, 불안함 등의 감정이 들었다면 몇점으로 평가할 수 있을까요?(10점 만점)'
                             '\n그 감정이 해소될 때까지의 시간은 얼마나 걸렸는지,\n동시에 자동적으로 떠올랐던 생각을 자유롭게 적어주세요.',
                       ),
-                      mindlogTextField(hintText: '감정을 기록해주세요',
+                      mindlogTextField(
+                        hintText: '감정을 기록해주세요',
+                        initialValue: emotion,
                         onSavedContent: (String? val) {emotion = val;},
                         contentValidator: contentValidator,
                       ),
@@ -166,9 +159,12 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                         direction: '나의 감정에 영향을 미친 이벤트가 있다면 기록해주세요.\n그 이벤트가 나에게 미친 영향이 어떠한지를 기록합니다.'
                           '\n감정/행동이 바뀌었다면 그 변화에 대해 기록해주세요.',
                       ),
-                      mindlogTextField(hintText: '이벤트를 기록해주세요',
+                      mindlogTextField(
+                        hintText: '이벤트를 기록해주세요',
+                        initialValue: event,
                         onSavedContent: (String? val) {event = val;},
-                        contentValidator: contentValidator,),
+                        contentValidator: contentValidator,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -177,9 +173,12 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                         direction: '약 먹었을 때 불편했던 것, 일상생활 중 궁금했던 것,\n'
                         '치료 방향 그리고 특별히 주치의와 상담하고 싶은 내용이 있다면 기록해주세요.',
                       ),
-                      mindlogTextField(hintText: '질문을 기록해주세요(선택)',
+                      mindlogTextField(
+                        hintText: '질문을 기록해주세요(선택)',
+                        initialValue: question,
                         onSavedContent: (String? val) {question = val;},
-                        contentValidator: contentCanNullValidator,),
+                        contentValidator: contentCanNullValidator,
+                      ),
                     ],
                   ),
                 ],
@@ -202,8 +201,22 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
     return null;
   }
 
+  String? moodValidator(List<String>? mood, int? moodColor, BuildContext context) {
+    if (mood == null || mood.isEmpty || moodColor == null || moodColor == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('기분을 선택해주세요.'),
+          duration: Duration(seconds: 2),
+          backgroundColor: primaryColor,
+        ),
+      );
+      return ''; // 빈 문자열 반환
+    }
+    return null;
+  }
+
   void onCreateButtonPressed() {
-    if(formKey.currentState!.validate()) {  // 폼 검증
+    if(formKey.currentState!.validate() && moodValidator(mood, moodColor, context) == null) {  // 폼 검증
       formKey.currentState!.save();  // 폼 저장
 
       // getMindlogByDate(context, '2024-04-20(토)');
@@ -214,6 +227,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
             mindlog: Mindlog(
                 id: 0,
                 date: date!,
+                time: time!,
                 mood: mood!,
                 moodColor: moodColor!,
                 title: title!,
@@ -227,6 +241,7 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
             mindlog: Mindlog(  // 수정 시 id와 date는 기존 값 유지
                 id: widget.modifyingMindlog!.id,
                 date: widget.modifyingMindlog!.date,
+                time: widget.modifyingMindlog!.time,
                 mood: mood!,
                 moodColor: moodColor!,
                 title: title!,
@@ -235,14 +250,12 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
                 questionRecord: question,
             )
         );
-
-        context.read<MindlogProvider>().selectedMoods = [];
-        context.read<MindlogProvider>().moodColor = 0;
       }
 
       print('-----input data-----');
       widget.isUpdate ? print('updated') : print('created');
       print('date : $date');
+      print('time : $time');
       print('mood : $mood');
       print('mood color : $moodColor');
       print('title : $title');
@@ -250,6 +263,8 @@ class _mindlogWriterScreenState extends State<mindlogWriterScreen> {
       print('event record : $event');
       print('question record: $question');
 
+      context.read<MindlogProvider>().selectedMoods = [];
+      context.read<MindlogProvider>().moodColor = 0;
       Navigator.pop(context);
     } else {
       print("null can't exist");

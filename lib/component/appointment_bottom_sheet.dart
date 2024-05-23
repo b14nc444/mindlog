@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/appointment_textfield.dart';
 import 'package:mindlog_app/component/hide_keyboard_on_tap.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:mindlog_app/provider/mindlog_provider.dart';
 import 'package:mindlog_app/provider/schedule_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,10 @@ import '../model/appoinment_model.dart';
 
 class AppointmentBottomSheet extends StatefulWidget {
 
-  const AppointmentBottomSheet({super.key});
+  final bool isUpdate;
+  final Appointment? modifyingAppointment;
+
+  const AppointmentBottomSheet({super.key, required this.isUpdate, this.modifyingAppointment});
 
   @override
   State<AppointmentBottomSheet> createState() => _AppointmentBottomSheetState();
@@ -34,8 +38,16 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     initializeDateFormatting('ko_KR');
-    String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDay);
+    // String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(selectedDay);
     date = selectedDay;
+
+    if (widget.isUpdate && widget.modifyingAppointment != null) {
+      date = widget.modifyingAppointment!.date;
+      startTime = widget.modifyingAppointment!.startTime;
+      endTime = widget.modifyingAppointment!.endTime;
+      hospital = widget.modifyingAppointment!.hospital;
+      doctorName = widget.modifyingAppointment!.doctorName;
+    }
 
     return Form(
       key: formKey,
@@ -73,7 +85,7 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                 const SizedBox(
                   height: 6,
                 ),
-                Text(formattedDate,
+                Text(DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(date!),
                   style: const TextStyle(
                     color: typographyGray3,
                     fontSize: 14,
@@ -84,6 +96,10 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
                   height: 24,
                 ),
                 AppointmentTextField(
+                  initialStartTime: startTime,
+                  initialEndTime: endTime,
+                  initialHospital: hospital,
+                  initialDoctorName: doctorName,
                   onSavedStartTime: (String? val) {startTime = val!;},
                   onSavedEndTime: (String? val) {endTime = val!;},
                   onSavedHospital: (String? val) {hospital = val!;},
@@ -129,15 +145,29 @@ class _AppointmentBottomSheetState extends State<AppointmentBottomSheet> {
     if(formKey.currentState!.validate()) {  // 폼 검증
       formKey.currentState!.save();  // 폼 저장
 
-      context.read<ScheduleProvider>().createAppointment(
-          appointment: Appointment(
-            id: 0,
-            date: date!,
+      if(widget.isUpdate == false) {
+        context.read<ScheduleProvider>().createAppointment(
+            appointment: Appointment(
+                id: 0,
+                date: date!,
+                startTime: startTime!,
+                endTime: endTime!,
+                hospital: hospital!,
+                doctorName: doctorName)
+        );
+      } else {  // 기존 기록 수정
+      context.read<ScheduleProvider>().updateAppointment(
+          id: widget.modifyingAppointment!.id,
+          appointment: Appointment(  // 수정 시 id와 date는 기존 값 유지
+            id: widget.modifyingAppointment!.id,
+            date: widget.modifyingAppointment!.date,
             startTime: startTime!,
-              endTime: endTime!,
-              hospital: hospital!,
-              doctorName: doctorName)
+            endTime: endTime!,
+            hospital: hospital!,
+            doctorName: doctorName,
+          )
       );
+    }
 
       print('-----data input-----');
       print('date : $date');

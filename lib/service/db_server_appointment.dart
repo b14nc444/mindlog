@@ -29,7 +29,7 @@ class AppointmentRepository {
     var serverUrl = '$serverIP_appointment/$appointmentId';
 
     try {
-      final response = await dio.delete(serverUrl, data: {'id': appointmentId});
+      final response = await dio.delete(serverUrl);
 
       if (response.statusCode == 200) {
         int appointmentId = response.data?['id'];
@@ -47,8 +47,8 @@ class AppointmentRepository {
   Future<void> updateAppointment(int appointmentId, Appointment appointment) async {
     var serverUrl = '$serverIP_appointment/$appointmentId';
 
-    final json = appointment.toJson();
     try {
+      final json = appointment.toJson();
       final response = await dio.put(serverUrl, data: json);
 
       if (response.statusCode == 200) {
@@ -64,24 +64,16 @@ class AppointmentRepository {
   }
 
   //날짜별조회
-  Future<List<Appointment>> getAppointmentByDate(DateTime appointmentDate) async {
-    var serverUrl = '$serverIP_appointment/by-date/${appointmentDate.toIso8601String()}';
+  Future<List<Appointment>> getAppointmentByDate(String date) async {
+    var serverUrl = '$serverIP_appointment/by-date/$date';
 
     try {
       final response = await dio.get(serverUrl, queryParameters: {});
 
       if (response.statusCode == 200) {
         List<Appointment> appointments = response.data.map<Appointment>(
-                (x) => Appointment.fromJson(x)).toList();
-        for (var appointment in appointments) {
-          print('Id: ${appointment.id}');
-          print('Date: ${appointment.date}');
-          print('Start Time: ${appointment.startTime}');
-          print('End Time: ${appointment.endTime}');
-          print('Hospital: ${appointment.hospital}');
-          print('Doctor: ${appointment.doctorName}');
-          print('------------------------');
-        }
+                (x) => Appointment.fromJson(x)
+        ).toList();
         print("Appointment Data received successfully");
         return appointments;
 
@@ -89,7 +81,18 @@ class AppointmentRepository {
         throw Exception("Failed to loaded data: ${response.statusCode}");
       }
     } catch (e) {
-      throw Exception("Failed to received data: $e");
+      if (e is DioException) {
+        if (e.response?.statusCode == 400) {
+          // 400 Bad Request 에러 처리
+          throw Exception("Bad Request: ${e.response?.data}");
+        } else {
+          // 다른 DioException 처리
+          throw Exception("Failed to received data: $e");
+        }
+      } else {
+        // 다른 예외 처리
+        throw Exception("Failed to received data: $e");
+      }
     }
   }
 

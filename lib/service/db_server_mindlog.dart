@@ -11,15 +11,34 @@ class MindlogRepository {
     var serverUrl = serverIP_mindlog;
 
     final json = mindlog.toJson();
-    final response = await dio.post(serverUrl, data: json);
+    try {
+      final response = await dio.post(serverUrl, data: json);
 
-    if (response.statusCode == 200) {
-      int mindlogId = response.data?['id']; // 서버로부터 받은 진료 일정의 ID
-      print('New mindlog added with ID: $mindlogId');
-      return mindlogId;
-
-    } else {
-      throw Exception("Failed to send data: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        int mindlogId = response.data?['id'];
+        print('New mindlog added with ID: $mindlogId');
+        return mindlogId;
+      } else {
+        // 서버 응답 코드가 200이 아닌 경우 처리
+        print('HTTP status code: ${response.statusCode}');
+        print('Response data: ${response.data}');
+        throw Exception('Failed to create mindlog: ${response.statusMessage}');
+      }
+    } on DioError catch (e) {
+      // DioError 처리
+      if (e.response != null) {
+        print('HTTP status code: ${e.response?.statusCode}');
+        print('Response data: ${e.response?.data}');
+        throw Exception('Failed to create mindlog: ${e.response?.statusMessage}');
+      } else {
+        print('Error: ${e.error}');
+        print('Error message: ${e.message}');
+        throw Exception('Failed to create mindlog: ${e.message}');
+      }
+    } catch (e) {
+      // 다른 예외 처리
+      print('Error: $e');
+      throw Exception('Failed to create mindlog: $e');
     }
   }
 
@@ -63,25 +82,27 @@ class MindlogRepository {
   }
 
   //날짜별조회
-  Future<List<Mindlog>> getMindlogByDate(String mindlogDate) async {
-    var serverUrl = '$serverIP_mindlog/by-date/$mindlogDate';
+  Future<List<Mindlog>> getMindlogByDate(String date) async {
+    var serverUrl = '$serverIP_mindlog/by-date/$date';
 
     try {
       final response = await dio.get(serverUrl, queryParameters: {});
 
       if (response.statusCode == 200) {
         List<Mindlog> mindlogs = response.data.map<Mindlog>(
-                (x) => Mindlog.fromJson(x)).toList();
-        for (var mindlog in mindlogs) {
-          print('Id: ${mindlog.id}');
-          print('Date: ${mindlog.date}');
-          print('Mood Color: ${mindlog.moodColor}');
-          print('Title: ${mindlog.title}');
-          print('Emotion Record: ${mindlog.emotionRecord}');
-          print('Event Record: ${mindlog.eventRecord}');
-          print('Question Record: ${mindlog.questionRecord}');
-          print('------------------------');
-        }
+                (x) => Mindlog.fromJson(x)
+        ).toList();
+        // for (var mindlog in mindlogs) {
+        //   print('Id: ${mindlog.id}');
+        //   print('Date: ${mindlog.date}');
+        //   print('Time: ${mindlog.time}');
+        //   print('Mood Color: ${mindlog.moodColor}');
+        //   print('Title: ${mindlog.title}');
+        //   print('Emotion Record: ${mindlog.emotionRecord}');
+        //   print('Event Record: ${mindlog.eventRecord}');
+        //   print('Question Record: ${mindlog.questionRecord}');
+        //   print('------------------------');
+        // }
         print("Mindlog Data received successfully");
         return mindlogs;
 
@@ -89,7 +110,18 @@ class MindlogRepository {
         throw Exception("Failed to loaded data: ${response.statusCode}");
       }
     } catch (e) {
-      throw Exception("Failed to received data: $e");
+      if (e is DioException) {
+        if (e.response?.statusCode == 400) {
+          // 400 Bad Request 에러 처리
+          throw Exception("Bad Request: ${e.response?.data}");
+        } else {
+          // 다른 DioException 처리
+          throw Exception("Failed to received data: $e");
+        }
+      } else {
+        // 다른 예외 처리
+        throw Exception("Failed to received data: $e");
+      }
     }
   }
 

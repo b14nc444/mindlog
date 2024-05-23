@@ -38,7 +38,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const RenderAppBarHome(),
       body: _buildBody(_selectedIndex),
@@ -78,11 +77,42 @@ class _HomeScreenState extends State<HomeScreen> {
   double _endY = 0;
 
   @override
+  void initState() {
+    super.initState();
+    final scheduleProvider = context.read<ScheduleProvider>();
+    final mindlogProvider = context.read<MindlogProvider>();
+    final currentDate = DateTime.now();
+
+    scheduleProvider.getAppointmentByDate(date: currentDate);
+    mindlogProvider.getMindlogByDate(date: currentDate);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scheduleProvider.addListener(_refreshData);
+      mindlogProvider.addListener(_refreshData);
+    });
+  }
+
+  @override
+  void dispose() {
+    final scheduleProvider = context.read<ScheduleProvider>();
+    final mindlogProvider = context.read<MindlogProvider>();
+
+    scheduleProvider.removeListener(_refreshData);
+    mindlogProvider.removeListener(_refreshData);
+
+    super.dispose();
+  }
+
+  void _refreshData() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final scheduleProvider = context.watch<ScheduleProvider>();
     final mindlogProvider = context.watch<MindlogProvider>();
-    final selectedDay = scheduleProvider.selectedDate;
+    final selectedDay = scheduleProvider.formattedDate;
     final appointments = scheduleProvider.cache[selectedDay] ?? [];
     final mindlogs = mindlogProvider.cache[selectedDay] ?? [];
 
@@ -110,7 +140,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 14,
                 ),
+                /////////TEST////////////
+                // Text(appointments.toString()),
+                // Text(selectedDay),
                 ListView.builder(
+                  physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
                   shrinkWrap: true,
                   itemCount: appointments.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -128,31 +162,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => appointmentScreen(
-                        appointment: Appointment(
-                          id: 0, date: selectedDay,
-                          startTime: '17:00',
-                          endTime: '17:30',
-                          hospital: '고려숲정신건강의학과의원',
-                          doctorName: '형원석 원장님',
-                        ),
-                      )),
-                    );
-                  },
-                  child: AppointmentCard(
-                    appointment: Appointment(
-                      id: 0, date: selectedDay,
-                      startTime: '17:00',
-                      endTime: '17:30',
-                      hospital: '고려숲정신건강의학과의원',
-                      doctorName: '형원석 원장님',
-                    ),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: (){
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => appointmentScreen(
+                //         appointment: Appointment(
+                //           id: 0, date: DateTime.parse(selectedDay),
+                //           startTime: '17:00',
+                //           endTime: '17:30',
+                //           hospital: '고려숲정신건강의학과의원',
+                //           doctorName: '형원석 원장님',
+                //         ),
+                //       )),
+                //     );
+                //   },
+                //   child: AppointmentCard(
+                //     appointment: Appointment(
+                //       id: 0, date: DateTime.parse(selectedDay),
+                //       startTime: '17:00',
+                //       endTime: '17:30',
+                //       hospital: '고려숲정신건강의학과의원',
+                //       doctorName: '형원석 원장님',
+                //     ),
+                //   ),
+                // ),
+                // Text(selectedDay), /////////TEST//////
                 const SizedBox(
                   height: 4,
                 ),
@@ -165,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       showModalBottomSheet(
                         context: context,
                         barrierColor: Colors.black.withAlpha(0),
-                        builder: (_) => const AppointmentBottomSheet(),
+                        builder: (_) => const AppointmentBottomSheet(isUpdate: false,),
                         isScrollControlled: true
                         );
                       },
@@ -195,6 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 20,
                 ),
                 ListView.builder(
+                  physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
                   shrinkWrap: true,
                   itemCount: mindlogs.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -203,30 +239,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     return mindlogCard(mindlog: mindlog,);
                   },
                 ),
+                //testtesttesttesttesttesttest
                 // InkWell(
                 //   onTap: (){
                 //     // deleteMindlog(context, 1);
                 //     Navigator.push(
-                //       context, MaterialPageRoute(builder: (context) => mindlogWriterScreen(
-                //         selectedDate: DateTime.now(), isUpdate: false,
-                //       ))
+                //         context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
+                //       mindlog: Mindlog(id: 0, date: DateTime.parse(selectedDay), time: DateTime.parse(selectedDay), mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: '',)
+                //     ))
                 //     );
                 //   },
+                //   child: mindlogCard(
+                //     mindlog: Mindlog(id: 0, date: DateTime.parse(selectedDay), time: DateTime.parse(selectedDay), mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: ''),
+                //   ),
                 // ),
-                //testtesttesttesttesttesttest
-                InkWell(
-                  onTap: (){
-                    // deleteMindlog(context, 1);
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
-                      mindlog: Mindlog(id: 0, date: selectedDay, mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: '',)
-                    ))
-                    );
-                  },
-                  child: mindlogCard(
-                    mindlog: Mindlog(id: 0, date: selectedDay, mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: ''),
-                  ),
-                ),
                 GestureDetector(
                   onVerticalDragStart: (details) {
                     _startY = details.localPosition.dy;
@@ -242,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (details.primaryVelocity! > 0) {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => mindlogWriterScreen(
-                            selectedDate: DateTime.now(), isUpdate: false,
+                            isUpdate: false,
                           ))
                       );
                       print('swiped down');

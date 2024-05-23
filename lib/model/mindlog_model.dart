@@ -1,7 +1,10 @@
 
+import 'package:intl/intl.dart';
+
 class Mindlog {
   final int id;
-  final DateTime date;  // 이거 date로 바꿔야됨
+  final DateTime date;
+  final String time;
   final List<String> mood;
   final int moodColor;
   final String title;
@@ -12,6 +15,7 @@ class Mindlog {
   Mindlog({
     required this.id,
     required this.date,
+    required this.time,
     required this.mood,
     required this.moodColor,
     required this.title,
@@ -21,8 +25,9 @@ class Mindlog {
 
   Mindlog.fromJson(Map<String, dynamic> json) :
         id = json['id'],
-        date = json['date'],
-        mood = json['mood'],
+        date = DateTime.parse(json['date']),
+        time = DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(json['time'])),
+        mood = List<String>.from(json['moods']),
         moodColor = json['moodColor'],
         title = json['title'],
         emotionRecord = json['emotionRecord'],
@@ -31,8 +36,9 @@ class Mindlog {
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'date': date.toIso8601String(),
-    'mood': mood,
+    'date': '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
+    'time': time,
+    'moods': mood.toList(),
     'moodColor': moodColor,
     'title': title,
     'emotionRecord': emotionRecord,
@@ -43,6 +49,7 @@ class Mindlog {
   Mindlog copyWith({
     int? id,
     DateTime? date,
+    String? time,
     List<String>? mood,
     int? moodColor,
     String? title,
@@ -53,6 +60,7 @@ class Mindlog {
     return Mindlog(
         id: id ?? this.id,
         date: date ?? this.date,
+        time: time ?? this.time,
         mood: mood ?? this.mood,
         moodColor: moodColor ?? this.moodColor,
         title: title ?? this.title,

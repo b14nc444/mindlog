@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mindlog_app/provider/schedule_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../const/visual.dart';
 import '../model/appoinment_model.dart';
@@ -13,8 +15,25 @@ class appointmentMemo extends StatefulWidget {
 }
 
 class _appointmentMemoState extends State<appointmentMemo> {
+
+  late TextEditingController _textEditingController;
+  String? memo;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+    memo = widget.appointment.memo ?? ''; // 기존 메모 또는 빈 문자열 할당
+    _textEditingController.text = memo!; // 텍스트 필드에 기존 메모 표시
+  }
+
   @override
   Widget build(BuildContext context) {
+    Appointment appointment = widget.appointment;
+
+    final provider = context.watch<ScheduleProvider>();
+    // provider.updateAppointmentMemo(id: appointment.id!, memo: memo!);
+    
     return Flex(
         direction: Axis.horizontal,
         children: [
@@ -48,7 +67,14 @@ class _appointmentMemoState extends State<appointmentMemo> {
                       color: basicBlack,
                       letterSpacing: -0.15,
                     ),
-                    // onSaved: widget.onSavedContent,
+                    onChanged: (String? val) {
+                      setState(() {
+                        memo = val;
+                      });
+                      // memo가 변경될 때마다 업데이트
+                      provider.updateAppointmentMemo(id: appointment.id!, memo: memo!);
+                      print('memo updated : $memo');
+                    },
                   ),
               ),
             ),

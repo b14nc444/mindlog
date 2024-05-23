@@ -6,8 +6,8 @@ import '../service/db_server_mindlog.dart';
 class MindlogProvider with ChangeNotifier {
   final MindlogRepository repository;
 
-  DateTime selectedDate = DateTime.now();
-  String formattedDate = DateTime.now().toIso8601String();
+  DateTime selectedDate = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  // String formattedDate = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day).toIso8601String();
   Map<String, List<Mindlog>> cache = {};
 
   MindlogProvider({required this.repository}) : super() {
@@ -16,9 +16,10 @@ class MindlogProvider with ChangeNotifier {
 
   //CRUD
   void getMindlogByDate({required DateTime date}) async {
-    final response = await repository.getMindlogByDate(date.toIso8601String());
+    String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    final response = await repository.getMindlogByDate(formattedDate);
 
-    cache.update(date.toIso8601String(), (value) => response, ifAbsent: () => response);
+    cache.update(formattedDate, (value) => response, ifAbsent: () => response);
     notifyListeners();
     print(cache);
   }
@@ -33,7 +34,7 @@ class MindlogProvider with ChangeNotifier {
   }
 
   void createMindlog({required Mindlog mindlog}) async {
-    final targetDate = mindlog.date.toIso8601String();
+    final targetDate = '${mindlog.date.year}-${mindlog.date.month.toString().padLeft(2, '0')}-${mindlog.date.day.toString().padLeft(2, '0')}';
     final savedMindlog = await repository.createMindlog(mindlog);
 
     print('requested');
@@ -48,9 +49,12 @@ class MindlogProvider with ChangeNotifier {
       ),
         ifAbsent: () => [mindlog]
     );
+    notifyListeners();
   }
 
   void deleteMindlog({required int id, required DateTime date}) async {
+    String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
     try {
       final response = await repository.deleteMindlog(id);
       cache.update(date.toIso8601String(), (value) => value.where((e) => e.id != id).toList(),
@@ -62,7 +66,7 @@ class MindlogProvider with ChangeNotifier {
   }
 
   void updateMindlog({required int id, required Mindlog mindlog}) async {
-    final targetDate = mindlog.date.toIso8601String();
+    final targetDate = '${mindlog.date.year}-${mindlog.date.month.toString().padLeft(2, '0')}-${mindlog.date.day.toString().padLeft(2, '0')}';
     final response = await repository.updateMindlog(id, mindlog);
 
     cache.update(targetDate, (value) =>

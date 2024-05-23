@@ -29,19 +29,9 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // initializeDateFormatting('ko_KR');
-    // String formattedDateTime = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR')
-    //     .format(widget.selectedDate);
-    // date = formattedDateTime;
-
-    // //for test
-    // String testTitle = '저희 진짜 열심히 했어요';
-    // String testContent1 = '피곤하다… 시험 하나만 봐서 별로 안 바쁠 줄 알았는데 생각보다 할 게 많음';
-    // String testContent2 = '친구들 만나러 다녀옴 근데 바빠서 생각보다 오래 못 놀고 들어와서 아쉬웠다';
-    // String testContent3 = '피곤하고 무기력할 때는 어떻게 해야 하지 힘이 안 난다';
 
     Mindlog mindlog = widget.mindlog;
-    String formattedDate = DateFormat('yyyy년 M월 d일 HH:MM', 'ko_KR').format(mindlog.date);
+    String formattedDate = DateFormat('yyyy년 M월 d일', 'ko_KR').format(mindlog.date);
 
     return Scaffold(
         appBar: AppBar(
@@ -76,7 +66,7 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
                     ),
                     SizedBox(
                         width: double.infinity,
-                        child: Text(formattedDate,
+                        child: Text('$formattedDate ${mindlog.time}',
                             style: const TextStyle(
                                 color: typographyGray1,
                                 fontWeight: FontWeight.w300,
@@ -92,6 +82,54 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
                 ),
                 Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              getHeartImageByMoodColor(mindlog.moodColor),
+                              SizedBox(width: 18,),
+                              Image.asset('assets/hearts/vector_line.png'),
+                              SizedBox(width: 18,),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 35,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: mindlog.mood.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      final mood = mindlog.mood[index];
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: backgroundColor,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        child: Center(
+                                            child: Text(mood, style: const TextStyle(
+                                              color: basicBlack,
+                                              fontSize: 14,
+                                            ))
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ),
+                    ),
                     const mindlogQuestion(
                       question: '1. 오늘의 감정',
                       direction: '오늘의 감정은 어떠했나요?\n우울함, 불안함 등의 감정이 들었다면 몇점으로 평가할 수 있을까요?(10점 만점)'
@@ -125,5 +163,22 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
         ),
         bottomNavigationBar: mindlogBottomMenu(mindlog: mindlog),
     );
+  }
+
+  Image getHeartImageByMoodColor(int moodColor) {
+    switch (moodColor) {
+      case 1:
+        return Image.asset('assets/hearts/heart_background_red.png');
+      case 2:
+        return Image.asset('assets/hearts/heart_background_orange.png');
+      case 3:
+        return Image.asset('assets/hearts/heart_background_yellow.png');
+      case 4:
+        return Image.asset('assets/hearts/heart_background_yellowgreen.png');
+      case 5:
+        return Image.asset('assets/hearts/heart_background_green.png');
+      default:
+        return heartEmpty;
+    }
   }
 }

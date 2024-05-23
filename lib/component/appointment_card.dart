@@ -5,6 +5,7 @@ import '../const/visual.dart';
 import '../model/appoinment_model.dart';
 import '../provider/schedule_provider.dart';
 import '../screen/appointment_screen.dart';
+import 'appointment_bottom_sheet.dart';
 
 enum AppointmentMenuItem { updateItem, deleteItem, }
 AppointmentMenuItem? selectedMenuItem;
@@ -31,10 +32,17 @@ class AppointmentCard extends StatelessWidget {
               ),
             );
           },
-          // onLongPress: (){
-          //   showPopupMenu(context, 0.0 as Offset
-          //   );
-          // },
+          onLongPress: (){
+            showModalBottomSheet(
+                context: context,
+                barrierColor: Colors.black.withAlpha(0),
+                builder: (_) => AppointmentBottomSheet(
+                  isUpdate: true,
+                  modifyingAppointment: appointment,
+                ),
+                isScrollControlled: true
+            );
+          },
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,

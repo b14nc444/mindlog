@@ -12,6 +12,11 @@ class AppointmentTextField extends StatefulWidget {
   final FormFieldValidator<String> hospitalValidator;
   final FormFieldValidator<String> doctorValidator;
 
+  final String? initialStartTime;
+  final String? initialEndTime;
+  final String? initialHospital;
+  final String? initialDoctorName;
+
   const AppointmentTextField({super.key,
     required this.onSavedStartTime,
     required this.onSavedEndTime,
@@ -21,6 +26,7 @@ class AppointmentTextField extends StatefulWidget {
     required this.endTimeValidator,
     required this.hospitalValidator,
     required this.doctorValidator,
+    this.initialStartTime, this.initialEndTime, this.initialHospital, this.initialDoctorName,
   });
 
   @override
@@ -38,25 +44,6 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
     String selectedTimeStart;
     String selectedTimeEnd;
     String inputText;
-
-    InputDecoration inputDecoration = InputDecoration(
-      filled: true,
-      fillColor: backgroundColor,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: BorderSide.none, // 테두리 없음
-      ),
-    );
-
-    InputDecoration inputdecorationTime = InputDecoration(
-      filled: true,
-      fillColor: backgroundColor,
-      border: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: BorderSide.none, // 테두리 없음
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal:10, vertical: 0),
-    );
 
     TextStyle textStyleLabel = const TextStyle(
         color: secondaryColor3,
@@ -101,6 +88,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 width: 95,
                 height: 40,
                 child: DropdownButtonFormField<String>(
+                  value: widget.initialStartTime,
                   decoration: InputDecoration(
                     hintText: '09:00',
                     hintStyle: textStyleHint,
@@ -139,6 +127,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
                 width: 95,
                 height: 40,
                 child: DropdownButtonFormField<String>(
+                  value: widget.initialEndTime,
                   decoration: InputDecoration(
                     hintText: '09:30',
                     hintStyle: textStyleHint,
@@ -182,6 +171,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
             height: 45,
             child: TextFormField(
               //controller: textControllerHospital,
+              initialValue: widget.initialHospital,
               textAlignVertical: TextAlignVertical.center,
               cursorColor: typographyGray3,
               maxLines: 1,
@@ -213,6 +203,7 @@ class _AppointmentTextFieldState extends State<AppointmentTextField> {
             height: 45,
             child: TextFormField(
               //controller: textControllerDoctor,
+              initialValue: widget.initialDoctorName,
               cursorColor: typographyGray3,
               maxLines: 1,
               keyboardType: TextInputType.multiline,

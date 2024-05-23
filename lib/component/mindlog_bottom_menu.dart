@@ -77,7 +77,6 @@ class _mindlogBottomMenuState extends State<mindlogBottomMenu> {
                       // 감정기록 수정 동작 수행
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => mindlogWriterScreen(
-                            selectedDate: DateTime.now(),
                             isUpdate: true,
                             modifyingMindlog: mindlog,
                           ))

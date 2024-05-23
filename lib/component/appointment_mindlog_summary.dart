@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../const/visual.dart';
 import '../model/appoinment_model.dart';
+import '../model/mindlog_model.dart';
 
 class appointmentMindlogSummary extends StatefulWidget {
-  final Appointment appointment;
+  final Mindlog mindlog;
 
-  const appointmentMindlogSummary({super.key, required this.appointment});
+  const appointmentMindlogSummary({super.key, required this.mindlog});
 
   @override
   State<appointmentMindlogSummary> createState() => _appointmentMindlogSummaryState();
@@ -14,17 +16,49 @@ class appointmentMindlogSummary extends StatefulWidget {
 
 class _appointmentMindlogSummaryState extends State<appointmentMindlogSummary> {
   bool _isExpanded = false;
-  // if (appointment.moodColor == 1) color
 
   @override
   Widget build(BuildContext context) {
+
+    Mindlog mindlog = widget.mindlog;
+    String formattedDate = DateFormat('yyyy.MM.dd', 'ko_KR').format(mindlog.date);
+
+    Color? borderColor;
+    Color? contentColor;
+
+    switch(mindlog.moodColor) {
+      case 1:
+        borderColor = Color(0xffFF6362);
+      case 2:
+        borderColor = Color(0xffFF9A4E);
+      case 3:
+        borderColor = Color(0xffF6C649);
+      case 4:
+        borderColor = Color(0xffC8DD6E);
+      case 5:
+        borderColor = Color(0xff78D358);
+    }
+
+    switch(mindlog.moodColor) {
+      case 1:
+        contentColor = Color(0xffF4E3DF);
+      case 2:
+        contentColor = Color(0xffF7EFE6);
+      case 3:
+        contentColor = Color(0xffF4F0DF);
+      case 4:
+        contentColor = Color(0xffF1F6E0);
+      case 5:
+        contentColor = Color(0xffE9EFE6);
+    }
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Color(0xFF78D358), // 테두리 색상
+          color: borderColor!, // 테두리 색상
           width: 2.5, // 테두리 두께
         ),
         boxShadow: [
@@ -44,7 +78,7 @@ class _appointmentMindlogSummaryState extends State<appointmentMindlogSummary> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('오늘 기분 최고!', style: TextStyle(
+                Text(mindlog.title, style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.18,
@@ -60,7 +94,7 @@ class _appointmentMindlogSummaryState extends State<appointmentMindlogSummary> {
                 ), // toggleArrowUp
               ],
             ),
-            Text('2024.04.15 9:10', style: TextStyle(
+            Text('$formattedDate ${mindlog.time}', style: TextStyle(
               color: basicGray,
               letterSpacing: -0.18,
             ),),
@@ -70,71 +104,26 @@ class _appointmentMindlogSummaryState extends State<appointmentMindlogSummary> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('감정', style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),),
-                    SizedBox(height: 10,),
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFE9EFE6),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text('감정 text\nsample', style: TextStyle(
-                                  color: basicBlack
-                              ),),
-                            ),
-                          ),
-                        ),
-                      ],
+                    _buildContentContainer(
+                        title: '감정',
+                        content: mindlog.emotionRecord,
+                        contentColor: contentColor!
                     ),
                     SizedBox(height: 16,),
-                    Text('이벤트', style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),),
-                    SizedBox(height: 10,),
-                    Container(
-                      width: double.infinity,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          color: Color(0xFFE9EFE6),
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text('이벤트 text', style: TextStyle(
-                            color: basicBlack
-                        ),),
-                      ),
+                    _buildContentContainer(
+                        title: '이벤트',
+                        content: mindlog.eventRecord,
+                        contentColor: contentColor!
                     ),
-                    SizedBox(height: 16,),
-                    Text('질문', style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),),
-                    SizedBox(height: 10,),
-                    Container(
-                      width: double.infinity,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          color: Color(0xFFE9EFE6),
-                          borderRadius: BorderRadius.circular(10)
+                    SizedBox(height: 6,),
+                    if (mindlog.questionRecord?.isNotEmpty == true)
+                      SizedBox(height: 10),
+                    if (mindlog.questionRecord?.isNotEmpty == true)
+                      _buildContentContainer(
+                          title: '질문',
+                          content: mindlog.questionRecord!,
+                          contentColor: contentColor!
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text('질문 Text', style: TextStyle(
-                            color: basicBlack
-                        ),),
-                      ),
-                    ),
                     SizedBox(height: 6,),
                   ],
                 ),
@@ -142,6 +131,43 @@ class _appointmentMindlogSummaryState extends State<appointmentMindlogSummary> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildContentContainer({
+    required String title,
+    required String content,
+    required Color contentColor,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+        ),),
+        SizedBox(height: 10,),
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                color: contentColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(content, style: TextStyle(
+                  color: basicBlack
+                ),),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ]
     );
   }
 }

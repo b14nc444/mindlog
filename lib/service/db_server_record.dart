@@ -31,7 +31,7 @@ class RecordRepository {
     final response = await dio.get(serverUrl);
 
     if (response.statusCode == 200) {
-      print("Record Data loaded successfully");
+      // print("Record Data loaded successfully");
       return Record.fromJson(response.data);
     } else {
       throw Exception("Failed to load data: ${response.statusCode}");

@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import '../provider/mindlog_provider.dart';
 
 class mindlogMoodPicker extends StatefulWidget {
-  const mindlogMoodPicker({super.key});
+  final List<String>? mood;
+  final int? moodColor;
+
+  const mindlogMoodPicker({super.key, this.mood, this.moodColor});
 
   @override
   State<mindlogMoodPicker> createState() => _mindlogMoodPickerState();
@@ -18,12 +21,22 @@ class _mindlogMoodPickerState extends State<mindlogMoodPicker> {
 
   @override
   Widget build(BuildContext context) {
-
     final provider = Provider.of<MindlogProvider>(context);
+
+    if (widget.mood != null) {
+      provider.selectedMoods = widget.mood!;
+    }
+    if (widget.moodColor != null) {
+      provider.moodColor = widget.moodColor!;
+    }
 
     List<MoodItem> moodItems = provider.moodItems;
     List<String> selectedMoods = provider.selectedMoods;
     int moodColor = provider.moodColor;
+
+    if (widget.moodColor != null) {
+      heartImage = getHeartImageByMoodColor(moodColor);
+    }
 
     double calculateAverageMoodValue() {
       if (selectedMoods.isEmpty) {
@@ -161,6 +174,25 @@ class _mindlogMoodPickerState extends State<mindlogMoodPicker> {
         return const Color(0xff76D43C);
       default:
         return const Color(0xffFF6362);
+    }
+  }
+
+  Image getHeartImageByMoodColor(int moodColor) {
+    switch (moodColor) {
+      case 0:
+        return heartEmpty;
+      case 1:
+        return heartRed;
+      case 2:
+        return heartOrange;
+      case 3:
+        return heartYellow;
+      case 4:
+        return heartYellowGreen;
+      case 5:
+        return heartGreen;
+      default:
+        return heartEmpty;
     }
   }
 }

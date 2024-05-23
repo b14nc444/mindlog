@@ -6,8 +6,9 @@ import 'package:mindlog_app/model/appoinment_model.dart';
 class ScheduleProvider extends ChangeNotifier {
   final AppointmentRepository repository;
 
-  DateTime selectedDate = DateTime.now();
-  // String formattedDate = DateTime.now().toIso8601String();
+  DateTime selectedDate = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  String formattedDate = '${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}';
+
   Map<String, List<Appointment>> cache = {};
 
   ScheduleProvider({required this.repository}) : super() {
@@ -16,10 +17,11 @@ class ScheduleProvider extends ChangeNotifier {
 
   //CRUD
   void getAppointmentByDate({required DateTime date}) async {
-    date = DateTime.parse(date.toIso8601String().split('T')[0]);
-    final response = await repository.getAppointmentByDate(date);
+    String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    final response = await repository.getAppointmentByDate(formattedDate);
+    // cache[formattedDate] = response;
 
-    cache.update(date.toIso8601String(), (value) => response, ifAbsent: () => response);
+    cache.update(formattedDate, (value) => response, ifAbsent: () => response);
     notifyListeners();
     print(cache);
   }
@@ -35,25 +37,29 @@ class ScheduleProvider extends ChangeNotifier {
   }
 
   void createAppointment({required Appointment appointment}) async {
-    final targetDate = appointment.date.toIso8601String();
+    final date = appointment.date;
+    String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     final savedAppointment = await repository.createAppointment(appointment);
 
     print('requested');
 
-    cache.update(targetDate, (value) => [
+    cache.update(formattedDate, (value) => [
       ...value,
       appointment.copyWith(id: savedAppointment)
     ]..sort(
-        (a, b) => a.startTime.compareTo(b.startTime)
+        (a, b) => a.startTime!.compareTo(b.startTime!)
     ),
     ifAbsent: () => [appointment]
     );
+    notifyListeners();
   }
 
   void deleteAppointment({required int id, required DateTime date}) async {
+    String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
     try {
       final response = await repository.deleteAppointment(id);
-      cache.update(date.toIso8601String(), (value) => value.where((e) => e.id != id).toList(),
+      cache.update(formattedDate, (value) => value.where((e) => e.id != id).toList(),
           ifAbsent: () => []);
       notifyListeners();
         } catch (e) {
@@ -62,25 +68,46 @@ class ScheduleProvider extends ChangeNotifier {
   }
 
   void updateAppointment({required int id, required Appointment appointment}) async {
-    final targetDate = appointment.date.toIso8601String();
+    final date = appointment.date;
+    String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
     final response = await repository.updateAppointment(id, appointment);
 
-    cache.update(targetDate, (value) =>
+    cache.update(formattedDate, (value) =>
     [
       ...value,
       appointment.copyWith(id: id)
     ]
       ..sort(
-              (a, b) => a.date.compareTo(b.date)
+              (a, b) => a.date!.compareTo(b.date!)
       ),
         ifAbsent: () => [appointment]
     );
     notifyListeners();
   }
+  
+  void updateAppointmentMemo({required int id, required String memo}) async {
+    Appointment existingAppointment = await repository.getAppointmentById(id);
+
+    // 수정된 예약 정보 생성
+    Appointment updatedAppointment = Appointment(
+      id: existingAppointment.id,
+      date: existingAppointment.date,
+      startTime: existingAppointment.startTime, // 수정된 시작 시간
+      endTime: existingAppointment.endTime, // 수정된 종료 시간
+      doctorName: existingAppointment.doctorName,
+      hospital: existingAppointment.hospital,
+      memo: memo
+    );
+
+    final response = await repository.updateAppointment(id, updatedAppointment);
+    notifyListeners();
+  }
 
   void changeSelectedDate({required DateTime date,}) {
-    selectedDate = date;
-    // formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(date);
+    selectedDate = DateTime.utc(date.year, date.month, date.day);
+    // formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    formattedDate = DateFormat('yyyy-MM-dd', 'ko_KR').format(date);
     notifyListeners();
   }
 }
