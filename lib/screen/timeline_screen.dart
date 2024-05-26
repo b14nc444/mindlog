@@ -1,4 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mindlog_app/component/timeline_appointment_card.dart';
+import 'package:mindlog_app/component/timeline_mindlog_card.dart';
+import 'package:mindlog_app/const/visual.dart';
+import 'package:mindlog_app/model/appoinment_model.dart';
+import 'package:provider/provider.dart';
+
+import '../model/mindlog_model.dart';
+import '../provider/mindlog_provider.dart';
+import '../provider/schedule_provider.dart';
 
 class TimelineScreen extends StatefulWidget {
   const TimelineScreen({super.key});
@@ -18,8 +29,47 @@ class _TimelineScreenState extends State<TimelineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Text('timeline')
+    final scheduleProvider = context.read<ScheduleProvider>();
+    final mindlogProvider = context.read<MindlogProvider>();
+
+
+    Appointment appointmentTest = Appointment(
+      id: 1,
+      date: DateTime.now(),
+      startTime: '09:00',
+      endTime: '09:30',
+      hospital: '',
+    );
+
+    Mindlog mindlogTest = Mindlog(
+        id: 0,
+        date: DateTime.now(),
+        time: '10:00',
+        mood: ['aaa'],
+        moodColor: 5,
+        title: '오늘 기분 최고!',
+        emotionRecord: '오늘 오전엔 기분이 안 좋았는데...',
+        eventRecord: '',
+        questionRecord: ''
+    );
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(30, 10, 20, 0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            timelineAppointmentCard(appointment: appointmentTest),
+            timelineMindlogCard(mindlog: mindlogTest,),
+            timelineMindlogCard(mindlog: mindlogTest),
+            timelineAppointmentCard(appointment: appointmentTest),
+            timelineMindlogCard(mindlog: mindlogTest),
+            timelineMindlogCard(mindlog: mindlogTest),
+            timelineMindlogCard(mindlog: mindlogTest),
+            // timelineAppointmentCard(appointment: appointmentTest),
+            // timelineMindlogCard(mindlog: mindlogTest),
+          ],
+        ),
+      ),
     );
   }
 }

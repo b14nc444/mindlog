@@ -162,31 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-                // InkWell(
-                //   onTap: (){
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(builder: (context) => appointmentScreen(
-                //         appointment: Appointment(
-                //           id: 0, date: DateTime.parse(selectedDay),
-                //           startTime: '17:00',
-                //           endTime: '17:30',
-                //           hospital: '고려숲정신건강의학과의원',
-                //           doctorName: '형원석 원장님',
-                //         ),
-                //       )),
-                //     );
-                //   },
-                //   child: AppointmentCard(
-                //     appointment: Appointment(
-                //       id: 0, date: DateTime.parse(selectedDay),
-                //       startTime: '17:00',
-                //       endTime: '17:30',
-                //       hospital: '고려숲정신건강의학과의원',
-                //       doctorName: '형원석 원장님',
-                //     ),
-                //   ),
-                // ),
                 // Text(selectedDay), /////////TEST//////
                 const SizedBox(
                   height: 4,
@@ -239,20 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     return mindlogCard(mindlog: mindlog,);
                   },
                 ),
-                //testtesttesttesttesttesttest
-                // InkWell(
-                //   onTap: (){
-                //     // deleteMindlog(context, 1);
-                //     Navigator.push(
-                //         context, MaterialPageRoute(builder: (context) => mindlogViewerScreen(
-                //       mindlog: Mindlog(id: 0, date: DateTime.parse(selectedDay), time: DateTime.parse(selectedDay), mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: '',)
-                //     ))
-                //     );
-                //   },
-                //   child: mindlogCard(
-                //     mindlog: Mindlog(id: 0, date: DateTime.parse(selectedDay), time: DateTime.parse(selectedDay), mood: ['난처한'], moodColor: 5, title: 'Test Title', emotionRecord: 'emotionemotionemotionemotion', eventRecord: 'event', questionRecord: ''),
-                //   ),
-                // ),
                 GestureDetector(
                   onVerticalDragStart: (details) {
                     _startY = details.localPosition.dy;

@@ -63,11 +63,11 @@ class _appointmentMindlogSummaryState extends State<appointmentMindlogSummary> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5), // 그림자 색상
-            spreadRadius: -1, // 그림자의 확산 범위
-            blurRadius: 17, // 그림자의 흐릿한 정도
-            offset: Offset(0, 6), // 그림자의 위치 (수평, 수직)
-          ),
+            color: Color(0x2813203E),
+            blurRadius: 17,
+            offset: Offset(0, 7),
+            spreadRadius: -1,
+          )
         ],
       ),
       child: Padding(
