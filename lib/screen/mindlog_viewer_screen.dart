@@ -96,7 +96,11 @@ class _mindlogViewerScreenState extends State<mindlogViewerScreen> {
                             children: [
                               getHeartImageByMoodColor(mindlog.moodColor),
                               SizedBox(width: 18,),
-                              Image.asset('assets/hearts/vector_line.png'),
+                              Container(
+                                width: 1,
+                                height: 45,
+                                color: guideGray,
+                              ),
                               SizedBox(width: 18,),
                               Expanded(
                                 child: SizedBox(
