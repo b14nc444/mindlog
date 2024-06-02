@@ -92,18 +92,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    final scheduleProvider = context.read<ScheduleProvider>();
-    final mindlogProvider = context.read<MindlogProvider>();
-
-    scheduleProvider.removeListener(_refreshData);
-    mindlogProvider.removeListener(_refreshData);
-
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   final scheduleProvider = context.read<ScheduleProvider>();
+  //   final mindlogProvider = context.read<MindlogProvider>();
+  //
+  //   scheduleProvider.removeListener(_refreshData);
+  //   mindlogProvider.removeListener(_refreshData);
+  //
+  //   super.dispose();
+  // }
 
   void _refreshData() {
+    if (!mounted) return; // Check if the widget is still mounted
     setState(() {});
   }
 
@@ -112,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final scheduleProvider = context.watch<ScheduleProvider>();
     final mindlogProvider = context.watch<MindlogProvider>();
+
     final selectedDay = scheduleProvider.formattedDate;
     final appointments = scheduleProvider.cache[selectedDay] ?? [];
     final mindlogs = mindlogProvider.cache[selectedDay] ?? [];

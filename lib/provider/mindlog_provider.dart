@@ -5,9 +5,10 @@ import '../service/db_server_mindlog.dart';
 
 class MindlogProvider with ChangeNotifier {
   List<Mindlog> _allMindlogs = [];
-  Map<String, List<Mindlog>> _MindlogsByAppointmentId = {};
+  Map<int, List<Mindlog>> _mindlogsByAppointmentId = {};
 
   List<Mindlog> get allMindlogs => _allMindlogs;
+  Map<int, List<Mindlog>> get mindlogsByAppointmentId => _mindlogsByAppointmentId;
 
   final MindlogRepository repository;
 
@@ -52,6 +53,7 @@ class MindlogProvider with ChangeNotifier {
   void getMindlogsByAppointmentId({required int appointmentId}) async {
     try {
       final response = await repository.getMindlogsByAppointmentId(appointmentId);
+      _mindlogsByAppointmentId[appointmentId] = response;
       notifyListeners();
     } catch (e) {
       throw Exception('failed to load mindlogs');

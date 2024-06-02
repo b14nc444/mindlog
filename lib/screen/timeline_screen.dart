@@ -28,10 +28,26 @@ class _TimelineScreenState extends State<TimelineScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final scheduleProvider = context.read<ScheduleProvider>();
-    final mindlogProvider = context.read<MindlogProvider>();
+  void initState() {
+    super.initState();
+    context.read<ScheduleProvider>().getAppointmentsAll();
 
+    // context.read<MindlogProvider>().getMindlogsByAppointmentId(appointmentId: appointmentId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mindlogProvider = context.watch<MindlogProvider>();
+    final scheduleProvider = context.watch<ScheduleProvider>();
+
+    final allAppointments = scheduleProvider.allAppointments;
+    final mindlogsByAppointmentId = mindlogProvider.mindlogsByAppointmentId;
+
+    for (var appointment in allAppointments) {
+      int appointmentId = appointment.id;
+      context.read<MindlogProvider>().getMindlogsByAppointmentId(appointmentId: appointmentId);
+      // print(mindlogsByAppointmentId[appointmentId]); //= List<Mindlog> mindlogs;
+    }
 
     Appointment appointmentTest = Appointment(
       id: 1,
