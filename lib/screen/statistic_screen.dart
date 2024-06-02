@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mindlog_app/provider/schedule_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../const/visual.dart';
+import '../provider/mindlog_provider.dart';
 
 class StatisticScreen extends StatefulWidget {
   const StatisticScreen({super.key});
@@ -20,7 +23,19 @@ class _StatisticScreenState extends State<StatisticScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<MindlogProvider>().getMindlogsAll();
+    context.read<ScheduleProvider>().getAppointmentsAll();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final mindlogProvider = context.watch<MindlogProvider>();
+    final scheduleProvider = context.watch<ScheduleProvider>();
+
+    final allMindlogs = mindlogProvider.allMindlogs;
+    final allAppointments = scheduleProvider.allAppointments;
 
     TextStyle textStyleTitle = TextStyle(
       color: Colors.black,
@@ -53,7 +68,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             Icon(Icons.chat_bubble_rounded, color: primaryColor, size: 18,),
                             // Image.asset('assets/icons/chat_bubble.png'),
                             SizedBox(width: 5,),
-                            Text('6개', style: textStyleTitle,),
+                            Text('${allMindlogs.length}개', style: textStyleTitle,),
                           ],
                         ),
                         SizedBox(height: 5,),
@@ -77,7 +92,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             // Icon(Icons.pl, color: primaryColor, size: 18,),
                             Image.asset('assets/icons/hospital_cross.png'),
                             SizedBox(width: 5,),
-                            Text('2개', style: textStyleTitle),
+                            Text('${allAppointments.length}개', style: textStyleTitle),
                           ],
                         ),
                         SizedBox(height: 5,),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:mindlog_app/service/db_server_appointment.dart';
 import 'package:mindlog_app/model/appoinment_model.dart';
+import 'package:mindlog_app/model/record_model.dart';
 
 class ScheduleProvider extends ChangeNotifier {
   final AppointmentRepository repository;
@@ -10,6 +11,9 @@ class ScheduleProvider extends ChangeNotifier {
   String formattedDate = '${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}';
 
   Map<String, List<Appointment>> cache = {};
+  List<Appointment> _allAppointments = [];
+
+  List<Appointment> get allAppointments => _allAppointments;
 
   ScheduleProvider({required this.repository}) : super() {
     getAppointmentByDate(date: selectedDate);
@@ -18,7 +22,7 @@ class ScheduleProvider extends ChangeNotifier {
   //CRUD
   void getAppointmentByDate({required DateTime date}) async {
     String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-    final response = await repository.getAppointmentByDate(formattedDate);
+    final response = await repository.getAppointmentsByDate(formattedDate);
     // cache[formattedDate] = response;
 
     cache.update(formattedDate, (value) => response, ifAbsent: () => response);
@@ -33,7 +37,16 @@ class ScheduleProvider extends ChangeNotifier {
         } catch (e) {
       throw Exception('failed to load appointment');
     }
+  }
 
+  void getAppointmentsAll() async {
+    try {
+      final response = await repository.getAppointmentsAll();
+      _allAppointments = response;
+      notifyListeners();
+    } catch (e) {
+      throw Exception('failed to load mindlogs');
+    }
   }
 
   void createAppointment({required Appointment appointment}) async {
@@ -101,6 +114,26 @@ class ScheduleProvider extends ChangeNotifier {
     );
 
     final response = await repository.updateAppointment(id, updatedAppointment);
+    notifyListeners();
+  }
+
+  void updateAppointmentRecord({required int appointmentId, required int recordId}) async {
+    Appointment existingAppointment = await repository.getAppointmentById(
+        appointmentId);
+
+    // 수정된 예약 정보 생성
+    Appointment updatedAppointment = Appointment(
+      id: existingAppointment.id,
+      date: existingAppointment.date,
+      startTime: existingAppointment.startTime,
+      endTime: existingAppointment.endTime,
+      doctorName: existingAppointment.doctorName,
+      hospital: existingAppointment.hospital,
+      memo: existingAppointment.memo,
+      record_id: recordId,
+    );
+
+    final response = await repository.updateAppointment(appointmentId, updatedAppointment);
     notifyListeners();
   }
 

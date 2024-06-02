@@ -27,10 +27,10 @@ class RecordProvider extends ChangeNotifier {
 
   Record? get record => _record;
 
-  void createRecord({required Record record}) async {
+  void createRecord({required Record record, required int appointmentId}) async {
     // final targetAppointment = record.appointmentId;
     try {
-      final savedRecord = await repository.createRecord(record);
+      final savedRecord = await repository.createRecord(record, appointmentId);
       print('Requested');
     } catch (e) {
       print('Failed to create record: $e');
@@ -45,5 +45,10 @@ class RecordProvider extends ChangeNotifier {
     // ),
     //     ifAbsent: () => [appointment]
     // );
+  }
+
+  void updateRecord(Record? record) {
+    _record = record;
+    notifyListeners();
   }
 }

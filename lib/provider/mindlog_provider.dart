@@ -4,6 +4,11 @@ import '../model/mindlog_model.dart';
 import '../service/db_server_mindlog.dart';
 
 class MindlogProvider with ChangeNotifier {
+  List<Mindlog> _allMindlogs = [];
+  Map<String, List<Mindlog>> _MindlogsByAppointmentId = {};
+
+  List<Mindlog> get allMindlogs => _allMindlogs;
+
   final MindlogRepository repository;
 
   DateTime selectedDate = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -17,7 +22,7 @@ class MindlogProvider with ChangeNotifier {
   //CRUD
   void getMindlogByDate({required DateTime date}) async {
     String formattedDate = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-    final response = await repository.getMindlogByDate(formattedDate);
+    final response = await repository.getMindlogsByDate(formattedDate);
 
     cache.update(formattedDate, (value) => response, ifAbsent: () => response);
     notifyListeners();
@@ -33,6 +38,26 @@ class MindlogProvider with ChangeNotifier {
     }
   }
 
+  void getMindlogsAll() async {
+    try {
+      final response = await repository.getMindlogsAll();
+      _allMindlogs = response;
+      notifyListeners();
+      print(_allMindlogs);
+    } catch (e) {
+      throw Exception('failed to load mindlogs');
+    }
+  }
+  
+  void getMindlogsByAppointmentId({required int appointmentId}) async {
+    try {
+      final response = await repository.getMindlogsByAppointmentId(appointmentId);
+      notifyListeners();
+    } catch (e) {
+      throw Exception('failed to load mindlogs');
+    }
+  }
+  
   void createMindlog({required Mindlog mindlog}) async {
     final targetDate = '${mindlog.date.year}-${mindlog.date.month.toString().padLeft(2, '0')}-${mindlog.date.day.toString().padLeft(2, '0')}';
     final savedMindlog = await repository.createMindlog(mindlog);

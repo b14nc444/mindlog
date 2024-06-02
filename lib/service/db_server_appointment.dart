@@ -64,7 +64,7 @@ class AppointmentRepository {
   }
 
   //날짜별조회
-  Future<List<Appointment>> getAppointmentByDate(String date) async {
+  Future<List<Appointment>> getAppointmentsByDate(String date) async {
     var serverUrl = '$serverIP_appointment/by-date/$date';
 
     try {
@@ -111,16 +111,20 @@ class AppointmentRepository {
   }
 
   //전체조회
-  Future<Appointment> getAppointmentAll() async {
+  Future<List<Appointment>> getAppointmentsAll() async {
     var serverUrl = '$serverIP_appointment';
 
     final response = await dio.get(serverUrl);
 
     if (response.statusCode == 200) {
-      print("Appointment Data loaded successfully");
-      return Appointment.fromJson(response.data);
+      List<Appointment> appointments = response.data.map<Appointment>(
+              (x) => Appointment.fromJson(x)
+      ).toList();
+      print("Appointment Data received successfully");
+      return appointments;
+
     } else {
-      throw Exception("Failed to load data: ${response.statusCode}");
+      throw Exception("Failed to loaded data: ${response.statusCode}");
     }
   }
 }

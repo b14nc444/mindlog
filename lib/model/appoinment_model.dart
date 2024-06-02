@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:mindlog_app/model/record_model.dart';
 
 class Appointment {
   final int id;

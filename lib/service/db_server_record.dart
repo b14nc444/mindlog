@@ -8,8 +8,8 @@ class RecordRepository {
   final String serverIP_record = 'http://$URL_NOW:3333/api/v1/record';
 
   //녹음 추가
-  Future<int> createRecord(Record record) async {
-    var serverUrl = serverIP_record;
+  Future<int> createRecord(Record record, int appointmentId) async {
+    var serverUrl = '$serverIP_record/$appointmentId/record';
 
     final json = record.toJson();
     final response = await dio.post(serverUrl, data: json);
@@ -17,7 +17,8 @@ class RecordRepository {
 
     if (response.statusCode == 200) {
       int appointmentId = response.data?['id'];
-      print('New record added with ID: $appointmentId');
+      print('New record added with ID: ${record.id}');
+      print('New record added in appointment ID: $appointmentId');
       return appointmentId;
     } else {
       throw Exception("Failed to send data: ${response.statusCode}");
@@ -25,8 +26,8 @@ class RecordRepository {
   }
 
   //id별조회
-  Future<Record> getRecordById(int appointmentId) async {
-    var serverUrl = '$serverIP_record/$appointmentId';
+  Future<Record> getRecordById(int recordId) async {
+    var serverUrl = '$serverIP_record/$recordId';
 
     final response = await dio.get(serverUrl);
 

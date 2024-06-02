@@ -75,19 +75,20 @@ class _appointmentRecordState extends State<appointmentRecord> {
 
   @override
   Widget build(BuildContext context) {
-    final recordProvider = context.watch<RecordProvider>();
-    int? recordId = 6; //widget.appointment.record_id;
-    //record id 조회가 안 됨
+    final provider = context.watch<RecordProvider>();
+    // int? recordId = widget.appointment.record_id;
 
     ///////쓰레기존///////
-    if(recordId != null) {
-      recordProvider.getRecordById(id: recordId);
-    }
-    Record? record = recordProvider.record;
+    // if(recordId != null) {
+    //   recordProvider.getRecordById(id: recordId);
+    // }
+    Record? record = provider.record;
 
-    setState(() {
-      isRecorded = record != null; // 녹음본이 있으면 isRecorded를 true로 설정
-    });
+    if (mounted) {
+      setState(() {
+        isRecorded = record != null; // 녹음본이 있으면 isRecorded를 true로 설정
+      });
+    }
 
     return Container(
       width: double.infinity,
@@ -207,7 +208,8 @@ class _appointmentRecordState extends State<appointmentRecord> {
       print('path : $audioPath');
 
       context.read<RecordProvider>().createRecord(
-          record: Record(id: widget.appointment.id, filePath: audioPath)
+        record: Record(id: 0, filePath: audioPath),
+        appointmentId: widget.appointment.id ,
       );
     }
     catch (e) {
@@ -215,12 +217,39 @@ class _appointmentRecordState extends State<appointmentRecord> {
     }
   }
 
+  // Future<void> stopRecording() async {
+  //   try {
+  //     String? path = await audioRecorder.stop();
+  //     if (mounted) {
+  //       setState(() {
+  //         isRecording = false;
+  //         isRecorded = true;
+  //         audioPath = path!;
+  //       });
+  //     }
+  //     print('Recording stopped');
+  //     print('path : $audioPath');
+  //
+  //     final record = Record(id: 0, filePath: path!);
+  //     context.read<RecordProvider>().createRecord(
+  //       record: record,
+  //       appointmentId: widget.appointment.id,
+  //     );
+  //     context.read<RecordProvider>().updateRecord(record);
+  //   } catch (e) {
+  //     print('recording failed : $e');
+  //   }
+  // }
+
   Future<void> startPlaying() async {
     try {
       final file = File(audioPath);
       if(await file.exists()) {
         Source audioSource = DeviceFileSource(audioPath);
         await audioPlayer.play(audioSource);
+
+        // await audioPlayer.setSourceDeviceFile(audioPath);
+        // await audioPlayer.resume();
 
         if(mounted) {
           setState(() {

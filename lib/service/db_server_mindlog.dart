@@ -82,7 +82,7 @@ class MindlogRepository {
   }
 
   //날짜별조회
-  Future<List<Mindlog>> getMindlogByDate(String date) async {
+  Future<List<Mindlog>> getMindlogsByDate(String date) async {
     var serverUrl = '$serverIP_mindlog/by-date/$date';
 
     try {
@@ -92,17 +92,6 @@ class MindlogRepository {
         List<Mindlog> mindlogs = response.data.map<Mindlog>(
                 (x) => Mindlog.fromJson(x)
         ).toList();
-        // for (var mindlog in mindlogs) {
-        //   print('Id: ${mindlog.id}');
-        //   print('Date: ${mindlog.date}');
-        //   print('Time: ${mindlog.time}');
-        //   print('Mood Color: ${mindlog.moodColor}');
-        //   print('Title: ${mindlog.title}');
-        //   print('Emotion Record: ${mindlog.emotionRecord}');
-        //   print('Event Record: ${mindlog.eventRecord}');
-        //   print('Question Record: ${mindlog.questionRecord}');
-        //   print('------------------------');
-        // }
         print("Mindlog Data received successfully");
         return mindlogs;
 
@@ -140,16 +129,53 @@ class MindlogRepository {
   }
 
   //전체조회
-  Future<Mindlog> getMindlogAll() async {
+  Future<List<Mindlog>> getMindlogsAll() async {
     var serverUrl = '$serverIP_mindlog';
 
     final response = await dio.get(serverUrl);
 
     if (response.statusCode == 200) {
-      print("Mindlog Data loaded successfully");
-      return Mindlog.fromJson(response.data);
+      List<Mindlog> mindlogs = response.data.map<Mindlog>(
+              (x) => Mindlog.fromJson(x)
+      ).toList();
+      print("Mindlog Data received successfully");
+      return mindlogs;
+
     } else {
-      throw Exception("Failed to load data: ${response.statusCode}");
+      throw Exception("Failed to loaded data: ${response.statusCode}");
+    }
+  }
+
+  //appointment에 속한 mindlogs 조회
+  Future<List<Mindlog>> getMindlogsByAppointmentId(int appointmentId) async {
+    var serverUrl = '$serverIP_mindlog/appointment/$appointmentId';
+
+    try {
+      final response = await dio.get(serverUrl, queryParameters: {});
+
+      if (response.statusCode == 200) {
+        List<Mindlog> mindlogs = response.data.map<Mindlog>(
+                (x) => Mindlog.fromJson(x)
+        ).toList();
+        print("Mindlog Data received successfully");
+        return mindlogs;
+
+      } else {
+        throw Exception("Failed to loaded data: ${response.statusCode}");
+      }
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response?.statusCode == 400) {
+          // 400 Bad Request 에러 처리
+          throw Exception("Bad Request: ${e.response?.data}");
+        } else {
+          // 다른 DioException 처리
+          throw Exception("Failed to received data: $e");
+        }
+      } else {
+        // 다른 예외 처리
+        throw Exception("Failed to received data: $e");
+      }
     }
   }
 }
