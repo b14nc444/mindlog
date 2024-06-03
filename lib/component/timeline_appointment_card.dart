@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../const/visual.dart';
 import '../model/appoinment_model.dart';
+import '../screen/appointment_screen.dart';
 
 class timelineAppointmentCard extends StatelessWidget {
   final Appointment appointment;
@@ -44,56 +45,66 @@ class timelineAppointmentCard extends StatelessWidget {
             const Icon(Icons.square, color: Color(0xffD1D1D1), size: 16,),
             SizedBox(width: 10,),
             Expanded(
-              child: Container(
-                width: 250,
-                height: 47,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                decoration: ShapeDecoration(
-                  color: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  shadows: const [
-                    BoxShadow(
-                      color: Color(0x2813203E),
-                      blurRadius: 17,
-                      offset: Offset(0, 7),
-                      spreadRadius: -1,
-                    )
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          const Text(
-                            '진료',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(width: 14),
-                          Text(
-                            '$formattedStartTime - $formattedEndTime',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Icon(Icons.arrow_forward_ios_rounded, color: Colors.white,)
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => appointmentScreen(
+                        appointment: appointment,)
+                      )
+                  );
+                },
+                child: Container(
+                  width: 250,
+                  height: 47,
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: ShapeDecoration(
+                    color: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    shadows: const [
+                      BoxShadow(
+                        color: Color(0x2813203E),
+                        blurRadius: 17,
+                        offset: Offset(0, 7),
+                        spreadRadius: -1,
+                      )
                     ],
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            const Text(
+                              '진료',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(width: 14),
+                            Text(
+                              '$formattedStartTime - $formattedEndTime',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Icon(Icons.arrow_forward_ios_rounded, color: Colors.white,)
+                      ],
+                    ),
                   ),
                 ),
               ),

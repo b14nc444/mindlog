@@ -110,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final scheduleProvider = context.watch<ScheduleProvider>();
     final mindlogProvider = context.watch<MindlogProvider>();
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mindlog_app/screen/mindlog_viewer_screen.dart';
 
 import '../const/visual.dart';
 import '../model/mindlog_model.dart';
@@ -51,48 +52,58 @@ class timelineMindlogCard extends StatelessWidget {
             Icon(Icons.circle, color: iconColor, size: 14,),
             SizedBox(width: 25,),
             Expanded(
-              child: Container(
-                width: 235,
-                height: 80,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => mindlogViewerScreen(
+                        mindlog: mindlog,)
+                      )
+                  );
+                },
+                child: Container(
+                  width: 235,
+                  height: 80,
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            mindlog.title,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              mindlog.title,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                          Text(
-                            mindlogContent,
-                            style: TextStyle(
-                              color: basicGray,
-                              fontSize: 12,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.15,
+                            Text(
+                              mindlogContent,
+                              style: TextStyle(
+                                color: basicGray,
+                                fontSize: 12,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.15,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Icon(Icons.arrow_forward_ios_rounded, color: guideGray,)
-                    ],
+                          ],
+                        ),
+                        Icon(Icons.arrow_forward_ios_rounded, color: guideGray,)
+                      ],
+                    ),
                   ),
                 ),
               ),

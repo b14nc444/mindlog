@@ -20,7 +20,24 @@ class _mindlogMoodPickerState extends State<mindlogMoodPicker> {
   Image heartImage = heartEmpty;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.mood != null) {
+        Provider.of<MindlogProvider>(context, listen: false).selectedMoods = widget.mood!;
+      }
+      if (widget.moodColor != null) {
+        Provider.of<MindlogProvider>(context, listen: false).moodColor = widget.moodColor!;
+        setState(() {
+          heartImage = getHeartImageByMoodColor(widget.moodColor!);
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     final provider = Provider.of<MindlogProvider>(context);
 
     if (widget.mood != null) {

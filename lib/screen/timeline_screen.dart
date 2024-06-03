@@ -74,13 +74,41 @@ class _TimelineScreenState extends State<TimelineScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            timelineAppointmentCard(appointment: appointmentTest),
-            timelineMindlogCard(mindlog: mindlogTest,),
-            timelineMindlogCard(mindlog: mindlogTest),
-            timelineAppointmentCard(appointment: appointmentTest),
-            timelineMindlogCard(mindlog: mindlogTest),
-            timelineMindlogCard(mindlog: mindlogTest),
-            timelineMindlogCard(mindlog: mindlogTest),
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+              reverse: true,
+              shrinkWrap: true,
+              itemCount: allAppointments.length,
+              itemBuilder: (BuildContext context, int index) {
+                final appointment = allAppointments[index];
+                return Column(
+                  children: [
+                    timelineAppointmentCard(appointment: appointment,),
+                    // 딸린 Mindlog가 있을 경우
+                    if(mindlogsByAppointmentId[appointment.id] != null)
+                      // 각 딸린 Mindlog 조회
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+                        reverse: true,
+                        shrinkWrap: true,
+                        itemCount: mindlogsByAppointmentId[appointment.id]!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final mindlog = mindlogsByAppointmentId[appointment.id]![index];
+                          return timelineMindlogCard(mindlog: mindlog,);
+                        },
+                      ),
+                  ],
+                );
+              },
+            ),
+            //////TEST/////////
+            // timelineAppointmentCard(appointment: appointmentTest),
+            // timelineMindlogCard(mindlog: mindlogTest,),
+            // timelineMindlogCard(mindlog: mindlogTest),
+            // timelineAppointmentCard(appointment: appointmentTest),
+            // timelineMindlogCard(mindlog: mindlogTest),
+            // timelineMindlogCard(mindlog: mindlogTest),
+            // timelineMindlogCard(mindlog: mindlogTest),
             // timelineAppointmentCard(appointment: appointmentTest),
             // timelineMindlogCard(mindlog: mindlogTest),
           ],
