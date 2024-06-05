@@ -1,9 +1,11 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/provider/schedule_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../const/visual.dart';
+import '../model/mindlog_model.dart';
 import '../provider/mindlog_provider.dart';
 
 class StatisticScreen extends StatefulWidget {
@@ -36,6 +38,12 @@ class _StatisticScreenState extends State<StatisticScreen> {
 
     final allMindlogs = mindlogProvider.allMindlogs;
     final allAppointments = scheduleProvider.allAppointments;
+
+    final moodColorPercentage1 = CalculateMoodColorRate(allMindlogs, 1);
+    final moodColorPercentage2 = CalculateMoodColorRate(allMindlogs, 2);
+    final moodColorPercentage3 = CalculateMoodColorRate(allMindlogs, 3);
+    final moodColorPercentage4 = CalculateMoodColorRate(allMindlogs, 4);
+    final moodColorPercentage5 = CalculateMoodColorRate(allMindlogs, 5);
 
     TextStyle textStyleTitle = TextStyle(
       color: Colors.black,
@@ -122,13 +130,26 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   children: [
                     Text('감정 통계', style: textStyleTitle,),
                     SizedBox(height: 14,),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         SizedBox(
                           width: 132,
                           height: 132,
-                          child: Center(child: Text('graph'))
+                          child: PieChart(
+                            PieChartData(
+                              sections: [
+                                PieChartSectionData(value: moodColorPercentage1, color: getColorByMoodValue(1), radius: 30, showTitle: false),
+                                PieChartSectionData(value: moodColorPercentage2, color: getColorByMoodValue(2), radius: 30, showTitle: false),
+                                PieChartSectionData(value: moodColorPercentage3, color: getColorByMoodValue(3), radius: 30, showTitle: false),
+                                PieChartSectionData(value: moodColorPercentage4, color: getColorByMoodValue(4), radius: 30, showTitle: false),
+                                PieChartSectionData(value: moodColorPercentage5, color: getColorByMoodValue(5), radius: 30, showTitle: false),
+                              ],
+                              sectionsSpace: 0,
+                            ),
+                            // swapAnimationDuration: Duration(milliseconds: 150), // Optional
+                            // swapAnimationCurve: Curves.linear, // Optional
+                          ),
                         ),
                         SizedBox(
                           height: 132,
@@ -136,11 +157,11 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RenderLegend(moodColor: 1, percent: 20),
-                              RenderLegend(moodColor: 2, percent: 40),
-                              RenderLegend(moodColor: 3, percent: 30),
-                              RenderLegend(moodColor: 4, percent: 10),
-                              RenderLegend(moodColor: 5, percent: 0),
+                              RenderLegend(moodColor: 1, percent:moodColorPercentage1),
+                              RenderLegend(moodColor: 2, percent: moodColorPercentage2),
+                              RenderLegend(moodColor: 3, percent: moodColorPercentage3),
+                              RenderLegend(moodColor: 4, percent: moodColorPercentage4),
+                              RenderLegend(moodColor: 5, percent: moodColorPercentage5),
                             ],
                           ),
                         )
@@ -194,9 +215,26 @@ class _StatisticScreenState extends State<StatisticScreen> {
   }
 }
 
+CalculateMoodColorRate(List<Mindlog> mindlogs, int moodColor) {
+  if (mindlogs.isEmpty) {
+    return 0.0; // 또는 다른 적절한 값
+  }
+
+  int totalCount = mindlogs.length;
+  int count = 0;
+
+  for (var mindlog in mindlogs) {
+    if (mindlog.moodColor == moodColor)
+      count += 1;
+  }
+
+  double percentage = (count / totalCount) * 100;
+  return percentage;
+}
+
 class RenderLegend extends StatelessWidget {
   final int moodColor;
-  final int percent;
+  final double percent;
 
   const RenderLegend({super.key, required this.moodColor, required this.percent});
 
@@ -213,7 +251,7 @@ class RenderLegend extends StatelessWidget {
           ),
         ),
         SizedBox(width: 8,),
-        Text('$percent%')
+        Text('${percent.round()}%')
       ],
     );
   }
@@ -346,7 +384,6 @@ getColorByMoodValue(int value) {
       return const Color(0xffFF6362);
   }
 }
-
 
 class BulletText extends StatelessWidget {
   final String bullet;

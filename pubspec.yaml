@@ -47,6 +47,8 @@ dependencies:
   path: ^1.9.0
   path_provider: ^2.0.3
   widget_arrows: ^0.6.0
+  timelines: ^0.1.0
+  fl_chart: ^0.68.0
 
 dev_dependencies:
   flutter_test:

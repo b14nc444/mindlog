@@ -6,6 +6,7 @@ import 'package:mindlog_app/component/timeline_mindlog_card.dart';
 import 'package:mindlog_app/const/visual.dart';
 import 'package:mindlog_app/model/appoinment_model.dart';
 import 'package:provider/provider.dart';
+import 'package:timelines/timelines.dart';
 
 import '../model/mindlog_model.dart';
 import '../provider/mindlog_provider.dart';
@@ -74,6 +75,43 @@ class _TimelineScreenState extends State<TimelineScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            // FixedTimeline.tileBuilder(
+            //   builder: TimelineTileBuilder.connected(
+            //     connectionDirection: ConnectionDirection.before,
+            //     itemCount: allAppointments.length,
+            //     contentsBuilder: (context, index) {
+            //       final appointment = allAppointments[index];
+            //       return Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             timelineAppointmentCard(appointment: appointment),
+            //             if (mindlogsByAppointmentId[appointment.id] != null)
+            //               ...mindlogsByAppointmentId[appointment.id]!.map((mindlog) {
+            //                 return Padding(
+            //                   padding: const EdgeInsets.symmetric(vertical: 8.0),
+            //                   child: timelineMindlogCard(mindlog: mindlog),
+            //                 );
+            //               }).toList(),
+            //           ],
+            //         ),
+            //       );
+            //     },
+            //     indicatorBuilder: (context, index) {
+            //       return DotIndicator(
+            //         color: Colors.blue,
+            //         size: 20.0,
+            //       );
+            //     },
+            //     connectorBuilder: (context, index, type) {
+            //       return SolidLineConnector(
+            //         color: Colors.blue,
+            //         thickness: 2.0,
+            //       );
+            //     },
+            //   ),
+            // ),
             ListView.builder(
               physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
               reverse: true,
@@ -97,6 +135,16 @@ class _TimelineScreenState extends State<TimelineScreen> {
                           return timelineMindlogCard(mindlog: mindlog,);
                         },
                       ),
+                      // FixedTimeline.tileBuilder(
+                      //   builder: TimelineTileBuilder.connected(
+                      //     connectionDirection: ConnectionDirection.before,
+                      //     itemCount: mindlogsByAppointmentId[appointment.id]!.length,
+                      //     contentsBuilder: (BuildContext context, int index) {
+                      //       final mindlog = mindlogsByAppointmentId[appointment.id]![index];
+                      //       return timelineMindlogCard(mindlog: mindlog,);
+                      //     },
+                      //   ),
+                      // ),
                   ],
                 );
               },
