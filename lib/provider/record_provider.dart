@@ -3,10 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:mindlog_app/model/record_model.dart';
 import 'package:mindlog_app/service/db_server_record.dart';
 
-Record? _record = null;
-
 class RecordProvider extends ChangeNotifier {
   final RecordRepository repository;
+
+  Record? _record = null;
+  Record? get record => _record;
 
   // DateTime selectedDate = DateTime.now();
   // Map<String, List<Record>> cache = {};
@@ -24,8 +25,6 @@ class RecordProvider extends ChangeNotifier {
       throw Exception('failed to load record');
     }
   }
-
-  Record? get record => _record;
 
   void createRecord({required Record record, required int appointmentId}) async {
     // final targetAppointment = record.appointmentId;

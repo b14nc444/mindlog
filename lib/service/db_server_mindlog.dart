@@ -92,7 +92,6 @@ class MindlogRepository {
         List<Mindlog> mindlogs = response.data.map<Mindlog>(
                 (x) => Mindlog.fromJson(x)
         ).toList();
-        print("Mindlog Data received successfully");
         return mindlogs;
 
       } else {
@@ -138,7 +137,7 @@ class MindlogRepository {
       List<Mindlog> mindlogs = response.data.map<Mindlog>(
               (x) => Mindlog.fromJson(x)
       ).toList();
-      print("Mindlog Data received successfully");
+      // print("Mindlog Data received successfully");
       return mindlogs;
 
     } else {
@@ -157,7 +156,7 @@ class MindlogRepository {
         List<Mindlog> mindlogs = response.data.map<Mindlog>(
                 (x) => Mindlog.fromJson(x)
         ).toList();
-        print("Mindlog Data received successfully");
+        // print("Mindlog Data received successfully");
         return mindlogs;
 
       } else {

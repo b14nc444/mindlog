@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/provider/schedule_provider.dart';
+import 'package:mindlog_app/provider/stats_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../const/visual.dart';
@@ -29,15 +30,18 @@ class _StatisticScreenState extends State<StatisticScreen> {
     super.initState();
     context.read<MindlogProvider>().getMindlogsAll();
     context.read<ScheduleProvider>().getAppointmentsAll();
+    context.read<StatsProvider>().getKeyword();
   }
 
   @override
   Widget build(BuildContext context) {
     final mindlogProvider = context.watch<MindlogProvider>();
     final scheduleProvider = context.watch<ScheduleProvider>();
+    final statsProvider = context.watch<StatsProvider>();
 
     final allMindlogs = mindlogProvider.allMindlogs;
     final allAppointments = scheduleProvider.allAppointments;
+    final keywords = statsProvider.keywords;
 
     final moodColorPercentage1 = CalculateMoodColorRate(allMindlogs, 1);
     final moodColorPercentage2 = CalculateMoodColorRate(allMindlogs, 2);
@@ -204,6 +208,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
                     KeywordRanking(rank: '2', keyword: '알바', mood: '#답답한', moodColor: 1,),
                     SizedBox(height: 14,),
                     KeywordRanking(rank: '3', keyword: '졸업 프로젝트', mood: '#감사한', moodColor: 3,),
+                    /// TEST///////
+                    // Text(keywords.first),
                   ],
                 ),
               ),

@@ -194,33 +194,10 @@ class _appointmentRecordState extends State<appointmentRecord> {
     }
   }
 
-  Future<void> stopRecording() async {
-    try {
-      String? path = await audioRecorder.stop();
-      if(mounted) {
-        setState(() {
-          isRecording = false;
-          isRecorded = true;
-          audioPath = path!;
-        });
-      }
-      print('Recording stopped');
-      print('path : $audioPath');
-
-      context.read<RecordProvider>().createRecord(
-        record: Record(id: 0, filePath: audioPath),
-        appointmentId: widget.appointment.id ,
-      );
-    }
-    catch (e) {
-      print('recording failed : $e');
-    }
-  }
-
   // Future<void> stopRecording() async {
   //   try {
   //     String? path = await audioRecorder.stop();
-  //     if (mounted) {
+  //     if(mounted) {
   //       setState(() {
   //         isRecording = false;
   //         isRecorded = true;
@@ -230,16 +207,39 @@ class _appointmentRecordState extends State<appointmentRecord> {
   //     print('Recording stopped');
   //     print('path : $audioPath');
   //
-  //     final record = Record(id: 0, filePath: path!);
   //     context.read<RecordProvider>().createRecord(
-  //       record: record,
-  //       appointmentId: widget.appointment.id,
+  //       record: Record(id: 0, filePath: audioPath),
+  //       appointmentId: widget.appointment.id ,
   //     );
-  //     context.read<RecordProvider>().updateRecord(record);
-  //   } catch (e) {
+  //   }
+  //   catch (e) {
   //     print('recording failed : $e');
   //   }
   // }
+
+  Future<void> stopRecording() async {
+    try {
+      String? path = await audioRecorder.stop();
+      if (mounted) {
+        setState(() {
+          isRecording = false;
+          isRecorded = true;
+          audioPath = path!;
+        });
+      }
+      print('Recording stopped');
+      print('path : $audioPath');
+
+      final record = Record(id: 0, filePath: path!);
+      context.read<RecordProvider>().createRecord(
+        record: record,
+        appointmentId: widget.appointment.id,
+      );
+      context.read<RecordProvider>().updateRecord(record);
+    } catch (e) {
+      print('recording failed : $e');
+    }
+  }
 
   Future<void> startPlaying() async {
     try {

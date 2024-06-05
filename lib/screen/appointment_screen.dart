@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mindlog_app/component/appointment_memo.dart';
 import 'package:mindlog_app/component/appointment_mindlog_summary.dart';
@@ -7,9 +8,12 @@ import 'package:mindlog_app/component/appointment_record.dart';
 import 'package:mindlog_app/component/hide_keyboard_on_tap.dart';
 import 'package:mindlog_app/component/mindlog_card.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:provider/provider.dart';
 
 import '../model/appoinment_model.dart';
 import '../model/mindlog_model.dart';
+import '../provider/mindlog_provider.dart';
+import 'mindlog_viewer_screen.dart';
 
 class appointmentScreen extends StatefulWidget {
   final Appointment appointment;
@@ -25,6 +29,12 @@ class _appointmentScreenState extends State<appointmentScreen> {
   @override
   Widget build(BuildContext context) {
     Appointment appointment = widget.appointment;
+
+    final mindlogProvider = context.watch<MindlogProvider>();
+    final mindlogs = mindlogProvider.mindlogsByAppointmentId[appointment.id];
+
+    context.read<MindlogProvider>().getMindlogsByAppointmentId(appointmentId: appointment.id);
+
     String formattedDate = DateFormat('yyyy-MM-dd(E)', 'ko_KR').format(appointment.date!);
 
     TextStyle textStyleTitle = const TextStyle(
@@ -137,8 +147,35 @@ class _appointmentScreenState extends State<appointmentScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  appointmentMindlogSummary(mindlog: Mindlog(id: 1, date: DateTime.now(), time: '9:10', mood: [], moodColor: 5, title: '오늘 기분 최고!', emotionRecord: '감정 text\nsample', eventRecord: '이벤트 text\n이벤트 text\n이벤트 text\n이벤트 text', questionRecord: '//'),),
-                  const SizedBox(height: 30,),
+                  if (mindlogs != null)
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: mindlogs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final mindlog = mindlogs[index];
+                        return Column(
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => mindlogViewerScreen(
+                                        mindlog: mindlog,)
+                                      )
+                                  );
+                                },
+                                child: appointmentMindlogSummary(mindlog: mindlog,)
+                            ),
+                            const SizedBox(height: 20,),
+                          ],
+                        );
+                      }
+                    ),
+                  if (mindlogs == null)
+                    Text('기록이 없습니다.'),
+                  // appointmentMindlogSummary(mindlog: Mindlog(id: 1, date: DateTime.now(), time: '9:10', mood: [], moodColor: 5, title: '오늘 기분 최고!', emotionRecord: '감정 text\nsample', eventRecord: '이벤트 text\n이벤트 text\n이벤트 text\n이벤트 text', questionRecord: '//'),),
+                  // const SizedBox(height: 30,),
                   Text('진료 메모', style: textStyleTitle),
                   const SizedBox(height: 10,),
                   appointmentMemo(appointment: appointment,),
