@@ -8,15 +8,23 @@ class StatsRepository {
   final String serverIP_stats = 'http://$URL_NOW:3333/api/v1/stats';
 
   Future<List<String>> getKeyword() async {
-    var serverUrl = '$serverIP_stats/keyword/';
+    var serverUrl = '$serverIP_stats/keyword';
 
-    final response = await dio.get(serverUrl);
+    try {
+      final response = await dio.get(serverUrl);
 
-    if (response.statusCode == 200) {
-      print("Keyword loaded successfully");
-      return response.data;
-    } else {
-      throw Exception("Failed to load data: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        print("Keyword loaded successfully");
+        List<dynamic> data = response.data;
+        List<String> keywords = data.cast<String>();
+        return keywords;
+      } else {
+        throw Exception("Failed to load data: ${response.statusCode}");
+      }
+    } catch (e, stacktrace) {
+      print('Failed to load keywords: $e');
+      print('Stacktrace: $stacktrace');
+      throw e;
     }
   }
 
@@ -27,7 +35,9 @@ class StatsRepository {
 
     if (response.statusCode == 200) {
       print("Negative situation loaded successfully");
-      return response.data;
+      List<dynamic> data = response.data;
+      List<String> keywords = data.cast<String>();
+      return keywords;
     } else {
       throw Exception("Failed to load data: ${response.statusCode}");
     }
@@ -40,7 +50,9 @@ class StatsRepository {
 
     if (response.statusCode == 200) {
       print("Positive situation loaded successfully");
-      return response.data;
+      List<dynamic> data = response.data;
+      List<String> keywords = data.cast<String>();
+      return keywords;
     } else {
       throw Exception("Failed to load data: ${response.statusCode}");
     }

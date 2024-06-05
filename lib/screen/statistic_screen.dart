@@ -30,6 +30,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
     super.initState();
     context.read<MindlogProvider>().getMindlogsAll();
     context.read<ScheduleProvider>().getAppointmentsAll();
+    context.read<StatsProvider>().getNegativeSituation();
+    context.read<StatsProvider>().getPositiveSituation();
     context.read<StatsProvider>().getKeyword();
   }
 
@@ -41,6 +43,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
 
     final allMindlogs = mindlogProvider.allMindlogs;
     final allAppointments = scheduleProvider.allAppointments;
+    final negativeSituations = statsProvider.negativeSituations;
+    final positiveSituations = statsProvider.positiveSituations;
     final keywords = statsProvider.keywords;
 
     final moodColorPercentage1 = CalculateMoodColorRate(allMindlogs, 1);
@@ -61,7 +65,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            //개수
+            // Text(keywords.length.toString()),
+            //개수 세기
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -203,13 +208,11 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   children: [
                     Text('가장 많이 언급한 단어 - 감정', style: textStyleTitle,),
                     SizedBox(height: 14,),
-                    KeywordRanking(rank: '1', keyword: '할머니', mood: '#걱정스러운', moodColor: 2,),
+                    KeywordRanking(rank: '1', keyword: keywords[0], mood: '#걱정스러운', moodColor: 2,),
                     SizedBox(height: 14,),
-                    KeywordRanking(rank: '2', keyword: '알바', mood: '#답답한', moodColor: 1,),
+                    KeywordRanking(rank: '2', keyword: keywords[1], mood: '#답답한', moodColor: 1,),
                     SizedBox(height: 14,),
-                    KeywordRanking(rank: '3', keyword: '졸업 프로젝트', mood: '#감사한', moodColor: 3,),
-                    /// TEST///////
-                    // Text(keywords.first),
+                    KeywordRanking(rank: '3', keyword: keywords[2], mood: '#감사한', moodColor: 3,),
                   ],
                 ),
               ),

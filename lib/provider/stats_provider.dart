@@ -19,6 +19,28 @@ class StatsProvider extends ChangeNotifier {
   StatsProvider({required this.repository}) : super() {}
 
   //상위 키워드 조회
+  void getNegativeSituation() async {
+    try {
+      final response = await repository.getNegativeSituation();
+      _negativeSituations = response;
+      notifyListeners();
+      print(_negativeSituations);
+    } catch (e) {
+      throw Exception('failed to load negative situations');
+    }
+  }
+
+  void getPositiveSituation() async {
+    try {
+      final response = await repository.getPositiveSituation();
+      _positiveSituations = response;
+      notifyListeners();
+      print(_positiveSituations);
+    } catch (e) {
+      throw Exception('failed to load positive situations');
+    }
+  }
+
   void getKeyword() async {
     try {
       final response = await repository.getKeyword();

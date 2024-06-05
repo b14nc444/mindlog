@@ -32,8 +32,6 @@ class _TimelineScreenState extends State<TimelineScreen> {
   void initState() {
     super.initState();
     context.read<ScheduleProvider>().getAppointmentsAll();
-
-    // context.read<MindlogProvider>().getMindlogsByAppointmentId(appointmentId: appointmentId);
   }
 
   @override
@@ -47,7 +45,6 @@ class _TimelineScreenState extends State<TimelineScreen> {
     for (var appointment in allAppointments) {
       int appointmentId = appointment.id;
       context.read<MindlogProvider>().getMindlogsByAppointmentId(appointmentId: appointmentId);
-      // print(mindlogsByAppointmentId[appointmentId]); //= List<Mindlog> mindlogs;
     }
 
     Appointment appointmentTest = Appointment(
