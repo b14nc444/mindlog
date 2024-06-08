@@ -19,13 +19,13 @@ class _appointmentMemoState extends State<appointmentMemo> {
   late TextEditingController _textEditingController;
   String? memo;
 
-  @override
-  void initState() {
-    super.initState();
-    _textEditingController = TextEditingController();
-    memo = widget.appointment.memo ?? ''; // 기존 메모 또는 빈 문자열 할당
-    _textEditingController.text = memo!; // 텍스트 필드에 기존 메모 표시
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _textEditingController = TextEditingController();
+  //   memo = widget.appointment.memo ?? ''; // 기존 메모 또는 빈 문자열 할당
+  //   _textEditingController.text = memo!; // 텍스트 필드에 기존 메모 표시
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +48,7 @@ class _appointmentMemoState extends State<appointmentMemo> {
               child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: TextFormField(
+                    initialValue: appointment.memo,
                     maxLines: null,
                     cursorColor: typographyGray3,
                     keyboardType: TextInputType.multiline,

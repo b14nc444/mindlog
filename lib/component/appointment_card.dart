@@ -28,7 +28,7 @@ class AppointmentCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => appointmentScreen(
-                appointment: appointment,)
+                appointment: appointment, fromWhere: '홈',)
               ),
             );
           },

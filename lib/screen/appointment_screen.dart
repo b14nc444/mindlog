@@ -16,9 +16,10 @@ import '../provider/mindlog_provider.dart';
 import 'mindlog_viewer_screen.dart';
 
 class appointmentScreen extends StatefulWidget {
+  final String fromWhere;
   final Appointment appointment;
 
-  const appointmentScreen({super.key, required this.appointment});
+  const appointmentScreen({super.key, required this.appointment, required this.fromWhere});
 
   @override
   State<appointmentScreen> createState() => _appointmentScreenState();
@@ -46,8 +47,21 @@ class _appointmentScreenState extends State<appointmentScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
+        leadingWidth: 150,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: basicGray,),
+          icon: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(width: 10,),
+              arrowBackIcon,
+              SizedBox(width: 10,),
+              Text(widget.fromWhere, style: TextStyle(
+                color: basicGray,
+                fontSize: 16
+              ),),
+            ],
+          ),
           onPressed: () {
             Navigator.pop(context);
           },

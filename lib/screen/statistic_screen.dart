@@ -208,11 +208,14 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   children: [
                     Text('가장 많이 언급한 단어 - 감정', style: textStyleTitle,),
                     SizedBox(height: 14,),
-                    KeywordRanking(rank: '1', keyword: keywords[0], mood: '#걱정스러운', moodColor: 2,),
-                    SizedBox(height: 14,),
-                    KeywordRanking(rank: '2', keyword: keywords[1], mood: '#답답한', moodColor: 1,),
-                    SizedBox(height: 14,),
-                    KeywordRanking(rank: '3', keyword: keywords[2], mood: '#감사한', moodColor: 3,),
+                    // 조건을 추가하여 인덱스 에러를 방지
+                    if (keywords.isNotEmpty) ...[
+                      KeywordRanking(rank: '1', keyword: keywords.length > 0 ? keywords[0] : '', mood: '#걱정스러운', moodColor: 2,),
+                      SizedBox(height: 14,),
+                      KeywordRanking(rank: '2', keyword: keywords.length > 1 ? keywords[1] : '', mood: '#답답한', moodColor: 1,),
+                      SizedBox(height: 14,),
+                      KeywordRanking(rank: '3', keyword: keywords.length > 2 ? keywords[2] : '', mood: '#감사한', moodColor: 3,),
+                    ],
                   ],
                 ),
               ),
@@ -226,7 +229,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
 
 CalculateMoodColorRate(List<Mindlog> mindlogs, int moodColor) {
   if (mindlogs.isEmpty) {
-    return 0.0; // 또는 다른 적절한 값
+    return 0.0;
   }
 
   int totalCount = mindlogs.length;
