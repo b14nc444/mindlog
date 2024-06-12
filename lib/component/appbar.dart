@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mindlog_app/const/visual.dart';
 
 class RenderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
-  const RenderAppBarHome({super.key});
+  final int index;
 
+  const RenderAppBarHome({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
-      //secondaryColor1,
+      color: (index == 0) ? secondaryColor1 : Colors.transparent,
       padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -26,7 +26,7 @@ class RenderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               onPressed: (){
               },
-              icon: Image.asset('assets/icons/settings.png')
+              icon: Icon(Icons.settings, color: typographyGray3,)
             ),
           )
         ],

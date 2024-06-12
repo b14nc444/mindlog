@@ -183,16 +183,16 @@ class _StatisticScreenState extends State<StatisticScreen> {
             SizedBox(height: 20,),
             EventRanking(
                 title: '👎 이럴 때 기분이 나빴어요',
-                event1: '버스를 놓쳤을 때',
-                event2: '아침에 늦게 일어났을 때',
-                event3: '병원 진료를 받지 못했을 때'
+                event1: negativeSituations.length > 0 ? negativeSituations[0] : '집계 불가',
+                event2: negativeSituations.length > 0 ? negativeSituations[1] : '집계 불가',
+                event3: negativeSituations.length > 1 ? negativeSituations[2] : '집계 불가',
             ),
             SizedBox(height: 20,),
             EventRanking(
                 title: '👍 이럴 때 기분이 좋았어요',
-                event1: '해야 할 일을 다 했을 때',
-                event2: '친구들이랑 놀았을 때',
-                event3: '칭찬을 받았을 때'
+                event1: positiveSituations.length > 0 ? positiveSituations[0] : '집계 불가',
+                event2: positiveSituations.length > 0 ? positiveSituations[1] : '집계 불가',
+                event3: positiveSituations.length > 1 ? positiveSituations[2] : '집계 불가',
             ),
             SizedBox(height: 20,),
             Container(
@@ -208,13 +208,12 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   children: [
                     Text('가장 많이 언급한 단어 - 감정', style: textStyleTitle,),
                     SizedBox(height: 14,),
-                    // 조건을 추가하여 인덱스 에러를 방지
                     if (keywords.isNotEmpty) ...[
-                      KeywordRanking(rank: '1', keyword: keywords.length > 0 ? keywords[0] : '', mood: '#걱정스러운', moodColor: 2,),
+                      KeywordRanking(rank: '1', keyword: keywords.length > 0 ? keywords[0] : '집계 불가', mood: '#걱정스러운', moodColor: 2,),
                       SizedBox(height: 14,),
-                      KeywordRanking(rank: '2', keyword: keywords.length > 1 ? keywords[1] : '', mood: '#답답한', moodColor: 1,),
+                      KeywordRanking(rank: '2', keyword: keywords.length > 0 ? keywords[1] : '집계 불가', mood: '#답답한', moodColor: 1,),
                       SizedBox(height: 14,),
-                      KeywordRanking(rank: '3', keyword: keywords.length > 2 ? keywords[2] : '', mood: '#감사한', moodColor: 3,),
+                      KeywordRanking(rank: '3', keyword: keywords.length > 1 ? keywords[2] : '집계 불가', mood: '#감사한', moodColor: 3,),
                     ],
                   ],
                 ),
@@ -406,6 +405,7 @@ class BulletText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           bullet,

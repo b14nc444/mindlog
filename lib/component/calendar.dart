@@ -138,7 +138,7 @@ class _CalendarState extends State<Calendar> {
                 margin: const EdgeInsets.all(4.0),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: hasAppointment ? Colors.blueAccent : (isToday ? CupertinoColors.systemGrey5 : Colors.transparent),
+                  color: hasAppointment ? Colors.blueAccent : (isToday ? guideGray : Colors.transparent),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: typographyGray2,
@@ -157,7 +157,7 @@ class _CalendarState extends State<Calendar> {
                 margin: const EdgeInsets.all(4.0),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: hasAppointment ? Colors.blueAccent : CupertinoColors.systemGrey5,
+                  color: hasAppointment ? Colors.blueAccent : guideGray,
                   shape: BoxShape.circle,
                 ),
                 child: Text(

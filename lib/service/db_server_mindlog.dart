@@ -177,4 +177,36 @@ class MindlogRepository {
       }
     }
   }
+
+  // Future<List<Mindlog>> getMindlogsByAppointmentId(int appointmentId) async {
+  //   var serverUrl = '$serverIP_mindlog/appointment/$appointmentId';
+  //
+  //   try {
+  //     final response = await dio.get(serverUrl, queryParameters: {});
+  //
+  //     if (response.statusCode == 200) {
+  //       List<Mindlog> mindlogs = response.data.map<Mindlog>(
+  //               (x) => Mindlog.fromJson(x)
+  //       ).toList();
+  //       // print("Mindlog Data received successfully");
+  //       return mindlogs;
+  //
+  //     } else {
+  //       throw Exception("Failed to loaded data: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     if (e is DioException) {
+  //       if (e.response?.statusCode == 400) {
+  //         // 400 Bad Request 에러 처리
+  //         throw Exception("Bad Request: ${e.response?.data}");
+  //       } else {
+  //         // 다른 DioException 처리
+  //         throw Exception("Failed to received data: $e");
+  //       }
+  //     } else {
+  //       // 다른 예외 처리
+  //       throw Exception("Failed to received data: $e");
+  //     }
+  //   }
+  // }
 }
