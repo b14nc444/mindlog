@@ -26,7 +26,8 @@ class RenderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               onPressed: (){
               },
-              icon: Icon(Icons.settings, color: typographyGray3,)
+              icon: Icon(Icons.settings,
+                color: (index == 0) ? typographyGray3 : typographyGray1,)
             ),
           )
         ],

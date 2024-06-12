@@ -61,166 +61,192 @@ class _StatisticScreenState extends State<StatisticScreen> {
     );
 
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            // Text(keywords.length.toString()),
-            //개수 세기
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.chat_bubble_rounded, color: primaryColor, size: 18,),
-                            // Image.asset('assets/icons/chat_bubble.png'),
-                            SizedBox(width: 5,),
-                            Text('${allMindlogs.length}개', style: textStyleTitle,),
-                          ],
-                        ),
-                        SizedBox(height: 5,),
-                        Text('기록한 감정', style: TextStyle(
-                          color: Color(0xFFABABAB),
-                          fontSize: 13,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                        ),),
-                      ],
-                    ),
-                    Container(
-                      width: 1,
-                      height: 65,
-                      color: guideGray,
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            // Icon(Icons.pl, color: primaryColor, size: 18,),
-                            Image.asset('assets/icons/hospital_cross.png'),
-                            SizedBox(width: 5,),
-                            Text('${allAppointments.length}개', style: textStyleTitle),
-                          ],
-                        ),
-                        SizedBox(height: 5,),
-                        Text('기록한 진료', style: TextStyle(
-                          color: Color(0xFFABABAB),
-                          fontSize: 13,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                        ),),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+      child: Column(
+        children: [
+          //상단바
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.chevron_left_rounded, color: basicGray,),
+                Text('2024년 5월', style: TextStyle(
+                  color: basicBlack,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),),
+                Icon(Icons.chevron_right_rounded, color: basicGray),
+              ],
             ),
-            SizedBox(height: 20,),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('감정 통계', style: textStyleTitle,),
-                    SizedBox(height: 14,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+          ),
+          Container(
+            width: double.infinity,
+            height: 2,
+            color: guideGray,
+          ),
+          //본문
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                // Text(keywords.length.toString()),
+                //개수 세기
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(
-                          width: 132,
-                          height: 132,
-                          child: PieChart(
-                            PieChartData(
-                              sections: [
-                                PieChartSectionData(value: moodColorPercentage1, color: getColorByMoodValue(1), radius: 30, showTitle: false),
-                                PieChartSectionData(value: moodColorPercentage2, color: getColorByMoodValue(2), radius: 30, showTitle: false),
-                                PieChartSectionData(value: moodColorPercentage3, color: getColorByMoodValue(3), radius: 30, showTitle: false),
-                                PieChartSectionData(value: moodColorPercentage4, color: getColorByMoodValue(4), radius: 30, showTitle: false),
-                                PieChartSectionData(value: moodColorPercentage5, color: getColorByMoodValue(5), radius: 30, showTitle: false),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.chat_bubble_rounded, color: primaryColor, size: 18,),
+                                // Image.asset('assets/icons/chat_bubble.png'),
+                                SizedBox(width: 5,),
+                                Text('${allMindlogs.length}개', style: textStyleTitle,),
                               ],
-                              sectionsSpace: 0,
                             ),
-                            // swapAnimationDuration: Duration(milliseconds: 150), // Optional
-                            // swapAnimationCurve: Curves.linear, // Optional
-                          ),
+                            SizedBox(height: 5,),
+                            Text('기록한 감정', style: TextStyle(
+                              color: Color(0xFFABABAB),
+                              fontSize: 13,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                            ),),
+                          ],
                         ),
-                        SizedBox(
-                          height: 132,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RenderLegend(moodColor: 1, percent:moodColorPercentage1),
-                              RenderLegend(moodColor: 2, percent: moodColorPercentage2),
-                              RenderLegend(moodColor: 3, percent: moodColorPercentage3),
-                              RenderLegend(moodColor: 4, percent: moodColorPercentage4),
-                              RenderLegend(moodColor: 5, percent: moodColorPercentage5),
-                            ],
-                          ),
+                        Container(
+                          width: 1,
+                          height: 65,
+                          color: guideGray,
+                        ),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                // Icon(Icons.pl, color: primaryColor, size: 18,),
+                                Image.asset('assets/icons/hospital_cross.png'),
+                                SizedBox(width: 5,),
+                                Text('${allAppointments.length}개', style: textStyleTitle),
+                              ],
+                            ),
+                            SizedBox(height: 5,),
+                            Text('기록한 진료', style: TextStyle(
+                              color: Color(0xFFABABAB),
+                              fontSize: 13,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                            ),),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20,),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('감정 통계', style: textStyleTitle,),
+                        SizedBox(height: 14,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: 132,
+                              height: 132,
+                              child: PieChart(
+                                PieChartData(
+                                  sections: [
+                                    PieChartSectionData(value: moodColorPercentage1, color: getColorByMoodValue(1), radius: 30, showTitle: false),
+                                    PieChartSectionData(value: moodColorPercentage2, color: getColorByMoodValue(2), radius: 30, showTitle: false),
+                                    PieChartSectionData(value: moodColorPercentage3, color: getColorByMoodValue(3), radius: 30, showTitle: false),
+                                    PieChartSectionData(value: moodColorPercentage4, color: getColorByMoodValue(4), radius: 30, showTitle: false),
+                                    PieChartSectionData(value: moodColorPercentage5, color: getColorByMoodValue(5), radius: 30, showTitle: false),
+                                  ],
+                                  sectionsSpace: 0,
+                                ),
+                                // swapAnimationDuration: Duration(milliseconds: 150), // Optional
+                                // swapAnimationCurve: Curves.linear, // Optional
+                              ),
+                            ),
+                            SizedBox(
+                              height: 132,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RenderLegend(moodColor: 1, percent:moodColorPercentage1),
+                                  RenderLegend(moodColor: 2, percent: moodColorPercentage2),
+                                  RenderLegend(moodColor: 3, percent: moodColorPercentage3),
+                                  RenderLegend(moodColor: 4, percent: moodColorPercentage4),
+                                  RenderLegend(moodColor: 5, percent: moodColorPercentage5),
+                                ],
+                              ),
+                            )
+                          ],
                         )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 20,),
-            EventRanking(
-                title: '👎 이럴 때 기분이 나빴어요',
-                event1: negativeSituations.length > 0 ? negativeSituations[0] : '집계 불가',
-                event2: negativeSituations.length > 0 ? negativeSituations[1] : '집계 불가',
-                event3: negativeSituations.length > 1 ? negativeSituations[2] : '집계 불가',
-            ),
-            SizedBox(height: 20,),
-            EventRanking(
-                title: '👍 이럴 때 기분이 좋았어요',
-                event1: positiveSituations.length > 0 ? positiveSituations[0] : '집계 불가',
-                event2: positiveSituations.length > 0 ? positiveSituations[1] : '집계 불가',
-                event3: positiveSituations.length > 1 ? positiveSituations[2] : '집계 불가',
-            ),
-            SizedBox(height: 20,),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('가장 많이 언급한 단어 - 감정', style: textStyleTitle,),
-                    SizedBox(height: 14,),
-                    if (keywords.isNotEmpty) ...[
-                      KeywordRanking(rank: '1', keyword: keywords.length > 0 ? keywords[0] : '집계 불가', mood: '#걱정스러운', moodColor: 2,),
-                      SizedBox(height: 14,),
-                      KeywordRanking(rank: '2', keyword: keywords.length > 0 ? keywords[1] : '집계 불가', mood: '#답답한', moodColor: 1,),
-                      SizedBox(height: 14,),
-                      KeywordRanking(rank: '3', keyword: keywords.length > 1 ? keywords[2] : '집계 불가', mood: '#감사한', moodColor: 3,),
-                    ],
-                  ],
+                SizedBox(height: 20,),
+                EventRanking(
+                    title: '👎 이럴 때 기분이 나빴어요',
+                    event1: negativeSituations.length > 0 ? negativeSituations[0] : '집계 불가',
+                    event2: negativeSituations.length > 0 ? negativeSituations[1] : '집계 불가',
+                    event3: negativeSituations.length > 1 ? negativeSituations[2] : '집계 불가',
                 ),
-              ),
+                SizedBox(height: 20,),
+                EventRanking(
+                    title: '👍 이럴 때 기분이 좋았어요',
+                    event1: positiveSituations.length > 0 ? positiveSituations[0] : '집계 불가',
+                    event2: positiveSituations.length > 0 ? positiveSituations[1] : '집계 불가',
+                    event3: positiveSituations.length > 1 ? positiveSituations[2] : '집계 불가',
+                ),
+                SizedBox(height: 20,),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('가장 많이 언급한 단어 - 감정', style: textStyleTitle,),
+                        SizedBox(height: 14,),
+                        if (keywords.isNotEmpty) ...[
+                          KeywordRanking(rank: '1', keyword: keywords.length > 0 ? keywords[0] : '집계 불가', mood: '#걱정스러운', moodColor: 2,),
+                          SizedBox(height: 14,),
+                          KeywordRanking(rank: '2', keyword: keywords.length > 0 ? keywords[1] : '집계 불가', mood: '#답답한', moodColor: 1,),
+                          SizedBox(height: 14,),
+                          KeywordRanking(rank: '3', keyword: keywords.length > 1 ? keywords[2] : '집계 불가', mood: '#감사한', moodColor: 3,),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ]
             ),
-          ]
-        ),
+          ),
+        ],
       ),
     );
   }
