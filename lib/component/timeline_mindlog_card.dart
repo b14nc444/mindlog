@@ -13,6 +13,7 @@ class timelineMindlogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('M.d', 'ko_KR').format(mindlog.date!);
+    String mindlogTitle = (mindlog.title.length > 13) ? '${mindlog.title.substring(0, 13)}...' : mindlog.title;
     String mindlogContent = (mindlog.emotionRecord.length > 20) ? '${mindlog.emotionRecord.substring(0, 20)}...' : mindlog.emotionRecord;
 
     Color? iconColor;
@@ -81,7 +82,7 @@ class timelineMindlogCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              mindlog.title,
+                              mindlogTitle,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,

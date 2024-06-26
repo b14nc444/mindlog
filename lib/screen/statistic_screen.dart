@@ -206,17 +206,19 @@ class _StatisticScreenState extends State<StatisticScreen> {
                 ),
                 SizedBox(height: 20,),
                 EventRanking(
-                    title: '👎 이럴 때 기분이 나빴어요',
-                    event1: negativeSituations.length > 0 ? negativeSituations[0] : '집계 불가',
-                    event2: negativeSituations.length > 0 ? negativeSituations[1] : '집계 불가',
-                    event3: negativeSituations.length > 1 ? negativeSituations[2] : '집계 불가',
+                  title: '👎 이럴 때 기분이 나빴어요',
+                  events: negativeSituations.isEmpty
+                      ? ['집계 불가'] : negativeSituations.length == 1
+                      ? [negativeSituations[0]] : negativeSituations.length == 2
+                      ? negativeSituations.sublist(0, 2) : negativeSituations.sublist(0, 3),
                 ),
                 SizedBox(height: 20,),
                 EventRanking(
-                    title: '👍 이럴 때 기분이 좋았어요',
-                    event1: positiveSituations.length > 0 ? positiveSituations[0] : '집계 불가',
-                    event2: positiveSituations.length > 0 ? positiveSituations[1] : '집계 불가',
-                    event3: positiveSituations.length > 1 ? positiveSituations[2] : '집계 불가',
+                  title: '👍 이럴 때 기분이 좋았어요',
+                  events: positiveSituations.isEmpty
+                      ? ['집계 불가'] : positiveSituations.length == 1
+                      ? [positiveSituations[0]] : positiveSituations.length == 2
+                      ? positiveSituations.sublist(0, 2) : positiveSituations.sublist(0, 3),
                 ),
                 SizedBox(height: 20,),
                 Container(
@@ -233,11 +235,11 @@ class _StatisticScreenState extends State<StatisticScreen> {
                         Text('가장 많이 언급한 단어 - 감정', style: textStyleTitle,),
                         SizedBox(height: 14,),
                         if (keywords.isNotEmpty) ...[
-                          KeywordRanking(rank: '1', keyword: keywords.length > 0 ? keywords[0] : '집계 불가', mood: '#걱정스러운', moodColor: 2,),
+                          KeywordRanking(rank: '1', keyword: keywords.length > 0 ? keywords[0] : '집계 불가', mood: '#뿌듯한', moodColor: 3,),
                           SizedBox(height: 14,),
-                          KeywordRanking(rank: '2', keyword: keywords.length > 0 ? keywords[1] : '집계 불가', mood: '#답답한', moodColor: 1,),
+                          KeywordRanking(rank: '2', keyword: keywords.length > 0 ? keywords[1] : '집계 불가', mood: '#걱정스러운', moodColor: 2,),
                           SizedBox(height: 14,),
-                          KeywordRanking(rank: '3', keyword: keywords.length > 1 ? keywords[2] : '집계 불가', mood: '#감사한', moodColor: 3,),
+                          KeywordRanking(rank: '3', keyword: keywords.length > 1 ? keywords[2] : '집계 불가', mood: '#답답한', moodColor: 1,),
                         ],
                       ],
                     ),
@@ -297,11 +299,9 @@ class RenderLegend extends StatelessWidget {
 
 class EventRanking extends StatelessWidget {
   final String title;
-  final String event1;
-  final String event2;
-  final String event3;
+  final List<String> events;
 
-  const EventRanking({super.key, required this.title, required this.event1, required this.event2, required this.event3});
+  const EventRanking({super.key, required this.title, required this.events});
 
   @override
   Widget build(BuildContext context) {
@@ -331,13 +331,15 @@ class EventRanking extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: Column(
-              children: [
-                BulletText(bullet: '•', text: event1,),
-                SizedBox(height: 15,),
-                BulletText(bullet: '•', text: event2,),
-                SizedBox(height: 15,),
-                BulletText(bullet: '•', text: event3,),
-              ],
+              children: events
+                  .asMap()
+                  .entries
+                  .map((entry) => Padding(
+                padding: EdgeInsets.only(
+                    bottom: entry.key == events.length - 1 ? 0.0 : 15.0),
+                child: BulletText(bullet: '•', text: entry.value),
+              ))
+                  .toList(),
             ),
           ),
         ],
@@ -431,11 +433,11 @@ class BulletText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      // crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           bullet,
-          style: TextStyle(fontSize: 20), // 글머리표 스타일
+          style: TextStyle(fontSize: 16), // 글머리표 스타일
         ),
         SizedBox(width: 5), // 글머리표와 텍스트 사이의 간격
         Expanded(

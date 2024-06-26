@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindlog_app/const/visual.dart';
+import 'package:mindlog_app/screen/settings_screen.dart';
 
 class RenderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
   final int index;
@@ -25,6 +26,9 @@ class RenderAppBarHome extends StatelessWidget implements PreferredSizeWidget {
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
               onPressed: (){
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => settingsScreen())
+                );
               },
               icon: Icon(Icons.settings,
                 color: (index == 0) ? typographyGray3 : typographyGray1,)
